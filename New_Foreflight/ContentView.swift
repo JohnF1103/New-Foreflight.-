@@ -1,24 +1,30 @@
+
 //
 //  ContentView.swift
 //  New_Foreflight
 //
 //  Created by John Foster on 12/15/23.
 //
-
 import SwiftUI
+import Foundation
+import MapKit
 
 struct ContentView: View {
+
+    
+
+    
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
+          Map {
+              
+          }.mapStyle(.hybrid(elevation: .realistic))
+        
+        
+      
+      }
+    
+    
 }
 
-#Preview {
-    ContentView()
-}
+
