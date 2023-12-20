@@ -7,16 +7,16 @@
 import SwiftUI
 import MapKit
 
-
+    
     struct ContentView: View {
         
-        @State private var airports: [Airport] = readFile()
+        @State private var locations: [Airport] = readFile()
         
         var body: some View {
             Map {
-                ForEach(airports) { curr_Airport in
-                    Annotation(curr_Airport.AirportCode, coordinate: CLLocationCoordinate2D(latitude: curr_Airport.latitude, longitude: curr_Airport.longitude)) {
-                        Button(action: { print("Clicked on \(curr_Airport.AirportCode)") }, label: {
+                ForEach(locations) { curr_airport in
+                    Annotation(curr_airport.AirportCode, coordinate: CLLocationCoordinate2D(latitude: curr_airport.latitude, longitude: curr_airport.longitude)) {
+                        Button(action: { print("Clicked on \(curr_airport.AirportCode)") }, label: {
                             ZStack{
                                 RoundedRectangle(cornerRadius: 5)
                                     .fill(Color.teal)
