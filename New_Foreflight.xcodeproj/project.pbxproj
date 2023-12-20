@@ -14,6 +14,9 @@
 		248A9F132B2D660A00C99490 /* New_ForeflightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F122B2D660A00C99490 /* New_ForeflightTests.swift */; };
 		248A9F1D2B2D660B00C99490 /* New_ForeflightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F1C2B2D660B00C99490 /* New_ForeflightUITests.swift */; };
 		248A9F1F2B2D660B00C99490 /* New_ForeflightUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F1E2B2D660B00C99490 /* New_ForeflightUITestsLaunchTests.swift */; };
+		249164572B32762E00D505AC /* Airports.txt in Resources */ = {isa = PBXBuildFile; fileRef = 249164562B32762E00D505AC /* Airports.txt */; };
+		249164592B32F37600D505AC /* Airport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249164582B32F37600D505AC /* Airport.swift */; };
+		2491645B2B32F3F800D505AC /* Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2491645A2B32F3F800D505AC /* Reading.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +48,9 @@
 		248A9F182B2D660B00C99490 /* New_ForeflightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = New_ForeflightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		248A9F1C2B2D660B00C99490 /* New_ForeflightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = New_ForeflightUITests.swift; sourceTree = "<group>"; };
 		248A9F1E2B2D660B00C99490 /* New_ForeflightUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = New_ForeflightUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		249164562B32762E00D505AC /* Airports.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Airports.txt; sourceTree = "<group>"; };
+		249164582B32F37600D505AC /* Airport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Airport.swift; sourceTree = "<group>"; };
+		2491645A2B32F3F800D505AC /* Reading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reading.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,8 +101,11 @@
 		248A9EFF2B2D660400C99490 /* New_Foreflight */ = {
 			isa = PBXGroup;
 			children = (
+				249164562B32762E00D505AC /* Airports.txt */,
 				248A9F002B2D660400C99490 /* New_ForeflightApp.swift */,
 				248A9F022B2D660400C99490 /* ContentView.swift */,
+				2491645A2B32F3F800D505AC /* Reading.swift */,
+				249164582B32F37600D505AC /* Airport.swift */,
 				248A9F042B2D660A00C99490 /* Assets.xcassets */,
 				248A9F062B2D660A00C99490 /* New_Foreflight.entitlements */,
 				248A9F072B2D660A00C99490 /* Preview Content */,
@@ -233,6 +242,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				249164572B32762E00D505AC /* Airports.txt in Resources */,
 				248A9F092B2D660A00C99490 /* Preview Assets.xcassets in Resources */,
 				248A9F052B2D660A00C99490 /* Assets.xcassets in Resources */,
 			);
@@ -259,7 +269,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				249164592B32F37600D505AC /* Airport.swift in Sources */,
 				248A9F032B2D660400C99490 /* ContentView.swift in Sources */,
+				2491645B2B32F3F800D505AC /* Reading.swift in Sources */,
 				248A9F012B2D660400C99490 /* New_ForeflightApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
