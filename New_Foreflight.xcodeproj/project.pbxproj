@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2444452E2B33FA8E001854DD /* LocationPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2444452D2B33FA8E001854DD /* LocationPreviewView.swift */; };
 		248A9F012B2D660400C99490 /* New_ForeflightApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F002B2D660400C99490 /* New_ForeflightApp.swift */; };
 		248A9F032B2D660400C99490 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F022B2D660400C99490 /* ContentView.swift */; };
 		248A9F052B2D660A00C99490 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 248A9F042B2D660A00C99490 /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2444452D2B33FA8E001854DD /* LocationPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPreviewView.swift; sourceTree = "<group>"; };
 		248A9EFD2B2D660400C99490 /* New_Foreflight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = New_Foreflight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		248A9F002B2D660400C99490 /* New_ForeflightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = New_ForeflightApp.swift; sourceTree = "<group>"; };
 		248A9F022B2D660400C99490 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 		248A9EFF2B2D660400C99490 /* New_Foreflight */ = {
 			isa = PBXGroup;
 			children = (
+				2444452D2B33FA8E001854DD /* LocationPreviewView.swift */,
 				249164562B32762E00D505AC /* Airports.txt */,
 				248A9F002B2D660400C99490 /* New_ForeflightApp.swift */,
 				248A9F022B2D660400C99490 /* ContentView.swift */,
@@ -272,6 +275,7 @@
 				249164592B32F37600D505AC /* Airport.swift in Sources */,
 				248A9F032B2D660400C99490 /* ContentView.swift in Sources */,
 				2491645B2B32F3F800D505AC /* Reading.swift in Sources */,
+				2444452E2B33FA8E001854DD /* LocationPreviewView.swift in Sources */,
 				248A9F012B2D660400C99490 /* New_ForeflightApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
