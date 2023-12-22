@@ -16,6 +16,9 @@ struct LocationPreviewView: View {
         HStack(alignment: .bottom, spacing: 0){
             VStack(alignment: .leading, spacing: 16){
                 
+                
+              
+                
                 imageSection
                 titlesection
             }
@@ -26,19 +29,21 @@ struct LocationPreviewView: View {
                 Weatherbutton
             }
             
-            .padding(20)
-            .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(.ultraThinMaterial)
+          
             
-                .offset(y:65)
             
-            )
-            .cornerRadius(10)
             
         }
+        .padding(20)
+        .background(RoundedRectangle(cornerRadius: 10)
+            .fill(.ultraThinMaterial)
+            .offset(y:65)
+        
+        )
+        
+        .cornerRadius(10)
+        
     }
-    
     
 }
 
@@ -48,17 +53,22 @@ extension LocationPreviewView{
         
         
         ZStack{
-            Image(systemName: "star")
+            Image(systemName: "airplane.departure")
+                
+            
+            
                 .resizable()
-                .scaledToFill()
+                .scaledToFit()
                 .frame(width: 100, height: 100)
                 .cornerRadius(10)
             
         }
         
         .padding(6)
-        .background(Color.white)
         .cornerRadius(10)
+        
+        
+        
         
     }
     
@@ -87,7 +97,7 @@ extension LocationPreviewView{
             
             
         }label: {
-            Text("Learn More")
+            Text("Airport Info")
                 .font(.headline)
                 .frame(width: 125, height: 35)
         }.buttonStyle(.borderedProminent)
@@ -100,7 +110,7 @@ extension LocationPreviewView{
             
             
         }label: {
-            Text("Next")
+            Text("View NOTAMS")
             
                 .font(.headline)
                 .frame(width: 125, height: 35)
@@ -118,7 +128,7 @@ extension LocationPreviewView{
         
         Color.green.ignoresSafeArea()
         
-        LocationPreviewView(airport: Airport(id: UUID(), AirportCode: "kjfk", latitude: 40.63972222222222, longitude: -73.77888888888889))
+        LocationPreviewView(airport: Airport(id: UUID(), AirportCode: "KJFK", latitude: 40.63972222222222, longitude: -73.77888888888889))
         
             .padding()
     }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2444452E2B33FA8E001854DD /* LocationPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2444452D2B33FA8E001854DD /* LocationPreviewView.swift */; };
+		244445322B351B44001854DD /* Tower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 244445312B351B44001854DD /* Tower.jpg */; };
 		248A9F012B2D660400C99490 /* New_ForeflightApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F002B2D660400C99490 /* New_ForeflightApp.swift */; };
 		248A9F032B2D660400C99490 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F022B2D660400C99490 /* ContentView.swift */; };
 		248A9F052B2D660A00C99490 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 248A9F042B2D660A00C99490 /* Assets.xcassets */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		2444452D2B33FA8E001854DD /* LocationPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPreviewView.swift; sourceTree = "<group>"; };
+		244445312B351B44001854DD /* Tower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tower.jpg; sourceTree = "<group>"; };
 		248A9EFD2B2D660400C99490 /* New_Foreflight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = New_Foreflight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		248A9F002B2D660400C99490 /* New_ForeflightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = New_ForeflightApp.swift; sourceTree = "<group>"; };
 		248A9F022B2D660400C99490 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		248A9EFF2B2D660400C99490 /* New_Foreflight */ = {
 			isa = PBXGroup;
 			children = (
+				244445312B351B44001854DD /* Tower.jpg */,
 				2444452D2B33FA8E001854DD /* LocationPreviewView.swift */,
 				249164562B32762E00D505AC /* Airports.txt */,
 				248A9F002B2D660400C99490 /* New_ForeflightApp.swift */,
@@ -246,6 +249,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				249164572B32762E00D505AC /* Airports.txt in Resources */,
+				244445322B351B44001854DD /* Tower.jpg in Resources */,
 				248A9F092B2D660A00C99490 /* Preview Assets.xcassets in Resources */,
 				248A9F052B2D660A00C99490 /* Assets.xcassets in Resources */,
 			);
