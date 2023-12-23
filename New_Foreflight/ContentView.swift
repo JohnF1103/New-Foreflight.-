@@ -21,6 +21,7 @@ struct ContentView: View {
     @State private var locations: [Airport] = readFile()
     
     
+    
     var body: some View {
         
         ZStack{
@@ -31,6 +32,7 @@ struct ContentView: View {
                 ForEach(locations) { curr_airport in
                                     Annotation(curr_airport.AirportCode, coordinate: CLLocationCoordinate2D(latitude: curr_airport.latitude, longitude: curr_airport.longitude)) {
                                         Button(action: { print("Clicked on \(curr_airport.AirportCode)")
+                                            
                                             
                                             
                                             self.selectedAirport = curr_airport

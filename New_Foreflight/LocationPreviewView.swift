@@ -25,7 +25,7 @@ struct LocationPreviewView: View {
             
             VStack(spacing:8){
                 
-                NOTAMButton
+                AirportINFOButton
                 Weatherbutton
             }
             
@@ -49,7 +49,9 @@ struct LocationPreviewView: View {
 
 extension LocationPreviewView{
     
+    
     private var imageSection: some View{
+        
         
         
         ZStack{
@@ -90,10 +92,44 @@ extension LocationPreviewView{
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     
-    private var NOTAMButton: some View{
+    private var AirportINFOButton: some View{
         
         Button{
+            var curr_metar_of_selected_Airport = ""
+
+            //changes view
             
+            //**TODO** Use completion handler to capture return value of async funciton.
+            
+            var semaphore = DispatchSemaphore (value: 0)
+
+            var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(airport.AirportCode)/decoded")!,timeoutInterval: Double.infinity)
+
+
+            request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
+
+            request.httpMethod = "GET"
+
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+              guard let data = data else {
+                print(String(describing: error))
+                semaphore.signal()
+                return
+              }
+                
+                 curr_metar_of_selected_Airport = String(data: data, encoding: .utf8)!
+                
+
+              semaphore.signal()
+            }
+
+
+            task.resume()
+            semaphore.wait()
+            
+            
+            
+            print("GOING TO NEW VIEW WITH ", curr_metar_of_selected_Airport)
             
             
         }label: {
@@ -128,7 +164,7 @@ extension LocationPreviewView{
         
         Color.green.ignoresSafeArea()
         
-        LocationPreviewView(airport: Airport(id: UUID(), AirportCode: "KJFK", latitude: 40.63972222222222, longitude: -73.77888888888889))
+        //LocationPreviewView(airport: Airport(id: UUID(), AirportCode: "KJFK", latitude: 40.63972222222222, longitude: -73.77888888888889))
         
             .padding()
     }

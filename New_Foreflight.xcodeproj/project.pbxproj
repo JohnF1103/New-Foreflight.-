@@ -19,6 +19,7 @@
 		249164572B32762E00D505AC /* Airports.txt in Resources */ = {isa = PBXBuildFile; fileRef = 249164562B32762E00D505AC /* Airports.txt */; };
 		249164592B32F37600D505AC /* Airport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249164582B32F37600D505AC /* Airport.swift */; };
 		2491645B2B32F3F800D505AC /* Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2491645A2B32F3F800D505AC /* Reading.swift */; };
+		24DD6BBF2B36C0E000CA6029 /* API_Req.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6BBE2B36C0E000CA6029 /* API_Req.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		249164562B32762E00D505AC /* Airports.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Airports.txt; sourceTree = "<group>"; };
 		249164582B32F37600D505AC /* Airport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Airport.swift; sourceTree = "<group>"; };
 		2491645A2B32F3F800D505AC /* Reading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reading.swift; sourceTree = "<group>"; };
+		24DD6BBE2B36C0E000CA6029 /* API_Req.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API_Req.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				249164562B32762E00D505AC /* Airports.txt */,
 				248A9F002B2D660400C99490 /* New_ForeflightApp.swift */,
 				248A9F022B2D660400C99490 /* ContentView.swift */,
+				24DD6BBE2B36C0E000CA6029 /* API_Req.swift */,
 				2491645A2B32F3F800D505AC /* Reading.swift */,
 				249164582B32F37600D505AC /* Airport.swift */,
 				248A9F042B2D660A00C99490 /* Assets.xcassets */,
@@ -277,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				249164592B32F37600D505AC /* Airport.swift in Sources */,
+				24DD6BBF2B36C0E000CA6029 /* API_Req.swift in Sources */,
 				248A9F032B2D660400C99490 /* ContentView.swift in Sources */,
 				2491645B2B32F3F800D505AC /* Reading.swift in Sources */,
 				2444452E2B33FA8E001854DD /* LocationPreviewView.swift in Sources */,
