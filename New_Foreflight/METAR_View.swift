@@ -23,6 +23,9 @@ struct METAR_View: View {
         
         if let parsedText = parseRawText(jsonString: JSON_Metar) {
             
+            
+            var emptyDict: [String: String] = getComponents(metar: parsedText)
+
             HStack {
                 
                 //keys
@@ -39,8 +42,14 @@ struct METAR_View: View {
                                    }
     //vals
                                    VStack {
-                                       Text(getDate(metar:parsedText))
+                                       Text(getTime(metar:parsedText))
                                        Text("Some String")
+                                       Text("Some String")
+                                       Text("Some String")
+                                       Text("Some String")
+                                       Text("Some String")
+                                       Text("Some String")
+
                                    }
 
                                   

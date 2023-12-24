@@ -25,6 +25,7 @@
 		24D9C1312B37F90100772DF1 /* RunwaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1302B37F90100772DF1 /* RunwaysView.swift */; };
 		24D9C1332B37F92200772DF1 /* NOTAMS_View .swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1322B37F92200772DF1 /* NOTAMS_View .swift */; };
 		24D9C1362B381C3500772DF1 /* METAR_Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1352B381C3500772DF1 /* METAR_Parser.swift */; };
+		24D9C1392B38343B00772DF1 /* SwiftMETAR in Frameworks */ = {isa = PBXBuildFile; productRef = 24D9C1382B38343B00772DF1 /* SwiftMETAR */; };
 		24DD6BBF2B36C0E000CA6029 /* API_Req.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6BBE2B36C0E000CA6029 /* API_Req.swift */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24D9C1392B38343B00772DF1 /* SwiftMETAR in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +105,7 @@
 				248A9F112B2D660A00C99490 /* New_ForeflightTests */,
 				248A9F1B2B2D660B00C99490 /* New_ForeflightUITests */,
 				248A9EFE2B2D660400C99490 /* Products */,
+				24D9C1372B38343B00772DF1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -165,6 +168,13 @@
 			path = New_ForeflightUITests;
 			sourceTree = "<group>";
 		};
+		24D9C1372B38343B00772DF1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -181,6 +191,9 @@
 			dependencies = (
 			);
 			name = New_Foreflight;
+			packageProductDependencies = (
+				24D9C1382B38343B00772DF1 /* SwiftMETAR */,
+			);
 			productName = New_Foreflight;
 			productReference = 248A9EFD2B2D660400C99490 /* New_Foreflight.app */;
 			productType = "com.apple.product-type.application";
@@ -679,6 +692,14 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		24D9C1382B38343B00772DF1 /* SwiftMETAR */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 24D9C1342B38137A00772DF1 /* XCRemoteSwiftPackageReference "SwiftMETAR" */;
+			productName = SwiftMETAR;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 248A9EF52B2D660400C99490 /* Project object */;
 }
