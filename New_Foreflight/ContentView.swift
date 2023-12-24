@@ -20,6 +20,7 @@ struct ContentView: View {
     
     @State private var locations: [Airport] = readFile()
     
+    @EnvironmentObject private var vm : AirportDetailModel
     
     
     var body: some View {
@@ -83,8 +84,11 @@ struct ContentView: View {
             }
             
             
+        }.sheet(item: $vm.sheetlocation, onDismiss: nil){ap in
+            
+            
+            AirportDetailsView(airport: ap, curr_mertar: vm.curr_metar!)
         }
-        
         
         
         

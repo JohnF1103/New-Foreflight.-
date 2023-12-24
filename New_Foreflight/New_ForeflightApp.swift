@@ -12,6 +12,7 @@ struct New_ForeflightApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(AirportDetailModel())
         }
     }
 }

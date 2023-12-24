@@ -10,6 +10,7 @@ import SwiftUI
 struct LocationPreviewView: View {
     
     let airport: Airport
+    @EnvironmentObject private var vm : AirportDetailModel
     
     
     var body: some View {
@@ -130,6 +131,10 @@ extension LocationPreviewView{
             
             
             print("GOING TO NEW VIEW WITH ", curr_metar_of_selected_Airport)
+            
+            vm.sheetlocation = airport
+            vm.curr_metar = curr_metar_of_selected_Airport
+            
             
             
         }label: {
