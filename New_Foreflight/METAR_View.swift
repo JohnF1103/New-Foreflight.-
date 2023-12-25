@@ -42,7 +42,7 @@ struct METAR_View: View {
                                    }
     //vals
                                    VStack {
-                                       Text(getTime(metar:parsedText))
+                                       Text("SOme string")
                                        Text("Some String")
                                        Text("Some String")
                                        Text("Some String")

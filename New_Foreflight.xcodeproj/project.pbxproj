@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2444452E2B33FA8E001854DD /* LocationPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2444452D2B33FA8E001854DD /* LocationPreviewView.swift */; };
 		244445322B351B44001854DD /* Tower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 244445312B351B44001854DD /* Tower.jpg */; };
+		245C35412B3900E800CD3DC1 /* METAR in Frameworks */ = {isa = PBXBuildFile; productRef = 245C35402B3900E800CD3DC1 /* METAR */; };
 		248A9F012B2D660400C99490 /* New_ForeflightApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F002B2D660400C99490 /* New_ForeflightApp.swift */; };
 		248A9F032B2D660400C99490 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F022B2D660400C99490 /* ContentView.swift */; };
 		248A9F052B2D660A00C99490 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 248A9F042B2D660A00C99490 /* Assets.xcassets */; };
@@ -25,7 +26,6 @@
 		24D9C1312B37F90100772DF1 /* RunwaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1302B37F90100772DF1 /* RunwaysView.swift */; };
 		24D9C1332B37F92200772DF1 /* NOTAMS_View .swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1322B37F92200772DF1 /* NOTAMS_View .swift */; };
 		24D9C1362B381C3500772DF1 /* METAR_Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1352B381C3500772DF1 /* METAR_Parser.swift */; };
-		24D9C1392B38343B00772DF1 /* SwiftMETAR in Frameworks */ = {isa = PBXBuildFile; productRef = 24D9C1382B38343B00772DF1 /* SwiftMETAR */; };
 		24DD6BBF2B36C0E000CA6029 /* API_Req.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6BBE2B36C0E000CA6029 /* API_Req.swift */; };
 /* End PBXBuildFile section */
 
@@ -77,7 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24D9C1392B38343B00772DF1 /* SwiftMETAR in Frameworks */,
+				245C35412B3900E800CD3DC1 /* METAR in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,7 +192,7 @@
 			);
 			name = New_Foreflight;
 			packageProductDependencies = (
-				24D9C1382B38343B00772DF1 /* SwiftMETAR */,
+				245C35402B3900E800CD3DC1 /* METAR */,
 			);
 			productName = New_Foreflight;
 			productReference = 248A9EFD2B2D660400C99490 /* New_Foreflight.app */;
@@ -267,7 +267,7 @@
 			);
 			mainGroup = 248A9EF42B2D660300C99490;
 			packageReferences = (
-				24D9C1342B38137A00772DF1 /* XCRemoteSwiftPackageReference "SwiftMETAR" */,
+				245C353F2B3900E800CD3DC1 /* XCRemoteSwiftPackageReference "SwiftMETAR" */,
 			);
 			productRefGroup = 248A9EFE2B2D660400C99490 /* Products */;
 			projectDirPath = "";
@@ -683,21 +683,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		24D9C1342B38137A00772DF1 /* XCRemoteSwiftPackageReference "SwiftMETAR" */ = {
+		245C353F2B3900E800CD3DC1 /* XCRemoteSwiftPackageReference "SwiftMETAR" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/RISCfuture/SwiftMETAR/";
+			repositoryURL = "https://github.com/JonathanDowning/SwiftMETAR.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		24D9C1382B38343B00772DF1 /* SwiftMETAR */ = {
+		245C35402B3900E800CD3DC1 /* METAR */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 24D9C1342B38137A00772DF1 /* XCRemoteSwiftPackageReference "SwiftMETAR" */;
-			productName = SwiftMETAR;
+			package = 245C353F2B3900E800CD3DC1 /* XCRemoteSwiftPackageReference "SwiftMETAR" */;
+			productName = METAR;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
