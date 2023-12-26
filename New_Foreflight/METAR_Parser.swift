@@ -46,41 +46,31 @@ func parseRawText(jsonString: String) -> String? {
 
 
 
-
-
-
-
-
-
-
-
-func getComponents(metar: String) -> Dictionary<String ,String>{
+func getComponents(metar: String) -> KeyValuePairs<String ,String>{
     
     //has to match foreflight exactly so forced to hard code? or does it idk
     
     
     var localtime = ""
-    var description = ""
-    var winds = "" 
+    var winds = ""
     var vis = ""
     var clouds = ""
     var temp = ""
-    var dewP = ""
+    var dew = ""
     var altimiter = ""
     var humidity = ""
 
     // Example usage:
-    
+
     
     let met = METAR(metar)
         
-    print(met?.visibility)
-    print(met?.cloudLayers)
-    print(met?.temperature)
-    print(met?.dewPoint)
-    print(met?.qnh?.converted(to: .inchesOfMercury))
-    print(met?.relativeHumidity)
-    
+
+    if let time = met?.date.formatted(date: .omitted, time: .standard){
+        localtime = time
+    }else{
+        print("error nil")
+    }
 
     
     
@@ -94,15 +84,67 @@ func getComponents(metar: String) -> Dictionary<String ,String>{
         print("Default value for nil case")
     }
 
+    
+    
+    
+    if let vis_ = met?.visibility?.measurement.value {
+        vis = "\(vis_)sm"
+        
+    }else{
+        print("error vis nil")
+    }
+    
+    
+    
+    if let clouds_ = met?.cloudLayers.first?.coverage {
+        var cloud_height = met?.cloudLayers.first?.height
+        clouds = "\(clouds_) \(cloud_height!)"
+    }else{
+        clouds = "error clouds nil"
+    }
+    
+    
+    if let dew_ = met?.dewPoint{
+        dew = "\(dew_)"
+    }else{
+        dew = "dewpoint nil"
+    }
+    
+    if let temp_ = met?.temperature{
+        temp = "\(temp_)"
+    }else{
+        temp = "temp nil"
+    }
+    
+    if let alt = met?.qnh?.converted(to: .inchesOfMercury){
+        altimiter = "\(alt)"
+    }else{
+        altimiter = "alt nil"
+    }
+    
+    if let hum = met?.relativeHumidity{
+        humidity = "\(hum * 100)"
+    }else{
+        humidity = "hum nil"
+    }
+    
 
-    var interestingNumbers = ["Time": "",
+    
+
+    var interestingNumbers: KeyValuePairs = ["Time": localtime,
                               "Wind": winds,
-                              "Clouds(AGL)": "",
-                              "Tempature": "",
-                              "Dewpoint": "",
-                              "Altimiter": "",
-                              "Humidity": "",
-                              "Density altitude": ""]
+                              "Visibility" : vis,
+                              "Clouds(AGL)": clouds,
+                              "Tempature": temp,
+                              "Dewpoint": dew,
+                              "Altimiter": altimiter,
+                              "Humidity": humidity,
+                              "Density altitude": "formula"]
+    
+    
+   
+    
+
     
     return interestingNumbers
 }

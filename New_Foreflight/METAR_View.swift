@@ -10,6 +10,8 @@ import SwiftUI
 
 
 struct METAR_View: View {
+
+    
     let JSON_Metar : String
     
     
@@ -18,24 +20,24 @@ struct METAR_View: View {
                 Spacer()
 
         
-        
-        
-        
         if let parsedText = parseRawText(jsonString: JSON_Metar) {
             
             
-            var emptyDict: [String: String] = getComponents(metar: parsedText)
+            let order_metar:KeyValuePairs = getComponents(metar: parsedText)
+            
+            
 
             NavigationView {
                 List {
-                    ForEach(Array(emptyDict.keys), id: \.self) { key in
+                    ForEach(order_metar, id: \.0) { key, value in
 
                         HStack {
                             Text("\(key):")
                             Spacer()
-                            Text("\(emptyDict[key]!)")
+                            Text("\(value)")
                         }
-                    }
+                    }            .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
+
                 }
                 
                 
