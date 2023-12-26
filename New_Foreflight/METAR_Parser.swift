@@ -74,7 +74,6 @@ func getComponents(metar: String) -> Dictionary<String ,String>{
     
     let met = METAR(metar)
         
-    print(met?.wind)
     print(met?.visibility)
     print(met?.cloudLayers)
     print(met?.temperature)
@@ -85,9 +84,11 @@ func getComponents(metar: String) -> Dictionary<String ,String>{
 
     
     
-    if let direction = met?.wind?.direction {
+    if let direction = met?.wind?.direction  {
         let windDirectionString = "\(direction)"
-        print(windDirectionString)
+        let windspeedString = met?.wind?.speed
+        
+        winds = "\(windDirectionString) at \(windspeedString!)kts"
 
     } else {
         print("Default value for nil case")
@@ -95,7 +96,7 @@ func getComponents(metar: String) -> Dictionary<String ,String>{
 
 
     var interestingNumbers = ["Time": "",
-                              "Wind": "",
+                              "Wind": winds,
                               "Clouds(AGL)": "",
                               "Tempature": "",
                               "Dewpoint": "",

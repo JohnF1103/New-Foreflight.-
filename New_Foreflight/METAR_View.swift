@@ -26,39 +26,20 @@ struct METAR_View: View {
             
             var emptyDict: [String: String] = getComponents(metar: parsedText)
 
-            HStack {
+            NavigationView {
+                List {
+                    ForEach(Array(emptyDict.keys), id: \.self) { key in
+
+                        HStack {
+                            Text("\(key):")
+                            Spacer()
+                            Text("\(emptyDict[key]!)")
+                        }
+                    }
+                }
                 
-                //keys
-                                   VStack {
-                                       Text("Time")
-                                       Text("Wind")
-                                       Text("Visibility")
-                                       Text("Clouds(AGL)")
-                                       Text("Temoature")
-                                       Text("Dewpoint")
-                                       Text("Altimiter")
-                                       Text("Humidity")
-
-                                   }
-    //vals
-                                   VStack {
-                                       Text("SOme string")
-                                       Text("Some String")
-                                       Text("Some String")
-                                       Text("Some String")
-                                       Text("Some String")
-                                       Text("Some String")
-                                       Text("Some String")
-
-                                   }
-
-                                  
-                               }
-                               .foregroundColor(.primary)
-                               .padding()
-                               .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary.opacity(0.1)))
-                               .padding(.horizontal)
-           
+                
+            }
         } else {
             Text("API ERROR, NIL METAR").foregroundStyle(Color.red)
         }
