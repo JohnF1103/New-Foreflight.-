@@ -6,19 +6,27 @@
 //
 
 import SwiftUI
+import PDFKit
+
+// Add this:
+
+
 
 struct AirportDetailsView: View {
     
     @EnvironmentObject private var vm : AirportDetailModel
+    @State private var image: UIImage? = nil
+
     //Should take in a METAR obj potentially
     
     let airport : Airport
     let curr_mertar: String
+
     
     
     /*TOO add these as properties of VM*/
-
- /*  let Notams : String
+    
+    /*  let Notams : String
      let runways : String */
     
     
@@ -49,23 +57,36 @@ struct AirportDetailsView: View {
     
     
 }
-   
 
+/*
 #Preview {
     AirportDetailsView(airport: Airport(id: UUID(), AirportCode: "KJFK", latitude: 40.63972222222222, longitude: -73.77888888888889), curr_mertar: "METAR")
 }
-
+*/
 
 extension AirportDetailsView{
-    
+
     private var Imagesection:  some View{
         //add approach plates
         TabView{
-            Image(systemName: "square.and.arrow.up.fill")
-                .resizable()
-                .scaledToFill()
+
+            VStack {
+                     if let image = image {
+                         Image(uiImage: image)
+                             .resizable()
+                             .scaledToFit()
+                     } else {
+                         Text("Loading Image...")
+                     }
+                 }
+                 .onAppear {
+                     // Make API call when the view appears
+                     loadImageFromAPI()
+                 }
+                .scaledToFit()
                 .frame(width: UIScreen.main.bounds.width)
                 .clipped()
+                .padding()
             
         }
         .frame(height: 500)
@@ -75,10 +96,16 @@ extension AirportDetailsView{
     private var titleseciton: some View{
         
         VStack(alignment: .leading, spacing: 8){
+            HStack(spacing: 150){
+                Text(airport.AirportCode)
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                
+                Text("100LL $4.23")
+                    .foregroundStyle(Color.red)
+                
+            }
             
-            Text(airport.AirportCode)
-                .font(.largeTitle)
-                .fontWeight(.semibold)
             Text("Airport")
                 .font(.title3)
                 .foregroundColor(.secondary)
@@ -94,25 +121,41 @@ extension AirportDetailsView{
             
             
             TabView {
-                        ScrollView {
-                            METAR_View(JSON_Metar: self.curr_mertar)
-                                .padding()
-                        }
-                        .tabItem {
-                            Image(systemName: "1.circle")
-                            Text("First")
-                        }
-                        .tag(1)
-                        
-                        Text("Second View")
-                            .padding()
-                            .tabItem {
-                                Image(systemName: "2.circle")
-                                Text("Second")
-                            }
-                            .tag(2)
+                ScrollView {
+                    METAR_View(JSON_Metar: self.curr_mertar)
+                        .padding()
+                }
+                .tabItem {
+                    Image(systemName: "cloud.fill")
+                    Text("METAR")
+                }
+                .tag(1)
+                
+                PlatesView()
+                    .padding()
+                    .tabItem {
+                        Image(systemName: "road.lanes")
+                        Text("Plates")
                     }
-                .frame(height: 200) // Adjust the height as needed
+                    .tag(2)
+                
+                Text("third View")
+                    .padding()
+                    .tabItem {
+                        Image(systemName: "exclamationmark.triangle")
+                        Text("NOTAMS")
+                    }
+                    .tag(3)
+                
+                Text("fourth View")
+                    .padding()
+                    .tabItem {
+                        Image(systemName: "antenna.radiowaves.left.and.right")
+                        Text("Frequencies")
+                    }
+                    .tag(4)
+            }
+            .frame(height: 200) // Adjust the height as needed
             
             
             
@@ -137,7 +180,27 @@ extension AirportDetailsView{
         }
     }
     
-   
+    func loadImageFromAPI() {
+        guard let url = URL(string: "https://cloudfront.foreflight.com/diagrams/2312/\(airport.AirportCode.lowercased()).jpg") else {
+                print("Invalid URL")
+                return
+            }
+
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                    return
+                }
+
+                if let data = data, let uiImage = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.image = uiImage
+                    }
+                }
+            }.resume()
+        }
+    
+    
     
     
 }

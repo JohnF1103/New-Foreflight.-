@@ -15,4 +15,9 @@ class AirportDetailModel: ObservableObject{
     @Published var sheetlocation : Airport? = nil
     
     @Published var curr_metar : String? = nil
+    
+    
 }
+
+
+

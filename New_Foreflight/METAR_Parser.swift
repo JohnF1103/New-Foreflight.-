@@ -9,11 +9,6 @@ import Foundation
 import METAR
 
 
-
-
-
-
-
 func parseRawText(jsonString: String) -> String? {
     do {
         // Convert the JSON string to Data
@@ -97,7 +92,7 @@ func getComponents(metar: String) -> KeyValuePairs<String ,String>{
     
     
     if let clouds_ = met?.cloudLayers.first?.coverage {
-        var cloud_height = met?.cloudLayers.first?.height
+        let cloud_height = met?.cloudLayers.first?.height
         clouds = "\(clouds_) \(cloud_height!)"
     }else{
         clouds = "error clouds nil"
@@ -131,7 +126,7 @@ func getComponents(metar: String) -> KeyValuePairs<String ,String>{
 
     
 
-    var interestingNumbers: KeyValuePairs = ["Time": localtime,
+    let interestingNumbers: KeyValuePairs = ["Time": localtime,
                               "Wind": winds,
                               "Visibility" : vis,
                               "Clouds(AGL)": clouds,

@@ -20,7 +20,7 @@ extension ContentView{
 
         var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(IACO)/decoded")!,timeoutInterval: Double.infinity)
 
-
+        //client side exposure. best practice to encrypt this
         request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
 
         request.httpMethod = "GET"

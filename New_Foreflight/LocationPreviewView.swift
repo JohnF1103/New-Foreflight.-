@@ -148,7 +148,7 @@ extension LocationPreviewView{
             
             
         }label: {
-            Text("View NOTAMS")
+            Text("Plan flight")
             
                 .font(.headline)
                 .frame(width: 125, height: 35)

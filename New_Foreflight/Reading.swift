@@ -8,7 +8,7 @@
 import Foundation
 
 func readFile() -> [Airport] {
-    let textFile = "Airports.txt"
+    _ = "Airports.txt"
     
     var locs: [Airport] = []
     

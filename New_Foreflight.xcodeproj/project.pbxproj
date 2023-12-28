@@ -21,6 +21,12 @@
 		249164572B32762E00D505AC /* Airports.txt in Resources */ = {isa = PBXBuildFile; fileRef = 249164562B32762E00D505AC /* Airports.txt */; };
 		249164592B32F37600D505AC /* Airport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249164582B32F37600D505AC /* Airport.swift */; };
 		2491645B2B32F3F800D505AC /* Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2491645A2B32F3F800D505AC /* Reading.swift */; };
+		24CF75142B3D4A2600B751E0 /* 4.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 24CF75132B3D4A2600B751E0 /* 4.pdf */; };
+		24CF75162B3D611B00B751E0 /* PlatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF75152B3D611B00B751E0 /* PlatesView.swift */; };
+		24CF75182B3D612E00B751E0 /* PlatesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF75172B3D612E00B751E0 /* PlatesViewModel.swift */; };
+		24CF751A2B3D614900B751E0 /* NotamsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF75192B3D614900B751E0 /* NotamsViewModel.swift */; };
+		24CF751C2B3D615A00B751E0 /* FrequenciesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF751B2B3D615A00B751E0 /* FrequenciesView.swift */; };
+		24CF751E2B3D616A00B751E0 /* FrequenciesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF751D2B3D616A00B751E0 /* FrequenciesViewModel.swift */; };
 		24D9C12D2B37893B00772DF1 /* AirportDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C12C2B37893B00772DF1 /* AirportDetailModel.swift */; };
 		24D9C12F2B37F8CB00772DF1 /* METAR_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C12E2B37F8CB00772DF1 /* METAR_View.swift */; };
 		24D9C1312B37F90100772DF1 /* RunwaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1302B37F90100772DF1 /* RunwaysView.swift */; };
@@ -64,6 +70,12 @@
 		249164562B32762E00D505AC /* Airports.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Airports.txt; sourceTree = "<group>"; };
 		249164582B32F37600D505AC /* Airport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Airport.swift; sourceTree = "<group>"; };
 		2491645A2B32F3F800D505AC /* Reading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reading.swift; sourceTree = "<group>"; };
+		24CF75132B3D4A2600B751E0 /* 4.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = 4.pdf; path = ../../../Downloads/4.pdf; sourceTree = "<group>"; };
+		24CF75152B3D611B00B751E0 /* PlatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatesView.swift; sourceTree = "<group>"; };
+		24CF75172B3D612E00B751E0 /* PlatesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatesViewModel.swift; sourceTree = "<group>"; };
+		24CF75192B3D614900B751E0 /* NotamsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotamsViewModel.swift; sourceTree = "<group>"; };
+		24CF751B2B3D615A00B751E0 /* FrequenciesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequenciesView.swift; sourceTree = "<group>"; };
+		24CF751D2B3D616A00B751E0 /* FrequenciesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequenciesViewModel.swift; sourceTree = "<group>"; };
 		24D9C12C2B37893B00772DF1 /* AirportDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportDetailModel.swift; sourceTree = "<group>"; };
 		24D9C12E2B37F8CB00772DF1 /* METAR_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = METAR_View.swift; sourceTree = "<group>"; };
 		24D9C1302B37F90100772DF1 /* RunwaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunwaysView.swift; sourceTree = "<group>"; };
@@ -101,6 +113,9 @@
 		248A9EF42B2D660300C99490 = {
 			isa = PBXGroup;
 			children = (
+				24CF75192B3D614900B751E0 /* NotamsViewModel.swift */,
+				24CF751B2B3D615A00B751E0 /* FrequenciesView.swift */,
+				24CF751D2B3D616A00B751E0 /* FrequenciesViewModel.swift */,
 				248A9EFF2B2D660400C99490 /* New_Foreflight */,
 				248A9F112B2D660A00C99490 /* New_ForeflightTests */,
 				248A9F1B2B2D660B00C99490 /* New_ForeflightUITests */,
@@ -122,10 +137,13 @@
 		248A9EFF2B2D660400C99490 /* New_Foreflight */ = {
 			isa = PBXGroup;
 			children = (
+				24CF75132B3D4A2600B751E0 /* 4.pdf */,
 				244445312B351B44001854DD /* Tower.jpg */,
 				2444452D2B33FA8E001854DD /* LocationPreviewView.swift */,
 				24D9C12C2B37893B00772DF1 /* AirportDetailModel.swift */,
 				248DE9AD2B377501007C976D /* AirportDetailsView.swift */,
+				24CF75152B3D611B00B751E0 /* PlatesView.swift */,
+				24CF75172B3D612E00B751E0 /* PlatesViewModel.swift */,
 				24D9C12E2B37F8CB00772DF1 /* METAR_View.swift */,
 				24D9C1352B381C3500772DF1 /* METAR_Parser.swift */,
 				24D9C1302B37F90100772DF1 /* RunwaysView.swift */,
@@ -285,6 +303,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24CF75142B3D4A2600B751E0 /* 4.pdf in Resources */,
 				249164572B32762E00D505AC /* Airports.txt in Resources */,
 				244445322B351B44001854DD /* Tower.jpg in Resources */,
 				248A9F092B2D660A00C99490 /* Preview Assets.xcassets in Resources */,
@@ -313,12 +332,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24CF75162B3D611B00B751E0 /* PlatesView.swift in Sources */,
+				24CF751E2B3D616A00B751E0 /* FrequenciesViewModel.swift in Sources */,
 				24D9C1332B37F92200772DF1 /* NOTAMS_View .swift in Sources */,
 				24D9C12D2B37893B00772DF1 /* AirportDetailModel.swift in Sources */,
+				24CF751A2B3D614900B751E0 /* NotamsViewModel.swift in Sources */,
 				24D9C1362B381C3500772DF1 /* METAR_Parser.swift in Sources */,
+				24CF751C2B3D615A00B751E0 /* FrequenciesView.swift in Sources */,
 				248DE9AE2B377501007C976D /* AirportDetailsView.swift in Sources */,
 				249164592B32F37600D505AC /* Airport.swift in Sources */,
 				24DD6BBF2B36C0E000CA6029 /* API_Req.swift in Sources */,
+				24CF75182B3D612E00B751E0 /* PlatesViewModel.swift in Sources */,
 				24D9C1312B37F90100772DF1 /* RunwaysView.swift in Sources */,
 				248A9F032B2D660400C99490 /* ContentView.swift in Sources */,
 				24D9C12F2B37F8CB00772DF1 /* METAR_View.swift in Sources */,
