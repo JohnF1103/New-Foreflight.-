@@ -9,7 +9,28 @@ import SwiftUI
 
 struct FrequenciesView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        let frequencies:KeyValuePairs <String, String> = [
+            "Key1": "112.3",
+            "Key2": "121.9"
+        ]
+        
+        
+        NavigationView {
+            List {
+                ForEach(frequencies, id: \.0) { key, value in
+
+                    HStack {
+                        Text("\(key):")
+                        Spacer()
+                        Text("\(value)")
+                    }
+                }            .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
+
+            }
+            .navigationTitle("frequencies ")
+            .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }
 

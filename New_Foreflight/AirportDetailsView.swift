@@ -16,7 +16,7 @@ struct AirportDetailsView: View {
     
     @EnvironmentObject private var vm : AirportDetailModel
     @State private var image: UIImage? = nil
-
+    @State private var PlateInfo: String = ""
     //Should take in a METAR obj potentially
     
     let airport : Airport
@@ -81,7 +81,12 @@ extension AirportDetailsView{
                  }
                  .onAppear {
                      // Make API call when the view appears
+                    //this is where we will load the plates NOTAMS & freqs as well.
+                     
+                     
+                     //Good Q for david 2 approaches. load data when view presented VS when parent button clicked?
                      loadImageFromAPI()
+                     LoadPlates()
                  }
                 .scaledToFit()
                 .frame(width: UIScreen.main.bounds.width)
@@ -130,24 +135,30 @@ extension AirportDetailsView{
                     Text("METAR")
                 }
                 .tag(1)
-                
-                PlatesView()
+                ScrollView{
+                    //if we pass nil str here platesview will check
+                    //we dont check here as we dont want to pass a str saying nil into the view. no way to update nil case then
+                    PlatesView(plateJSON: self.PlateInfo, curr_ap : self.airport)
+                }
                     .padding()
                     .tabItem {
                         Image(systemName: "road.lanes")
                         Text("Plates")
                     }
                     .tag(2)
-                
-                Text("third View")
+                ScrollView{
+                    NOTAMS_View_()
+                }
                     .padding()
                     .tabItem {
                         Image(systemName: "exclamationmark.triangle")
                         Text("NOTAMS")
                     }
                     .tag(3)
-                
-                Text("fourth View")
+                ScrollView{
+                    FrequenciesView()
+                    
+                }
                     .padding()
                     .tabItem {
                         Image(systemName: "antenna.radiowaves.left.and.right")
@@ -200,6 +211,48 @@ extension AirportDetailsView{
             }.resume()
         }
     
+    
+    func LoadPlates(){
+        
+        //Q for david. Load & parse at the same time? or is it ok to load on view apperence & parse on button click
+        
+        guard let url = URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())") else {
+                print("Invalid URL")
+                return
+            }
+
+    
+        
+        
+        
+        var semaphore = DispatchSemaphore (value: 0)
+
+        var request = URLRequest(url: URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())")!,timeoutInterval: Double.infinity)
+
+
+        request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
+
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+          guard let data = data else {
+            print(String(describing: error))
+            semaphore.signal()
+            return
+          }
+            
+            self.PlateInfo = String(data: data, encoding: .utf8)!
+            print("PLATE INFO FOR ", airport.AirportCode.lowercased())
+
+          semaphore.signal()
+        }
+
+
+        task.resume()
+        semaphore.wait()
+        
+        
+    }
     
     
     
