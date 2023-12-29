@@ -29,38 +29,45 @@ struct Plate: Decodable {
     let pdfName: String
     let pdfPath: String
 }
-func parseAirportCharts(apiOutputString: String, airport: Airport) -> [String: (String, String)]? {
+
+func parseAirportCharts(apiOutputString: String, airport: Airport) -> [(String, String, String)]? {
     print("INSDOE HERE")
 
-    var allcharts: [String: String] = [:]
+    var dpCharts: [(String, String, String)] = []
+
     do {
         if let jsonData = apiOutputString.data(using: .utf8) {
             if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: [[String: Any]]] {
-                
-                
-                if let firstKey = jsonObject.keys.first,
-                              let chartArray = jsonObject[firstKey] {
+
+                if let firstKey = jsonObject.keys.first, let chartArray = jsonObject[firstKey] {
                     var chartArrayData: [[String: String]] = []
-                    
+
                     for chartEntry in chartArray {
-                        if let chartType = chartEntry["chart_code"] as? String, let chartName = chartEntry["chart_name"] as? String {
-                            let chartData = ["chart_code": chartType, "chart_name": chartName]
-                            chartArrayData.append(chartData)
+                        if let chartType = chartEntry["chart_code"] as? String, let chartName = chartEntry["chart_name"] as? String, let pdfPath = chartEntry["pdf_path"] as? String {
+                            let chartData = (chartName, pdfPath, chartEntry["download_link"] as? String ?? "")
+                            chartArrayData.append(["chart_code": chartType, "chart_name": chartName, "pdf_path": pdfPath, "download_link": chartData.2])
+                            if chartType == "DP" || chartType == "IAP" || chartType == "STAR" {
+                                dpCharts.append(chartData)
+                            }
                         }
                     }
-                    
+
                     // Print the resulting array of dictionaries
-                    let starCharts = chartArrayData.filter { $0["chart_code"] == "STAR" }
-                                    
-                                    // Print the values of the "STAR" charts
-                        starCharts.forEach { print($0["chart_name"] ?? "") }
+                    let SID_STAR_and_IAP_charts = chartArrayData.filter { $0["chart_code"] == "DP"  ||  $0["chart_code"] == "IAP" ||  $0["chart_code"] == "STAR" }
+
+                    // Print the values of the "STAR" charts
+                    SID_STAR_and_IAP_charts.forEach {
+                        if let chartName = $0["chart_name"], let pdfPath = $0["pdf_path"]{
+                            print("Chart Name: \(chartName), PDF Path: \(pdfPath)")
+                        }
+                    }
                 }
             }
         }
     } catch {
         print("Error parsing JSON: \(error)")
-    }    
-    return nil
-}
+    }
 
+    return dpCharts.isEmpty ? nil : dpCharts
+}
 
