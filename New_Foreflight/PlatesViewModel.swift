@@ -29,16 +29,13 @@ struct Plate: Decodable {
     let pdfName: String
     let pdfPath: String
 }
-
-func parseAirportCharts(apiOutputString: String, airport: Airport) -> [(String, String, String)]? {
-    print("INSDOE HERE")
-
+func parseAirportCharts(apiOutputString: String, airport: Airport) -> [String: [(String, String)]]? {
     var dpCharts: [(String, String, String)] = []
+    var chartDataDictionary: [String: [(String, String)]] = [:]
 
     do {
         if let jsonData = apiOutputString.data(using: .utf8) {
             if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: [[String: Any]]] {
-
                 if let firstKey = jsonObject.keys.first, let chartArray = jsonObject[firstKey] {
                     var chartArrayData: [[String: String]] = []
 
@@ -52,13 +49,19 @@ func parseAirportCharts(apiOutputString: String, airport: Airport) -> [(String, 
                         }
                     }
 
-                    // Print the resulting array of dictionaries
-                    let SID_STAR_and_IAP_charts = chartArrayData.filter { $0["chart_code"] == "DP"  ||  $0["chart_code"] == "IAP" ||  $0["chart_code"] == "STAR" }
+                    let SID_STAR_and_IAP_charts = chartArrayData.filter { $0["chart_code"] == "DP" || $0["chart_code"] == "IAP" || $0["chart_code"] == "STAR" }
 
-                    // Print the values of the "STAR" charts
                     SID_STAR_and_IAP_charts.forEach {
-                        if let chartName = $0["chart_name"], let pdfPath = $0["pdf_path"]{
-                            print("Chart Name: \(chartName), PDF Path: \(pdfPath)")
+                        if let chartName = $0["chart_name"], let pdfPath = $0["pdf_path"], let chartType = $0["chart_code"] {
+                            print("Chart Name: \(chartName), PDF Path: \(pdfPath), Chart Code: \(chartType)")
+
+                            // Modify the dictionary structure
+                            if var existingCharts = chartDataDictionary[chartType] {
+                                existingCharts.append((chartName, pdfPath))
+                                chartDataDictionary[chartType] = existingCharts
+                            } else {
+                                chartDataDictionary[chartType] = [(chartName, pdfPath)]
+                            }
                         }
                     }
                 }
@@ -68,6 +71,5 @@ func parseAirportCharts(apiOutputString: String, airport: Airport) -> [(String, 
         print("Error parsing JSON: \(error)")
     }
 
-    return dpCharts.isEmpty ? nil : dpCharts
+    return chartDataDictionary.isEmpty ? nil : chartDataDictionary
 }
-

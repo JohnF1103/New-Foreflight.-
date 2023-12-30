@@ -17,6 +17,7 @@ struct AirportDetailsView: View {
     @EnvironmentObject private var vm : AirportDetailModel
     @State private var image: UIImage? = nil
     @State private var PlateInfo: String = ""
+
     //Should take in a METAR obj potentially
     
     let airport : Airport
@@ -129,7 +130,7 @@ extension AirportDetailsView{
                 ScrollView {
                     METAR_View(JSON_Metar: self.curr_mertar)
                         .padding()
-                }
+                }.frame(maxWidth: .infinity)
                 .tabItem {
                     Image(systemName: "cloud.fill")
                     Text("METAR")
@@ -138,8 +139,8 @@ extension AirportDetailsView{
                 ScrollView{
                     //if we pass nil str here platesview will check
                     //we dont check here as we dont want to pass a str saying nil into the view. no way to update nil case then
-                    PlatesView(plateJSON: self.PlateInfo, curr_ap : self.airport)
-                }
+                    PlatesView(plateJSON: self.PlateInfo, curr_ap : self.airport).frame(maxHeight: .infinity)
+                }.frame(maxHeight: .infinity)
                     .padding()
                     .tabItem {
                         Image(systemName: "road.lanes")
@@ -215,7 +216,7 @@ extension AirportDetailsView{
     func LoadPlates(){
         
         //Q for david. Load & parse at the same time? or is it ok to load on view apperence & parse on button click
-        
+        //Q for david. frontend exposure. should this be loaded from out OWN API?
         guard let url = URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())") else {
                 print("Invalid URL")
                 return
