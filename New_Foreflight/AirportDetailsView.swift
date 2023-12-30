@@ -17,7 +17,12 @@ struct AirportDetailsView: View {
     @EnvironmentObject private var vm : AirportDetailModel
     @State private var image: UIImage? = nil
     @State private var PlateInfo: String = ""
-
+    @State private var isPlatesViewPresented = false
+    
+    
+    @State var isPresenting = false
+       @State private var selectedItem = 1
+       @State private var oldSelectedItem = 1
     //Should take in a METAR obj potentially
     
     let airport : Airport
@@ -126,7 +131,7 @@ extension AirportDetailsView{
         VStack(alignment: .leading, spacing: 8){
             
             
-            TabView {
+            TabView(selection: $selectedItem) {
                 ScrollView {
                     METAR_View(JSON_Metar: self.curr_mertar)
                         .padding()
@@ -136,17 +141,14 @@ extension AirportDetailsView{
                     Text("METAR")
                 }
                 .tag(1)
-                ScrollView{
-                    //if we pass nil str here platesview will check
-                    //we dont check here as we dont want to pass a str saying nil into the view. no way to update nil case then
-                    PlatesView(plateJSON: self.PlateInfo, curr_ap : self.airport).frame(maxHeight: .infinity)
-                }.frame(maxHeight: .infinity)
-                    .padding()
-                    .tabItem {
-                        Image(systemName: "road.lanes")
-                        Text("Plates")
-                    }
-                    .tag(2)
+                Text("Diaplaying plates...")
+                .tabItem {
+                    Image(systemName: "road.lanes")
+                                    Text("Plates")
+                }
+                .tag(2)
+                
+                
                 ScrollView{
                     NOTAMS_View_()
                 }
@@ -167,6 +169,22 @@ extension AirportDetailsView{
                     }
                     .tag(4)
             }
+            .onChange(of: selectedItem) {    // SwiftUI 2.0 track changes
+                        if 2 == selectedItem {
+                        self.isPresenting = true
+                        } else {
+                            self.oldSelectedItem = $0
+                        }
+                    }
+                .sheet(isPresented: $isPresenting, onDismiss: {
+                        self.selectedItem = self.oldSelectedItem
+                    }) {
+                        PlatesView(plateJSON: self.PlateInfo, curr_ap: self.airport)
+                }
+
+
+            
+            
             .frame(height: 200) // Adjust the height as needed
             
             
