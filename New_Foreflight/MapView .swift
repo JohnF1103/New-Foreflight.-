@@ -17,6 +17,7 @@ struct MapView: UIViewRepresentable {
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
+        mapView.addOverlays(self.parseGEOjson())
         return mapView
     }
     
@@ -32,12 +33,33 @@ struct MapView: UIViewRepresentable {
         Coordinator(parent: self)
     }
     
-    func AnnotationCLicked(annotation: MKAnnotation){
-        vm.DisplayLocationdetail.toggle()
-        vm.selected_airport = Airport(id: UUID(), AirportCode: annotation.title?.debugDescription ?? "nil", latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
-     
+    func parseGEOjson() ->[MKOverlay]{
         
-       
+        guard let url = Bundle.main.url(forResource: "Map", withExtension: "json") else {
+            
+            fatalError("Uable to get geoJSON update API creds.")
+        }
+        var geoJSon = [MKGeoJSONObject]()
+        
+        do{
+            let data = try Data(contentsOf:url)
+            geoJSon = try MKGeoJSONDecoder().decode(data)
+            
+        }catch {
+            fatalError("error no obj to decode")
+        }
+        var overlays = [MKOverlay]()
+        for item in geoJSon{
+            if let feature = item as? MKGeoJSONFeature{
+                for geo in feature.geometry{
+                    if let polygon = geo as? MKPolygon{
+                        
+                        overlays.append(polygon)
+                    }
+                }
+            }
+        }
+        return overlays
     }
     
     class Coordinator: NSObject,MKMapViewDelegate{
@@ -50,8 +72,24 @@ struct MapView: UIViewRepresentable {
             self.parent = parent
         }
         
+        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+            if let polygon = overlay as? MKPolygon{
+
+                let renderer = MKPolygonRenderer(polygon:polygon)
+                renderer.fillColor = UIColor.red.withAlphaComponent(0.5)
+                renderer.strokeColor = UIColor.black
+                return renderer
+            }
+
+            return MKOverlayRenderer(overlay: overlay)
+        }
+        
+        
+        
         
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            
+            
                if let annotation = view.annotation {
                    //Process your annotation here
                    
