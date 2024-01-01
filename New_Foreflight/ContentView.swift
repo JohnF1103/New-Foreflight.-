@@ -8,53 +8,33 @@ import SwiftUI
 import MapKit
 
 
-    
+
+
+
 struct ContentView: View {
     
     // Assuming this code is part of a function or method
     
+    @State private var centerCoordinate = CLLocationCoordinate2D()
+    @State private var airports = [MKPointAnnotation]()
     
     
-    @State private var showLocationPreview = false
-    @State private var selectedAirport: Airport?
     
     @State private var locations: [Airport] = readFile()
     
     @EnvironmentObject private var vm : AirportDetailModel
     
     
-    var body: some View {
+    var body: some View {	
         
         ZStack{
             
-            Map{
-              
             
-                ForEach(locations) { curr_airport in
-                                    Annotation(curr_airport.AirportCode, coordinate: CLLocationCoordinate2D(latitude: curr_airport.latitude, longitude: curr_airport.longitude)) {
-                                        Button(action: { print("Clicked on \(curr_airport.AirportCode)")
-                                            
-                                            
-                                            
-                                            self.selectedAirport = curr_airport
-                                            self.showLocationPreview.toggle()
-                                                
-                                            
-                                            
-                                        }, label: {
-                                            ZStack{
-                                                RoundedRectangle(cornerRadius: 5)
-                                                    .fill(Color.teal)
-                                                Text("✈️")
-                                                    .padding(5)
-                                            }
-                                        })
-                                    }
-                                }
-                
-            }
-                .ignoresSafeArea()
             
+            MapView(centerCoordinate: $centerCoordinate, annotations:  airports)
+                .edgesIgnoringSafeArea(.all)
+        
+        
 
             VStack(spacing: 0){
                 
@@ -64,11 +44,11 @@ struct ContentView: View {
                 
                 ZStack{
                     
-                    if showLocationPreview{
+                    if vm.DisplayLocationdetail{
                         
-                        if self.selectedAirport != nil{
+                        if vm.selected_airport != nil{
                             
-                            LocationPreviewView(airport: self.selectedAirport!)
+                            LocationPreviewView(airport: vm.selected_airport!)
                             
                                 .shadow(color:Color.black.opacity(0.3) , radius: 20)
                                 .padding()
@@ -78,11 +58,22 @@ struct ContentView: View {
                         
                     }
                     
-                    
+        
                 }
                 
             }
-            
+            .onAppear{
+                
+                for airport in locations {
+                            let annotation = MKPointAnnotation()
+                            annotation.coordinate = CLLocationCoordinate2D(latitude: airport.latitude, longitude: airport.longitude)
+                            annotation.title = airport.AirportCode
+                            airports.append(annotation)
+                        }
+            }.onDisappear {
+                // Reset the selectedAirport when the ContentView disappears
+                vm.selected_airport = nil
+            }
             
         }.sheet(item: $vm.sheetlocation, onDismiss: nil){ap in
             
@@ -98,3 +89,4 @@ struct ContentView: View {
         
     }
 }
+

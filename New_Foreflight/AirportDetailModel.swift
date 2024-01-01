@@ -16,6 +16,11 @@ class AirportDetailModel: ObservableObject{
     
     @Published var curr_metar : String? = nil
     
+    @Published var DisplayLocationdetail = false
+    @Published var selected_airport: Airport?
+
+
+    
     
 }
 

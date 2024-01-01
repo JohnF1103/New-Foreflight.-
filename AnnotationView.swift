@@ -7,12 +7,15 @@
 
 import SwiftUI
 
-struct SwiftUIView: View {
+struct AnnotationView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack{
+            RoundedRectangle(cornerRadius: 5)
+                .fill(Color.teal)
+            Text("✈️")
+                .padding(5)
+        }
     }
 }
 
-#Preview {
-    SwiftUIView()
-}
+
