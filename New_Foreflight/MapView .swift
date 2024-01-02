@@ -23,10 +23,15 @@ struct MapView: UIViewRepresentable {
     
     func updateUIView(_ view: MKMapView, context: Context) {
         print("hello")
+        
+        
         if annotations.count != view.annotations.count{
             view.removeAnnotations(view.annotations)
             view.addAnnotations(annotations)
         }
+        
+        view.removeOverlays(view.overlays)
+        view.addOverlays(self.parseGEOjson())
     }
     
     func makeCoordinator() -> Coordinator {
@@ -36,8 +41,9 @@ struct MapView: UIViewRepresentable {
     func parseGEOjson() ->[MKOverlay]{
         //add logic for toggles on the map here
         
+        print("GETTTING ", vm.selectedData)
         //vm.whatever we label
-        guard let url = Bundle.main.url(forResource: "Places", withExtension: "json") else {
+        guard let url = Bundle.main.url(forResource: vm.selectedData, withExtension: "json") else {
             
             fatalError("Uable to get geoJSON update API creds.")
         }

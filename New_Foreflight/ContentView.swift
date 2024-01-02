@@ -15,11 +15,12 @@ struct ContentView: View {
     
     // Assuming this code is part of a function or method
     
-    @State private var selection = "Military TFRs"
+    @State private var selection = ""
     let colors = ["Military TFRs", "Special Airspaces"]
     
     @State private var centerCoordinate = CLLocationCoordinate2D()
     @State private var airports = [MKPointAnnotation]()
+    @State private var isPickerVisible = false
     
     
     @State private var locations: [Airport] = readFile()
@@ -27,7 +28,7 @@ struct ContentView: View {
     @EnvironmentObject private var vm : AirportDetailModel
     
     
-    var body: some View {	
+    var body: some View {
         
         ZStack{
             
@@ -35,9 +36,9 @@ struct ContentView: View {
             
             MapView(centerCoordinate: $centerCoordinate, annotations:  airports)
                 .edgesIgnoringSafeArea(.all)
-        
-        
-
+            
+            
+            
             VStack(spacing: 0){
                 AdditionalDataButton
                 
@@ -60,18 +61,18 @@ struct ContentView: View {
                         
                     }
                     
-        
+                    
                 }
                 
             }
             .onAppear{
                 
                 for airport in locations {
-                            let annotation = MKPointAnnotation()
-                            annotation.coordinate = CLLocationCoordinate2D(latitude: airport.latitude, longitude: airport.longitude)
-                            annotation.title = airport.AirportCode
-                            airports.append(annotation)
-                        }
+                    let annotation = MKPointAnnotation()
+                    annotation.coordinate = CLLocationCoordinate2D(latitude: airport.latitude, longitude: airport.longitude)
+                    annotation.title = airport.AirportCode
+                    airports.append(annotation)
+                }
             }.onDisappear {
                 // Reset the selectedAirport when the ContentView disappears
                 vm.selected_airport = nil
@@ -85,7 +86,7 @@ struct ContentView: View {
         
         
         
-       
+        
         
         
         
@@ -97,22 +98,43 @@ extension ContentView{
     
     private var AdditionalDataButton: some View{
         
-        Button{
-            
-            
-
         
-        } label: {
-            Image(systemName: "xmark")
-                .font(.headline)
-                .padding(16)
-                .foregroundColor(.primary)
-                .foregroundColor(.primary)
-                .background(.thickMaterial)
-                .cornerRadius(10)
-                .shadow(radius: 4)
-                .padding()
-        }
+        VStack {
+            
+            
+            Menu {
+                Button("MilitaryTFR's", action:showTFRs )
+                Button("Special Airspaces", action: showSpecialAirspaces)
+            } label: {
+                
+                Image(systemName: "square.on.square")
+                    .font(.headline)
+                    .padding(16)
+                    .foregroundColor(.primary)
+                    .background(.thickMaterial)
+                    .cornerRadius(10)
+                    .shadow(radius: 4)
+                    .padding()
+            }
+            // Image (xmark) to open the Picker
+            
+            // Picker
+            
+        }.offset(x:-150)
+    }
+    
+    func showTFRs() {
+        
+        print("CALLING ME NOEN SELECTED")
+        vm.selectedData = "TFR"
+        
+    }
+    
+    
+    func showSpecialAirspaces() {
+        print("CALLING ME NOEN SELECTED")
+
+        vm.selectedData = "Special"
     }
 }
 
