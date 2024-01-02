@@ -19,7 +19,7 @@ class AirportDetailModel: ObservableObject{
     @Published var DisplayLocationdetail = false
     @Published var selected_airport: Airport?
 
-    @Published  var selectedData: String? = nil
+    @Published  var selectedData: String? = "Class_B"
 
     
    

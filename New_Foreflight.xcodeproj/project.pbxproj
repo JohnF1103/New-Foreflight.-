@@ -12,6 +12,9 @@
 		245C35412B3900E800CD3DC1 /* METAR in Frameworks */ = {isa = PBXBuildFile; productRef = 245C35402B3900E800CD3DC1 /* METAR */; };
 		246715512B436D0B00DCDFAB /* Special.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715502B436D0B00DCDFAB /* Special.json */; };
 		246715532B43C61800DCDFAB /* TFR.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715522B43C61800DCDFAB /* TFR.json */; };
+		246715552B43E76E00DCDFAB /* ASpace_bounds.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715542B43E76D00DCDFAB /* ASpace_bounds.json */; };
+		246715572B43E7AD00DCDFAB /* Staduims.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715562B43E7AD00DCDFAB /* Staduims.json */; };
+		246715592B43F79000DCDFAB /* Class_B.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715582B43F79000DCDFAB /* Class_B.json */; };
 		2477B8102B42303A004523FD /* MapView .swift in Sources */ = {isa = PBXBuildFile; fileRef = 2477B80F2B42303A004523FD /* MapView .swift */; };
 		2477B8122B424B9B004523FD /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2477B8112B424B9B004523FD /* AnnotationView.swift */; };
 		24813A162B42B125003616F6 /* Map.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 24813A152B42B125003616F6 /* Map.geojson */; };
@@ -63,6 +66,9 @@
 		244445312B351B44001854DD /* Tower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tower.jpg; sourceTree = "<group>"; };
 		246715502B436D0B00DCDFAB /* Special.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Special.json; sourceTree = "<group>"; };
 		246715522B43C61800DCDFAB /* TFR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TFR.json; sourceTree = "<group>"; };
+		246715542B43E76D00DCDFAB /* ASpace_bounds.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ASpace_bounds.json; sourceTree = "<group>"; };
+		246715562B43E7AD00DCDFAB /* Staduims.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Staduims.json; sourceTree = "<group>"; };
+		246715582B43F79000DCDFAB /* Class_B.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Class_B.json; sourceTree = "<group>"; };
 		2477B80F2B42303A004523FD /* MapView .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView .swift"; sourceTree = "<group>"; };
 		2477B8112B424B9B004523FD /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		24813A152B42B125003616F6 /* Map.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = Map.geojson; sourceTree = "<group>"; };
@@ -158,8 +164,10 @@
 				24CF75152B3D611B00B751E0 /* PlatesView.swift */,
 				24CF75172B3D612E00B751E0 /* PlatesViewModel.swift */,
 				24D9C12E2B37F8CB00772DF1 /* METAR_View.swift */,
+				246715582B43F79000DCDFAB /* Class_B.json */,
 				246715502B436D0B00DCDFAB /* Special.json */,
 				246715522B43C61800DCDFAB /* TFR.json */,
+				246715562B43E7AD00DCDFAB /* Staduims.json */,
 				24D9C1352B381C3500772DF1 /* METAR_Parser.swift */,
 				24D9C1302B37F90100772DF1 /* RunwaysView.swift */,
 				24D9C1322B37F92200772DF1 /* NOTAMS_View .swift */,
@@ -175,6 +183,7 @@
 				248A9F072B2D660A00C99490 /* Preview Content */,
 				24C7CAF02B3E85D4009EA545 /* WebView.swift */,
 				24F33F552B4365A9003EABB4 /* Maps */,
+				246715542B43E76D00DCDFAB /* ASpace_bounds.json */,
 			);
 			path = New_Foreflight;
 			sourceTree = "<group>";
@@ -323,9 +332,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				249164572B32762E00D505AC /* Airports.txt in Resources */,
+				246715552B43E76E00DCDFAB /* ASpace_bounds.json in Resources */,
 				246715512B436D0B00DCDFAB /* Special.json in Resources */,
+				246715572B43E7AD00DCDFAB /* Staduims.json in Resources */,
 				24F33F562B4365A9003EABB4 /* Maps in Resources */,
 				244445322B351B44001854DD /* Tower.jpg in Resources */,
+				246715592B43F79000DCDFAB /* Class_B.json in Resources */,
 				246715532B43C61800DCDFAB /* TFR.json in Resources */,
 				248A9F092B2D660A00C99490 /* Preview Assets.xcassets in Resources */,
 				248A9F052B2D660A00C99490 /* Assets.xcassets in Resources */,

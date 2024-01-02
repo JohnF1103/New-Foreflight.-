@@ -16,7 +16,7 @@ struct ContentView: View {
     // Assuming this code is part of a function or method
     
     @State private var selection = ""
-    let colors = ["Military TFRs", "Special Airspaces"]
+    let colors = ["Military TFRs", "Special use airspaces, ATC boundaries"]
     
     @State private var centerCoordinate = CLLocationCoordinate2D()
     @State private var airports = [MKPointAnnotation]()
@@ -103,8 +103,11 @@ extension ContentView{
             
             
             Menu {
-                Button("MilitaryTFR's", action:showTFRs )
-                Button("Special Airspaces", action: showSpecialAirspaces)
+                Button("Class B cairspaces", action: Show_class_Bravo)
+                Button("National Defense TFRs", action:showTFRs )
+                Button("ATC Boundaries", action: showATClimits)
+                Button("Special use airspaces", action: showSpecialAirspaces)
+
             } label: {
                 
                 Image(systemName: "square.on.square")
@@ -135,6 +138,14 @@ extension ContentView{
         print("CALLING ME NOEN SELECTED")
 
         vm.selectedData = "Special"
+    }
+    
+    func showATClimits(){
+        vm.selectedData = "ASpace_bounds"
+    }
+    
+    func Show_class_Bravo(){
+        vm.selectedData = "Class_B"
     }
 }
 

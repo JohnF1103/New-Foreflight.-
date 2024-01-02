@@ -18,6 +18,8 @@ struct MapView: UIViewRepresentable {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
         mapView.addOverlays(self.parseGEOjson())
+        
+        
         return mapView
     }
     
@@ -63,6 +65,8 @@ struct MapView: UIViewRepresentable {
                     if let polygon = geo as? MKPolygon{
                         
                         overlays.append(polygon)
+                        
+                        
                     }
                 }
             }
@@ -79,6 +83,8 @@ struct MapView: UIViewRepresentable {
         init(parent: MapView) {
             self.parent = parent
         }
+        
+        
         
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
             if let polygon = overlay as? MKPolygon{
@@ -108,6 +114,9 @@ struct MapView: UIViewRepresentable {
                    
                }
            }
+        
+        
+        
         
        
     }
