@@ -15,9 +15,11 @@ struct ContentView: View {
     
     // Assuming this code is part of a function or method
     
+    @State private var selection = "Military TFRs"
+    let colors = ["Military TFRs", "Special Airspaces"]
+    
     @State private var centerCoordinate = CLLocationCoordinate2D()
     @State private var airports = [MKPointAnnotation]()
-    
     
     
     @State private var locations: [Airport] = readFile()
@@ -37,7 +39,7 @@ struct ContentView: View {
         
 
             VStack(spacing: 0){
-                
+                AdditionalDataButton
                 
                 Spacer()
                 
@@ -87,6 +89,30 @@ struct ContentView: View {
         
         
         
+    }
+}
+
+
+extension ContentView{
+    
+    private var AdditionalDataButton: some View{
+        
+        Button{
+            
+            
+
+        
+        } label: {
+            Image(systemName: "xmark")
+                .font(.headline)
+                .padding(16)
+                .foregroundColor(.primary)
+                .foregroundColor(.primary)
+                .background(.thickMaterial)
+                .cornerRadius(10)
+                .shadow(radius: 4)
+                .padding()
+        }
     }
 }
 

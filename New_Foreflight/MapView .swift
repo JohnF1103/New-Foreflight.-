@@ -34,8 +34,10 @@ struct MapView: UIViewRepresentable {
     }
     
     func parseGEOjson() ->[MKOverlay]{
+        //add logic for toggles on the map here
         
-        guard let url = Bundle.main.url(forResource: "Map", withExtension: "json") else {
+        //vm.whatever we label
+        guard let url = Bundle.main.url(forResource: "Places", withExtension: "json") else {
             
             fatalError("Uable to get geoJSON update API creds.")
         }

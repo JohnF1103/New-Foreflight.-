@@ -10,9 +10,10 @@
 		2444452E2B33FA8E001854DD /* LocationPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2444452D2B33FA8E001854DD /* LocationPreviewView.swift */; };
 		244445322B351B44001854DD /* Tower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 244445312B351B44001854DD /* Tower.jpg */; };
 		245C35412B3900E800CD3DC1 /* METAR in Frameworks */ = {isa = PBXBuildFile; productRef = 245C35402B3900E800CD3DC1 /* METAR */; };
+		246715512B436D0B00DCDFAB /* Places.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715502B436D0B00DCDFAB /* Places.json */; };
 		2477B8102B42303A004523FD /* MapView .swift in Sources */ = {isa = PBXBuildFile; fileRef = 2477B80F2B42303A004523FD /* MapView .swift */; };
 		2477B8122B424B9B004523FD /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2477B8112B424B9B004523FD /* AnnotationView.swift */; };
-		24813A162B42B125003616F6 /* Map.json in Resources */ = {isa = PBXBuildFile; fileRef = 24813A152B42B125003616F6 /* Map.json */; };
+		24813A162B42B125003616F6 /* Map.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 24813A152B42B125003616F6 /* Map.geojson */; };
 		248A9F012B2D660400C99490 /* New_ForeflightApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F002B2D660400C99490 /* New_ForeflightApp.swift */; };
 		248A9F032B2D660400C99490 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A9F022B2D660400C99490 /* ContentView.swift */; };
 		248A9F052B2D660A00C99490 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 248A9F042B2D660A00C99490 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 		24D9C1332B37F92200772DF1 /* NOTAMS_View .swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1322B37F92200772DF1 /* NOTAMS_View .swift */; };
 		24D9C1362B381C3500772DF1 /* METAR_Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1352B381C3500772DF1 /* METAR_Parser.swift */; };
 		24DD6BBF2B36C0E000CA6029 /* API_Req.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6BBE2B36C0E000CA6029 /* API_Req.swift */; };
+		24F33F562B4365A9003EABB4 /* Maps in Resources */ = {isa = PBXBuildFile; fileRef = 24F33F552B4365A9003EABB4 /* Maps */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,9 +60,10 @@
 /* Begin PBXFileReference section */
 		2444452D2B33FA8E001854DD /* LocationPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPreviewView.swift; sourceTree = "<group>"; };
 		244445312B351B44001854DD /* Tower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tower.jpg; sourceTree = "<group>"; };
+		246715502B436D0B00DCDFAB /* Places.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Places.json; sourceTree = "<group>"; };
 		2477B80F2B42303A004523FD /* MapView .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView .swift"; sourceTree = "<group>"; };
 		2477B8112B424B9B004523FD /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
-		24813A152B42B125003616F6 /* Map.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Map.json; sourceTree = "<group>"; };
+		24813A152B42B125003616F6 /* Map.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = Map.geojson; sourceTree = "<group>"; };
 		248A9EFD2B2D660400C99490 /* New_Foreflight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = New_Foreflight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		248A9F002B2D660400C99490 /* New_ForeflightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = New_ForeflightApp.swift; sourceTree = "<group>"; };
 		248A9F022B2D660400C99490 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -88,6 +91,7 @@
 		24D9C1322B37F92200772DF1 /* NOTAMS_View .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NOTAMS_View .swift"; sourceTree = "<group>"; };
 		24D9C1352B381C3500772DF1 /* METAR_Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = METAR_Parser.swift; sourceTree = "<group>"; };
 		24DD6BBE2B36C0E000CA6029 /* API_Req.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API_Req.swift; sourceTree = "<group>"; };
+		24F33F552B4365A9003EABB4 /* Maps */ = {isa = PBXFileReference; lastKnownFileType = text; path = Maps; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,7 +148,7 @@
 		248A9EFF2B2D660400C99490 /* New_Foreflight */ = {
 			isa = PBXGroup;
 			children = (
-				24813A152B42B125003616F6 /* Map.json */,
+				24813A152B42B125003616F6 /* Map.geojson */,
 				244445312B351B44001854DD /* Tower.jpg */,
 				2444452D2B33FA8E001854DD /* LocationPreviewView.swift */,
 				24D9C12C2B37893B00772DF1 /* AirportDetailModel.swift */,
@@ -152,6 +156,7 @@
 				24CF75152B3D611B00B751E0 /* PlatesView.swift */,
 				24CF75172B3D612E00B751E0 /* PlatesViewModel.swift */,
 				24D9C12E2B37F8CB00772DF1 /* METAR_View.swift */,
+				246715502B436D0B00DCDFAB /* Places.json */,
 				24D9C1352B381C3500772DF1 /* METAR_Parser.swift */,
 				24D9C1302B37F90100772DF1 /* RunwaysView.swift */,
 				24D9C1322B37F92200772DF1 /* NOTAMS_View .swift */,
@@ -166,6 +171,7 @@
 				248A9F062B2D660A00C99490 /* New_Foreflight.entitlements */,
 				248A9F072B2D660A00C99490 /* Preview Content */,
 				24C7CAF02B3E85D4009EA545 /* WebView.swift */,
+				24F33F552B4365A9003EABB4 /* Maps */,
 			);
 			path = New_Foreflight;
 			sourceTree = "<group>";
@@ -314,10 +320,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				249164572B32762E00D505AC /* Airports.txt in Resources */,
+				246715512B436D0B00DCDFAB /* Places.json in Resources */,
+				24F33F562B4365A9003EABB4 /* Maps in Resources */,
 				244445322B351B44001854DD /* Tower.jpg in Resources */,
 				248A9F092B2D660A00C99490 /* Preview Assets.xcassets in Resources */,
 				248A9F052B2D660A00C99490 /* Assets.xcassets in Resources */,
-				24813A162B42B125003616F6 /* Map.json in Resources */,
+				24813A162B42B125003616F6 /* Map.geojson in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
