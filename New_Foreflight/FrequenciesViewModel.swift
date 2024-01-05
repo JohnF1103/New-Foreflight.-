@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
+
+
+func parseFrequencies(){
+    
+    
+}

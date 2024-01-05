@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import PDFKit
 import WebKit
 
 
@@ -20,7 +19,6 @@ struct PlatesView: View {
     let curr_ap : Airport
     @State private var isPresentWebView = false
 
-    let url: URL! = URL(string: "http://developer.apple.com/iphone/library/documentation/UIKit/Reference/UIWebView_Class/UIWebView_Class.pdf")
 
     var body: some View {
     
