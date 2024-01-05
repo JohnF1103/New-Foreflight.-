@@ -36,7 +36,3 @@ struct FrequenciesView: View {
         }
     }
 }
-
-#Preview {
-    FrequenciesView()
-}
