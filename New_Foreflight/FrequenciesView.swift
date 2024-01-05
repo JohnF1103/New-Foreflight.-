@@ -9,7 +9,10 @@ import SwiftUI
 
 struct FrequenciesView: View {
     
+    let FreqenciesJSON: String
+    let curr_ap : Airport
     var body: some View {
+        
         
         let frequencies:KeyValuePairs <String, String> = [
             "Key1": "112.3",

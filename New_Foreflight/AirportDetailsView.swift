@@ -17,7 +17,8 @@ struct AirportDetailsView: View {
     @EnvironmentObject private var vm : AirportDetailModel
     @State private var image: UIImage? = nil
     @State private var PlateInfo: String = ""
-    @State private var isPlatesViewPresented = false
+    @State private var isFreqenciespresented = false
+    
     
     
     @State var isPresenting = false
@@ -159,8 +160,8 @@ extension AirportDetailsView{
                     }
                     .tag(3)
                 ScrollView{
-                    FrequenciesView()
-                    
+                    Text("Diaplaying Frequencies...")
+
                 }
                     .padding()
                     .tabItem {
@@ -175,12 +176,27 @@ extension AirportDetailsView{
                         } else {
                             self.oldSelectedItem = $0
                         }
+                
+                    if 4 == selectedItem {
+                    self.isFreqenciespresented = true
+                    } else {
+                        self.oldSelectedItem = $0
                     }
-                .sheet(isPresented: $isPresenting, onDismiss: {
+                    }
+            
+             .sheet(isPresented: $isPresenting, onDismiss: {
                         self.selectedItem = self.oldSelectedItem
                     }) {
                         PlatesView(plateJSON: self.PlateInfo, curr_ap: self.airport)
                 }
+                    .sheet(isPresented: $isFreqenciespresented, onDismiss: {
+                               self.selectedItem = self.oldSelectedItem
+                           }) {
+                               
+                               FrequenciesView(FreqenciesJSON: self.PlateInfo, curr_ap: self.airport)
+                       }
+            
+                    
 
 
             
