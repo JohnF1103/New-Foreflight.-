@@ -17,8 +17,11 @@ struct AirportDetailsView: View {
     @EnvironmentObject private var vm : AirportDetailModel
     @State private var image: UIImage? = nil
     @State private var PlateInfo: String = ""
+    @State private var FrequencyInfo: String = ""
+
     @State private var isFreqenciespresented = false
-    
+    @State private var FreqapiKey = "9d0b8ab9c176ca96804eac20c1936b5b2b058965c1c0e6ffbfd4c737730dfe8f5d175f8f447b6be1b9875346c5f00cc3"
+
     
     
     @State var isPresenting = false
@@ -178,7 +181,11 @@ extension AirportDetailsView{
                         }
                 
                     if 4 == selectedItem {
+                    
+                    LoadFrequencies()
                     self.isFreqenciespresented = true
+                    
+
                     } else {
                         self.oldSelectedItem = $0
                     }
@@ -286,6 +293,42 @@ extension AirportDetailsView{
         task.resume()
         semaphore.wait()
         
+        
+    }
+    
+    
+    func LoadFrequencies(){
+        
+        
+        //Q for david. Load & parse at the same time? or is it ok to load on view apperence & parse on button click
+        //Q for david. frontend exposure. should this be loaded from out OWN API?
+    
+        
+        var semaphore = DispatchSemaphore (value: 0)
+
+        var request = URLRequest(url: URL(string: "https://airportdb.io/api/v1/airport/\(self.airport.AirportCode)?apiToken=\(self.FreqapiKey)")!,timeoutInterval: Double.infinity)
+
+
+        request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
+
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+          guard let data = data else {
+            print(String(describing: error))
+            semaphore.signal()
+            return
+          }
+            
+            self.FrequencyInfo = String(data: data, encoding: .utf8)!
+            print("frequency INFO FOR ", airport.AirportCode.lowercased(), FrequencyInfo)
+
+          semaphore.signal()
+        }
+
+
+        task.resume()
+        semaphore.wait()
         
     }
     
