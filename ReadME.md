@@ -19,13 +19,14 @@ User manual/install instructions
 
 3) Package Dependencies Deployment targets:
 	to ensure a smooth experience if not aded by default add the following package 	dependency https://github.com/JonathanDowning/SwiftMETAR.git
+	This package is used to parse METAR output from the API into objects.
 
 	project -> add package dependency -> paste the GitHub link into the search 	bar. 
 
 	Also make sure to set the app deployment target to iOS 17.2
 
-4) From here the app should be all set to run. The main content view features an interactive map with labeled airports that supports GEOjson overlays of class B airspaces, special-use airspaces, military TFRs, and ATC boundaries.
+5) From here the app should be all set to run. The main content view features an interactive map with labeled airports that supports GEOjson overlays of class B airspaces, special-use airspaces, military TFRs, and ATC boundaries.
 
-Currently clicking on an airport supports live METAR and updated approach/Departure/IAP plates as well as airport diagrams using the foreflight API. 
+Currently clicking on an airport supports live METAR, updated approach/Departure/IAP plates, live frequency data with an interactive selector, as well as airport diagrams using the foreflight API. 
 
-**Please keep in mind still a work in progress, Support for live NOTAM data, frequencies, and flight planning to come in the next few days. 
+**Please keep in mind still a work in progress, Support for live NOTAM data, and flight planning to come in the next few days. 
