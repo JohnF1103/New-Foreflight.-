@@ -200,7 +200,7 @@ extension AirportDetailsView{
                                self.selectedItem = self.oldSelectedItem
                            }) {
                                
-                               FrequenciesView(FreqenciesJSON: self.PlateInfo, curr_ap: self.airport)
+                               FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport).ignoresSafeArea()
                        }
             
                     
@@ -321,7 +321,6 @@ extension AirportDetailsView{
           }
             
             self.FrequencyInfo = String(data: data, encoding: .utf8)!
-            print("frequency INFO FOR ", airport.AirportCode.lowercased(), FrequencyInfo)
 
           semaphore.signal()
         }
