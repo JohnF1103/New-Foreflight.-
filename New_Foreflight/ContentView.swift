@@ -17,8 +17,7 @@ struct ContentView: View {
     
     @State private var selection = ""
     let colors = ["Military TFRs", "Special use airspaces, ATC boundaries"]
-    
-    @State private var centerCoordinate = CLLocationCoordinate2D()
+    @State private var centerCoordinate = CLLocationCoordinate2D(latitude: 40.6, longitude: -73.7)
     @State private var airports = [MKPointAnnotation]()
     @State private var isPickerVisible = false
     

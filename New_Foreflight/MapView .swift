@@ -9,6 +9,9 @@ import SwiftUI
 import MapKit
 
 struct MapView: UIViewRepresentable {
+
+           
+           
     @EnvironmentObject private var vm : AirportDetailModel
 
     @Binding var centerCoordinate: CLLocationCoordinate2D
@@ -19,7 +22,9 @@ struct MapView: UIViewRepresentable {
         mapView.delegate = context.coordinator
         mapView.addOverlays(self.parseGEOjson())
         
-        
+        let region = MKCoordinateRegion(center: centerCoordinate, span: MKCoordinateSpan(latitudeDelta: 3, longitudeDelta: 3))
+           mapView.setRegion(region, animated: false)
+
         return mapView
     }
     

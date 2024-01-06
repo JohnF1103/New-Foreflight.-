@@ -79,7 +79,7 @@ struct FrequenciesView: View {
                 
                 Button {
                     
-                    var temp = self.active
+                    let temp = self.active
                     self.active = self.SBY
                     self.SBY = temp
                 } label: {
