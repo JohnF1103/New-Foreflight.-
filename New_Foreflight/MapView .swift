@@ -48,7 +48,6 @@ struct MapView: UIViewRepresentable {
     func parseGEOjson() ->[MKOverlay]{
         //add logic for toggles on the map here
         
-        print("GETTTING ", vm.selectedData)
         //vm.whatever we label
         guard let url = Bundle.main.url(forResource: vm.selectedData, withExtension: "json") else {
             

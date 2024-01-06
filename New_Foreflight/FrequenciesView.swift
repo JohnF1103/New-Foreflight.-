@@ -20,19 +20,7 @@ struct FrequenciesView: View {
         
         
     
-        
-        let frequencies:KeyValuePairs <String, String> = [
-            "GRD": "112.3",
-            "TWR": "112.3",
-            "APPRCH": "112.3",
-            "DEP": "112.3",
-            "TWR2": "112.3",
-            "CTR": "112.3",
-            "ATIS": "112.3",
-            "blah blah": "112.3",
-          
-
-        ]
+     
         
 
     

@@ -258,16 +258,16 @@ extension AirportDetailsView{
         
         //Q for david. Load & parse at the same time? or is it ok to load on view apperence & parse on button click
         //Q for david. frontend exposure. should this be loaded from out OWN API?
-        guard let url = URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())") else {
-                print("Invalid URL")
+        /*guard let url = URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())") else {
+            print("Invalid URL")
                 return
-            }
+            }*/
 
     
         
         
         
-        var semaphore = DispatchSemaphore (value: 0)
+        let semaphore = DispatchSemaphore (value: 0)
 
         var request = URLRequest(url: URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())")!,timeoutInterval: Double.infinity)
 
@@ -304,7 +304,7 @@ extension AirportDetailsView{
         //Q for david. frontend exposure. should this be loaded from out OWN API?
     
         
-        var semaphore = DispatchSemaphore (value: 0)
+        let semaphore = DispatchSemaphore (value: 0)
 
         var request = URLRequest(url: URL(string: "https://airportdb.io/api/v1/airport/\(self.airport.AirportCode)?apiToken=\(self.FreqapiKey)")!,timeoutInterval: Double.infinity)
 

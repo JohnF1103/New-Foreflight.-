@@ -102,7 +102,7 @@ extension LocationPreviewView{
             
             //**TODO** Use completion handler to capture return value of async funciton.
             
-            var semaphore = DispatchSemaphore (value: 0)
+            let semaphore = DispatchSemaphore (value: 0)
 
             var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(airport.AirportCode)/decoded")!,timeoutInterval: Double.infinity)
 

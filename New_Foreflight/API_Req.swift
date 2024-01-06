@@ -16,7 +16,7 @@ extension ContentView{
     func Get_Metar(res: String, IACO: String){
        
 
-        var semaphore = DispatchSemaphore (value: 0)
+        let semaphore = DispatchSemaphore (value: 0)
 
         var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(IACO)/decoded")!,timeoutInterval: Double.infinity)
 
