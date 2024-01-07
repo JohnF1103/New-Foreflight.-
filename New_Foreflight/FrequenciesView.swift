@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+
 struct FrequenciesView: View {
     
     let FreqenciesJSON: String
