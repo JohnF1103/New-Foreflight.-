@@ -20,12 +20,41 @@ struct FrequenciesView: View {
         
         
     
-     
+     Spacer()
         
 
-    
+        VStack(spacing: 10) {
+            Text("Active: \(self.active.0) \(self.active.1, specifier: "%.1f")")
+                .padding()
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
+                .foregroundColor(.white)
+                .frame(width: 200) // Set a fixed width for the container
+            
+            Text("Standby: \(self.SBY.0) \(self.SBY.1,specifier: "%.1f")")
+                .padding()
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.green))
+                .foregroundColor(.white)
+            
+                .frame(width: 200) // Set a fixed width for the container
+            
+            Button {
+                
+                let temp = self.active
+                self.active = self.SBY
+                self.SBY = temp
+            } label: {
+                Image(systemName: "arrowshape.left.arrowshape.right.fill")
+            }
+            .background(RoundedRectangle(cornerRadius: 20).fill(Color.gray))
+            .padding()
+
+
+        }.padding()
         
-        HStack {
+        
+        
+        
+        VStack {
             NavigationView {
                 
                 if let frequenciesDict = parseFrequencies(json_frequencies: FreqenciesJSON) {
@@ -37,7 +66,7 @@ struct FrequenciesView: View {
                                 print(key)
                                 self.active = (key, Double(value)!)
                             } label: {
-                                VStack {
+                                HStack {
                                     Text("\(key):")
                                     Text("\(value):")
                                 }
@@ -46,39 +75,11 @@ struct FrequenciesView: View {
                             .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
                         }
                     }
-                    .navigationTitle("Frequencies")
+                    .navigationTitle("Nearby Frequencies:")
                     .navigationBarTitleDisplayMode(.inline)
                 }
             }
             
-            VStack(spacing: 10) {
-                Text("Active: \(self.active.0) \(self.active.1, specifier: "%.1f")")
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
-                    .foregroundColor(.white)
-                    .frame(width: 200) // Set a fixed width for the container
-                
-                Text("Standby: \(self.SBY.0) \(self.SBY.1,specifier: "%.1f")")
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.green))
-                    .foregroundColor(.white)
-                
-                    .frame(width: 200) // Set a fixed width for the container
-                
-                Button {
-                    
-                    let temp = self.active
-                    self.active = self.SBY
-                    self.SBY = temp
-                } label: {
-                    Image(systemName: "arrowshape.left.arrowshape.right.fill")
-                }
-                .background(RoundedRectangle(cornerRadius: 20).fill(Color.gray))
-                .padding()
-
-
-            }.ignoresSafeArea()
-            Spacer()
         }.ignoresSafeArea()
 
         
