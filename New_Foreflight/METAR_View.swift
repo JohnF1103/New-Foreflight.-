@@ -40,7 +40,7 @@ extension METAR_View{
         VStack(spacing: 2){
             
             
-            Titlesection(curr_ap: curr_ap, subtitle: "METAR", flightrules: vm.flightrules!)
+            Titlesection(curr_ap: curr_ap, subtitle: "METAR", flightrules: vm.flightrules!).padding(.all)
             Divider()
             
             
