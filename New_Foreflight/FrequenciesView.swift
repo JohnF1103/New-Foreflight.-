@@ -24,7 +24,7 @@ struct FrequenciesView: View {
         
         
 
-        VStack(spacing: 5) {
+        VStack(spacing: 2) {
             
             Titlesection(curr_ap: curr_ap, subtitle: "Nearby frequencies", flightrules: vm.flightrules!)
                 .padding(.all)

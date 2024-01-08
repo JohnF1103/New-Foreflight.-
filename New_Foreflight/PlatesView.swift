@@ -23,7 +23,7 @@ struct PlatesView: View {
 
     var body: some View {
         
-        VStack{
+        VStack(spacing:2){
             Titlesection(curr_ap: curr_ap, subtitle: "PLATES", flightrules: vm.flightrules! ).padding(.all)
             Divider()
             if let chartDictionary = parseAirportCharts(apiOutputString: plateJSON, airport: curr_ap) {
