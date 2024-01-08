@@ -128,7 +128,7 @@ func getComponents(metar: String) -> KeyValuePairs<String ,String>{
     }
     
     if let hum = met?.relativeHumidity{
-        humidity = "\(hum * 100)"
+        humidity = "\( hum * 100)"
     }else{
         humidity = "hum nil"
     }

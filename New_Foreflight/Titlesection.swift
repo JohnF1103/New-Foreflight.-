@@ -22,8 +22,8 @@ struct Titlesection: View {
                         .font(.largeTitle)
                         .fontWeight(.semibold)
             
-                    Text(flightrules)
-                        .foregroundStyle(Color.red)
+                    Text(flightrules.uppercased())
+                        .foregroundStyle(flightrules.lowercased().first == "v" ? Color.green : flightrules.lowercased().first == "i" ? Color.red : Color.white)
                     
                 }
                 
