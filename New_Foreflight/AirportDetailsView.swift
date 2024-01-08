@@ -25,8 +25,7 @@ struct AirportDetailsView: View {
     
     
     @State var isPresenting = false
-    @State private var selectedItem = 1
-    @State private var oldSelectedItem = 1
+    @State private var selectedItem = 0
     //Should take in a METAR obj potentially
     
     let airport : Airport
@@ -66,9 +65,8 @@ struct AirportDetailsView: View {
                     Text("Frequencies")
                 }
         }
-        .tabViewStyle(.page)  // Move this line here
+        .tabViewStyle(.page)
         .onAppear {
-            print("Hello I APPEARED!")
             DispatchQueue.main.async {
                 loadImageFromAPI()
                 LoadFrequencies()
