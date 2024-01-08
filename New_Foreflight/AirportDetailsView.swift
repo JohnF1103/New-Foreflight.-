@@ -43,49 +43,28 @@ struct AirportDetailsView: View {
     
     var body: some View {
         TabView{
+            METAR_View(JSON_Metar: self.curr_mertar)
+                .tabItem {
+                    Image(systemName: "folder.fill")
+                    Text("Home")
+                }
             
-            NavigationStack{
-                //TAXI
-                TaxiDiagramSection
-                
-            }
-            
-            NavigationStack{
-                //METAR
-                
-                METAR_View(JSON_Metar: self.curr_mertar)
-                
-            }
-            NavigationStack{
-                
-                PlatesView(plateJSON: self.PlateInfo, curr_ap: self.airport)
-                    
-            }
-            
-            
-            NavigationStack{
-                FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport)
-                   
-            }
-            
-            NavigationStack{
-                
-                //NOTAMS
-                NOTAMS_View_()
-            }
-           
-            
-        }.tabViewStyle(.page)
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
-            .onAppear{
-                
-                print("Hello I APPEARED!")
+            Text("Second")
+                .tabItem {
+                    Image(systemName: "folder.fill")
+                    Text("SecondView")
+                }
+        }
+        .tabViewStyle(.page)  // Move this line here
+        .onAppear {
+            print("Hello I APPEARED!")
+            DispatchQueue.main.async {
                 loadImageFromAPI()
                 LoadFrequencies()
                 LoadPlates()
-
-
             }
+        }
+
         
     }
     
@@ -121,7 +100,6 @@ extension AirportDetailsView{
     }
     private var Imagesection:  some View{
         //add approach plates
-        TabView{
 
             VStack {
                      if let image = image {
@@ -138,7 +116,7 @@ extension AirportDetailsView{
                 .clipped()
                 .padding()
             
-        }
+        
         .frame(height: 500)
         .tabViewStyle(PageTabViewStyle())
     }

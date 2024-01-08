@@ -16,7 +16,6 @@ struct NOTAMS_View_: View {
         ]
         
         
-        NavigationView {
             List {
                 ForEach(frequencies, id: \.0) { key, value in
 
@@ -28,9 +27,8 @@ struct NOTAMS_View_: View {
                 }            .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
 
             }
-            .navigationTitle("NOTAMS ")
-            .navigationBarTitleDisplayMode(.inline)
-        }
+           
+        
     }
 }
 

@@ -23,10 +23,6 @@ struct PlatesView: View {
     var body: some View {
     
         
-        NavigationView {
-            
-            
-            
             if let chartDictionary = parseAirportCharts(apiOutputString: plateJSON, airport: curr_ap) {
 
                 // Convert the dictionary to an array of key-value pairs and sort it
@@ -51,22 +47,18 @@ struct PlatesView: View {
                     }
                     .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
                 }
-                .navigationTitle("Plates ")
-                .navigationBarTitleDisplayMode(.inline)
+            
 
             } else {
                 Text("API ERROR, NIL METAR").foregroundStyle(Color.red)
             }
 
             
-        }
+        
         
         
 
         
         
     }
-}
-extension PlatesView{
-            
 }

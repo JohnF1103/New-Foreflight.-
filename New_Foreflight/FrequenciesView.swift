@@ -57,7 +57,6 @@ struct FrequenciesView: View {
         
         
         VStack {
-            NavigationView {
                 
                 if let frequenciesDict = parseFrequencies(json_frequencies: FreqenciesJSON) {
                     
@@ -77,10 +76,9 @@ struct FrequenciesView: View {
                             .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
                         }
                     }
-                    .navigationTitle("Nearby Frequencies:")
-                    .navigationBarTitleDisplayMode(.inline)
+                    
                 }
-            }
+            
             
         }.ignoresSafeArea()
 
