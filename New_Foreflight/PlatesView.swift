@@ -18,20 +18,19 @@ struct PlatesView: View {
     let plateJSON: String
     let curr_ap : Airport
     @State private var isPresentWebView = false
+    @EnvironmentObject private var vm : AirportDetailModel
 
 
     var body: some View {
-    
         
-        NavigationView {
-            
-            
-            
+        VStack{
+            Titlesection(curr_ap: curr_ap, subtitle: "PLATES", flightrules: vm.flightrules! ).padding(.all)
+            Divider()
             if let chartDictionary = parseAirportCharts(apiOutputString: plateJSON, airport: curr_ap) {
-
+                
                 // Convert the dictionary to an array of key-value pairs and sort it
                 let sortedCharts = chartDictionary.sorted { $0.key < $1.key }
-
+                
                 // Process the parsed data
                 List {
                     ForEach(sortedCharts, id: \.0) { key, values in
@@ -42,31 +41,24 @@ struct PlatesView: View {
                                     //HERE
                                     
                                     WebViewRow(urlString: tuple.1, chartname: tuple.0)
-
-
-
+                                    
+                                    
+                                    
                                 }
                             }
                         }
                     }
                     .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
                 }
-                .navigationTitle("Plates ")
-                .navigationBarTitleDisplayMode(.inline)
-
+                
+                
             } else {
                 Text("API ERROR, NIL METAR").foregroundStyle(Color.red)
             }
-
             
-        }
         
-        
-
+        }.padding(.all)
         
         
     }
-}
-extension PlatesView{
-            
 }

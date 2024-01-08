@@ -80,7 +80,8 @@ struct ContentView: View {
         }.sheet(item: $vm.sheetlocation, onDismiss: nil){ap in
             
             
-            AirportDetailsView(airport: ap, curr_mertar: vm.curr_metar!)
+            AirportDetailsView(airport: ap, curr_mertar: vm.curr_metar ?? "NIL")
+               
         }
         
         
