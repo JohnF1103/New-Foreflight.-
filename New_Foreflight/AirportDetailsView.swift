@@ -43,13 +43,24 @@ struct AirportDetailsView: View {
     
     var body: some View {
         TabView{
+            TaxiDiagramSection
+                .tabItem {
+                    Image(systemName: "folder.fill")
+                    Text("SecondView")
+                }
             METAR_View(JSON_Metar: self.curr_mertar)
                 .tabItem {
                     Image(systemName: "folder.fill")
                     Text("Home")
                 }
             
-            Text("Second")
+            PlatesView(plateJSON: self.PlateInfo, curr_ap: self.airport)
+                .tabItem {
+                    Image(systemName: "folder.fill")
+                    Text("SecondView")
+                }
+           
+            FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport)
                 .tabItem {
                     Image(systemName: "folder.fill")
                     Text("SecondView")
