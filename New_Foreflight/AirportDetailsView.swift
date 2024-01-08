@@ -48,7 +48,7 @@ struct AirportDetailsView: View {
                     Image(systemName: "folder.fill")
                     Text("SecondView")
                 }
-            METAR_View(JSON_Metar: self.curr_mertar)
+            METAR_View(JSON_Metar: self.curr_mertar, curr_ap: self.airport)
                 .tabItem {
                     Image(systemName: "folder.fill")
                     Text("Home")
@@ -97,7 +97,7 @@ extension AirportDetailsView{
                 
                 
                 VStack(alignment: .leading, spacing: 16){
-                    titleseciton
+                    Titlesection(curr_ap: airport, subtitle: "Airport", flightrules: vm.flightrules!)
                     Divider()
                 }
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading)
@@ -132,27 +132,7 @@ extension AirportDetailsView{
         .tabViewStyle(PageTabViewStyle())
     }
     
-    private var titleseciton: some View{
-        
-        VStack(alignment: .leading, spacing: 8){
-            HStack(spacing: 150){
-                Text(airport.AirportCode)
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                
-                Text("100LL $4.23")
-                    .foregroundStyle(Color.red)
-                
-            }
-            
-            Text("Airport")
-                .font(.title3)
-                .foregroundColor(.secondary)
-            
-            
-            
-        }
-    }
+
     
     private var TabSection: some View{
         

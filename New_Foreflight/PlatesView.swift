@@ -18,12 +18,14 @@ struct PlatesView: View {
     let plateJSON: String
     let curr_ap : Airport
     @State private var isPresentWebView = false
+    @EnvironmentObject private var vm : AirportDetailModel
 
 
     var body: some View {
-    
-        ZStack{
-            
+        
+        VStack{
+            Titlesection(curr_ap: curr_ap, subtitle: "PLATES", flightrules: vm.flightrules! ).padding(.all)
+            Divider()
             if let chartDictionary = parseAirportCharts(apiOutputString: plateJSON, airport: curr_ap) {
                 
                 // Convert the dictionary to an array of key-value pairs and sort it
@@ -54,11 +56,8 @@ struct PlatesView: View {
                 Text("API ERROR, NIL METAR").foregroundStyle(Color.red)
             }
             
-            
-            
-        }.padding(.all)
         
-
+        }.padding(.all)
         
         
     }

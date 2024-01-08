@@ -131,6 +131,7 @@ extension LocationPreviewView{
             
             vm.sheetlocation = airport
             vm.curr_metar = curr_metar_of_selected_Airport
+            vm.flightrules = getFlightRules(metar: parseRawText(jsonString: vm.curr_metar ?? "Nil") ?? "Nil")
             
             
             

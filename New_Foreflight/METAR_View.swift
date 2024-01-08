@@ -13,9 +13,13 @@ struct METAR_View: View {
 
     
     let JSON_Metar : String
-    
-    
+    let curr_ap : Airport
+
+    @EnvironmentObject private var vm : AirportDetailModel
+
     var body: some View {
+        
+        
         RAW_Metar
         
     }
@@ -24,18 +28,30 @@ struct METAR_View: View {
 
 extension METAR_View{
     
+    
+    
+ 
+    
+    
+    
     private var RAW_Metar: some View{
+       
         
         VStack(spacing: 2){
-            Text("METAR")
             
-            if let parsedText = parseRawText(jsonString: JSON_Metar) {
-                Text(parsedText).foregroundStyle(Color.green)
-        
-          
+                        if let parsedText = parseRawText(jsonString: JSON_Metar) {
+                Text(parsedText).foregroundStyle(Color.green).padding(.top)
+                   
+
+                        
+                Titlesection(curr_ap: curr_ap, subtitle: "METAR", flightrules: getFlightRules(metar: parsedText))
+                Divider()
+
                 
                 let order_metar:KeyValuePairs = getComponents(metar: parsedText)
-                
+
+                            
+                            
                 
                //translated
                 List {
@@ -55,7 +71,8 @@ extension METAR_View{
                 Text("API ERROR, NIL METAR").foregroundStyle(Color.red)
             }
            
-        }
+        }.padding(.all)
+            .padding(.top)
 
         
     }

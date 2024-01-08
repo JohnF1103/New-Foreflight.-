@@ -39,6 +39,19 @@ func parseRawText(jsonString: String) -> String? {
     }
 }
 
+func getFlightRules(metar:String) -> String{
+    
+    let met = METAR(metar)
+    var fr = ""
+    
+    if let flightrules = met?.icaoFlightRules{
+        
+        fr = "\(flightrules)"
+    }
+    
+    return fr
+}
+
 
 
 func getComponents(metar: String) -> KeyValuePairs<String ,String>{
@@ -78,9 +91,6 @@ func getComponents(metar: String) -> KeyValuePairs<String ,String>{
     } else {
         print("Default value for nil case")
     }
-
-    
-    
     
     if let vis_ = met?.visibility?.measurement.value {
         vis = "\(vis_)sm"

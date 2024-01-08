@@ -29,6 +29,7 @@
 		249164572B32762E00D505AC /* Airports.txt in Resources */ = {isa = PBXBuildFile; fileRef = 249164562B32762E00D505AC /* Airports.txt */; };
 		249164592B32F37600D505AC /* Airport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249164582B32F37600D505AC /* Airport.swift */; };
 		2491645B2B32F3F800D505AC /* Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2491645A2B32F3F800D505AC /* Reading.swift */; };
+		249AEE902B4BDFC1003459EA /* Titlesection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249AEE8F2B4BDFC1003459EA /* Titlesection.swift */; };
 		24C7CAF12B3E85D4009EA545 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C7CAF02B3E85D4009EA545 /* WebView.swift */; };
 		24CF75162B3D611B00B751E0 /* PlatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF75152B3D611B00B751E0 /* PlatesView.swift */; };
 		24CF75182B3D612E00B751E0 /* PlatesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF75172B3D612E00B751E0 /* PlatesViewModel.swift */; };
@@ -87,6 +88,7 @@
 		249164562B32762E00D505AC /* Airports.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Airports.txt; sourceTree = "<group>"; };
 		249164582B32F37600D505AC /* Airport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Airport.swift; sourceTree = "<group>"; };
 		2491645A2B32F3F800D505AC /* Reading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reading.swift; sourceTree = "<group>"; };
+		249AEE8F2B4BDFC1003459EA /* Titlesection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Titlesection.swift; sourceTree = "<group>"; };
 		24C7CAF02B3E85D4009EA545 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		24CF75152B3D611B00B751E0 /* PlatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatesView.swift; sourceTree = "<group>"; };
 		24CF75172B3D612E00B751E0 /* PlatesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatesViewModel.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				2444452D2B33FA8E001854DD /* LocationPreviewView.swift */,
 				24D9C12C2B37893B00772DF1 /* AirportDetailModel.swift */,
 				248DE9AD2B377501007C976D /* AirportDetailsView.swift */,
+				249AEE8F2B4BDFC1003459EA /* Titlesection.swift */,
 				24CF75152B3D611B00B751E0 /* PlatesView.swift */,
 				24CF75172B3D612E00B751E0 /* PlatesViewModel.swift */,
 				24D9C12E2B37F8CB00772DF1 /* METAR_View.swift */,
@@ -377,6 +380,7 @@
 				248DE9AE2B377501007C976D /* AirportDetailsView.swift in Sources */,
 				249164592B32F37600D505AC /* Airport.swift in Sources */,
 				24DD6BBF2B36C0E000CA6029 /* API_Req.swift in Sources */,
+				249AEE902B4BDFC1003459EA /* Titlesection.swift in Sources */,
 				24CF75182B3D612E00B751E0 /* PlatesViewModel.swift in Sources */,
 				24D9C1312B37F90100772DF1 /* RunwaysView.swift in Sources */,
 				248A9F032B2D660400C99490 /* ContentView.swift in Sources */,

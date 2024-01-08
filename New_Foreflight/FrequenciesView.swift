@@ -13,6 +13,8 @@ struct FrequenciesView: View {
     
     let FreqenciesJSON: String
     let curr_ap : Airport
+    @EnvironmentObject private var vm : AirportDetailModel
+
     
     @State private var active = ("Unicom",122.8.rounded())
     @State private var SBY = ("",122.8.rounded())
@@ -22,35 +24,16 @@ struct FrequenciesView: View {
         
         
 
-        VStack(spacing: 10) {
-            VStack{
-                Text("Active: \(self.active.0) \(self.active.1, specifier: "%.1f")")
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
-                    .foregroundColor(.white)
-                    .frame(width: 200) // Set a fixed width for the container
-                
-                Text("Standby: \(self.SBY.0) \(self.SBY.1,specifier: "%.1f")")
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.green))
-                    .foregroundColor(.white)
-                
-                    .frame(width: 200) // Set a fixed width for the container
-                
-                Button {
-                    
-                    let temp = self.active
-                    self.active = self.SBY
-                    self.SBY = temp
-                } label: {
-                    Image(systemName: "arrowshape.left.arrowshape.right.fill")
-                }
-                .background(RoundedRectangle(cornerRadius: 20).fill(Color.gray))
-                .padding()
-                
-            }
+        VStack(spacing: 5) {
+            
+            Titlesection(curr_ap: curr_ap, subtitle: "Nearby frequencies", flightrules: vm.flightrules!)
+                .padding(.all)
+           
+            freqchanger
+            
+            
             if let frequenciesDict = parseFrequencies(json_frequencies: FreqenciesJSON) {
-                
+            
                 List {
                     ForEach(frequenciesDict.sorted(by: { $0.0 < $1.0 }), id: \.key) { key, value in
 
@@ -70,7 +53,7 @@ struct FrequenciesView: View {
                 
             }
 
-        }.padding()
+        }.padding(.all)
         
         
         
@@ -80,5 +63,38 @@ struct FrequenciesView: View {
         
         
      
+    }
+}
+
+extension FrequenciesView{
+    
+    private var freqchanger: some View{
+        
+        VStack{
+            Text("Active: \(self.active.0) \(self.active.1, specifier: "%.1f")")
+                .padding()
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
+                .foregroundColor(.white)
+                .frame(width: 200) // Set a fixed width for the container
+            
+            Text("Standby: \(self.SBY.0) \(self.SBY.1,specifier: "%.1f")")
+                .padding()
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.green))
+                .foregroundColor(.white)
+            
+                .frame(width: 200) // Set a fixed width for the container
+            
+            Button {
+                
+                let temp = self.active
+                self.active = self.SBY
+                self.SBY = temp
+            } label: {
+                Image(systemName: "arrowshape.left.arrowshape.right.fill")
+            }
+            .background(RoundedRectangle(cornerRadius: 20).fill(Color.gray))
+            .padding()
+            
+        }.padding(.all)
     }
 }
