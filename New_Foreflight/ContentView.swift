@@ -81,6 +81,7 @@ struct ContentView: View {
             
             
             AirportDetailsView(airport: ap, curr_mertar: vm.curr_metar!)
+               
         }
         
         

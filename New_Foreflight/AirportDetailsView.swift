@@ -42,26 +42,50 @@ struct AirportDetailsView: View {
     
     
     var body: some View {
-        ScrollView{
-            VStack{
-                Imagesection
-                    .shadow(color: Color.black.opacity(0.3), radius: 20,x: 0,y:10)
-                
-                
-                VStack(alignment: .leading, spacing: 16){
-                    titleseciton
-                    Divider()
-                    TabSection
-                }
-                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading)
-                .padding()
-                
+        TabView{
+            
+            NavigationStack{
+                //TAXI
+                TaxiDiagramSection
                 
             }
             
+            NavigationStack{
+                //METAR
+                
+                METAR_View(JSON_Metar: self.curr_mertar)
+                
+            }
+            NavigationStack{
+                
+                PlatesView(plateJSON: self.PlateInfo, curr_ap: self.airport)
+                    
+            }
             
-        }
-        
+            
+            NavigationStack{
+                FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport)
+                   
+            }
+            
+            NavigationStack{
+                
+                //NOTAMS
+                NOTAMS_View_()
+            }
+           
+            
+        }.tabViewStyle(.page)
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            .onAppear{
+                
+                print("Hello I APPEARED!")
+                loadImageFromAPI()
+                LoadFrequencies()
+                LoadPlates()
+
+
+            }
         
     }
     
@@ -76,6 +100,25 @@ struct AirportDetailsView: View {
 
 extension AirportDetailsView{
 
+    private var TaxiDiagramSection: some View{
+            VStack{
+                Imagesection
+                    .shadow(color: Color.black.opacity(0.3), radius: 20,x: 0,y:10)
+                
+                
+                VStack(alignment: .leading, spacing: 16){
+                    titleseciton
+                    Divider()
+                }
+                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading)
+                .padding()
+                
+                
+            }
+            
+            
+        
+    }
     private var Imagesection:  some View{
         //add approach plates
         TabView{
@@ -89,15 +132,7 @@ extension AirportDetailsView{
                          Text("Loading Image...")
                      }
                  }
-                 .onAppear {
-                     // Make API call when the view appears
-                    //this is where we will load the plates NOTAMS & freqs as well.
-                     
-                     
-                     //Good Q for david 2 approaches. load data when view presented VS when parent button clicked?
-                     loadImageFromAPI()
-                     LoadPlates()
-                 }
+               
                 .scaledToFit()
                 .frame(width: UIScreen.main.bounds.width)
                 .clipped()
@@ -135,81 +170,10 @@ extension AirportDetailsView{
         VStack(alignment: .leading, spacing: 8){
             
             
-            TabView(selection: $selectedItem) {
-                ScrollView {
-                    METAR_View(JSON_Metar: self.curr_mertar)
-                        .padding()
-                }.frame(maxWidth: .infinity)
-                .tabItem {
-                    Image(systemName: "cloud.fill")
-                    Text("METAR")
-                }
-                .tag(1)
-                Text("Diaplaying plates...")
-                .tabItem {
-                    Image(systemName: "road.lanes")
-                                    Text("Plates")
-                }
-                .tag(2)
-                
-                
-                ScrollView{
-                    NOTAMS_View_()
-                }
-                    .padding()
-                    .tabItem {
-                        Image(systemName: "exclamationmark.triangle")
-                        Text("NOTAMS")
-                    }
-                    .tag(3)
-                ScrollView{
-                    Text("Diaplaying Frequencies...")
-
-                }
-                    .padding()
-                    .tabItem {
-                        Image(systemName: "antenna.radiowaves.left.and.right")
-                        Text("Frequencies")
-                    }
-                    .tag(4)
-            }
-            .onChange(of: selectedItem) {    // SwiftUI 2.0 track changes
-                        if 2 == selectedItem {
-                        self.isPresenting = true
-                        } else {
-                            self.oldSelectedItem = $0
-                        }
-                
-                    if 4 == selectedItem {
-                    
-                    LoadFrequencies()
-                    self.isFreqenciespresented = true
-                    
-
-                    } else {
-                        self.oldSelectedItem = $0
-                    }
-                    }
-            
-             .sheet(isPresented: $isPresenting, onDismiss: {
-                        self.selectedItem = self.oldSelectedItem
-                    }) {
-                        PlatesView(plateJSON: self.PlateInfo, curr_ap: self.airport)
-                }
-                    .sheet(isPresented: $isFreqenciespresented, onDismiss: {
-                               self.selectedItem = self.oldSelectedItem
-                           }) {
-                               
-                               FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport).ignoresSafeArea()
-                       }
+         
             
                     
 
-
-            
-            
-            .frame(height: 200) // Adjust the height as needed
-            
             
             
         }
