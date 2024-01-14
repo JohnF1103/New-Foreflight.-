@@ -18,7 +18,8 @@ struct AirportDetailsView: View {
     @State private var image: UIImage? = nil
     @State private var PlateInfo: String = ""
     @State private var FrequencyInfo: String = ""
-    
+    @State private var NotamsInfo: String = ""
+
     @State private var isFreqenciespresented = false
     @State private var FreqapiKey = "9d0b8ab9c176ca96804eac20c1936b5b2b058965c1c0e6ffbfd4c737730dfe8f5d175f8f447b6be1b9875346c5f00cc3"
     
@@ -63,6 +64,12 @@ struct AirportDetailsView: View {
                 .tabItem {
                     Image(systemName: "antenna.radiowaves.left.and.right")
                     Text("Frequencies")
+                }
+            
+            NOTAMS_View_(NotamsJson: self.NotamsInfo, curr_ap: self.airport)
+                .tabItem {
+                    Image(systemName: "exclamationmark.triangle")
+                    Text("NOTAMS")
                 }
         }
         .tabViewStyle(.page)

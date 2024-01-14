@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct NOTAMS_View_: View {
+    
+    let NotamsJson: String
+    let curr_ap : Airport
+    @EnvironmentObject private var vm : AirportDetailModel
+    
+    
     var body: some View {
         
         let frequencies:KeyValuePairs <String, String> = [
@@ -32,6 +38,3 @@ struct NOTAMS_View_: View {
     }
 }
 
-#Preview {
-    NOTAMS_View_()
-}
