@@ -27,6 +27,6 @@ User manual/install instructions
 
 5) From here the app should be all set to run. The main content view features an interactive map with labeled airports that supports GEOjson overlays of class B airspaces, special-use airspaces, military TFRs, and ATC boundaries.
 
-Currently clicking on an airport supports live METAR, updated approach/Departure/IAP plates, live frequency data with an interactive selector, as well as airport diagrams using the foreflight API. 
+Currently, clicking on an airport supports live METAR & NOTAMS(If enabled. ICAO API only allows 100 free calls), updated approach/Departure/IAP plates, live frequency data with an interactive selector, as well as airport diagrams using the foreflight API. 
 
-**Please keep in mind still a work in progress, Support for live NOTAM data, and flight planning to come in the next few days. 
+**Please keep in mind still a work in progress, Support for flight planning to come in the next few days. 
