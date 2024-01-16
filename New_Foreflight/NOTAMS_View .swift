@@ -23,20 +23,25 @@ struct NOTAMS_View_: View {
             
             if let notamsDict = parseNOTAMS(json_notams: NotamsJson){
                 
+                let sortedNotams = notamsDict.sorted { $0.key < $1.key }
+
                 
                 
-               /* List {
-                    ForEach(notamsDict, id: \.0) { key, value in
-                        
-                        HStack {
-                            Text("\(key):")
-                            Spacer()
-                            Text("\(value)")
+                List {
+                    ForEach(sortedNotams, id: \.0) { key, values in
+                        Section(header: Text("\(key):")) {
+                            ForEach(values, id: \.self) {string in
+                                Text(string)
+                            }
+                            
                         }
-                    }            .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
-                    
-                }*/
+                    }
+                    .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
+                }
                 
+            }else{
+                
+                Text("API ERROR NO NOTAMS").foregroundStyle(Color.red)
             }
         }.padding(.all)
            

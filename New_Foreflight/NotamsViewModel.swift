@@ -22,7 +22,7 @@ struct NOTAM: Decodable {
 
 
 
-func parseNOTAMS(json_notams: String) -> [String: String]? {
+func parseNOTAMS(json_notams: String) -> [String: [String]]? {
     // Convert the JSON string to Data
     // Check if the JSON data is not empty
     
@@ -64,9 +64,7 @@ func parseNOTAMS(json_notams: String) -> [String: String]? {
         }
     ]
     """
-    
-    var NotamsDict = [String: String]()
-    
+        
     
     
     var notamsDict: [String: [String]] = [:]
@@ -100,8 +98,7 @@ func parseNOTAMS(json_notams: String) -> [String: String]? {
         }
     }
     
-    print(notamsDict.first?.value.count)
-    return NotamsDict
+    return notamsDict.isEmpty ? nil : notamsDict
     
     
 }
