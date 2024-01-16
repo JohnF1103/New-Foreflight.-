@@ -16,23 +16,29 @@ struct NOTAMS_View_: View {
     
     var body: some View {
         
-        let frequencies:KeyValuePairs <String, String> = [
-            "Key1": "112.3",
-            "Key2": "121.9"
-        ]
-        
-        
-            List {
-                ForEach(frequencies, id: \.0) { key, value in
-
-                    HStack {
-                        Text("\(key):")
-                        Spacer()
-                        Text("\(value)")
-                    }
-                }            .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
-
+       
+        VStack(spacing: 2){
+            Titlesection(curr_ap: self.curr_ap, subtitle: "NOTAMS", flightrules: vm.flightrules ?? "Nil").padding(.all)
+            Divider()
+            
+            if let notamsDict = parseNOTAMS(json_notams: NotamsJson){
+                
+                
+                
+               /* List {
+                    ForEach(notamsDict, id: \.0) { key, value in
+                        
+                        HStack {
+                            Text("\(key):")
+                            Spacer()
+                            Text("\(value)")
+                        }
+                    }            .listRowInsets(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)) // Adjust padding as needed
+                    
+                }*/
+                
             }
+        }.padding(.all)
            
         
     }

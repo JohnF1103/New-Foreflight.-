@@ -53,7 +53,6 @@ func parseAirportCharts(apiOutputString: String, airport: Airport) -> [String: [
 
                     SID_STAR_and_IAP_charts.forEach {
                         if let chartName = $0["chart_name"], let pdfPath = $0["pdf_path"], let chartType = $0["chart_code"] {
-                            print("Chart Name: \(chartName), PDF Path: \(pdfPath), Chart Code: \(chartType)")
 
                             // Modify the dictionary structure
                             if var existingCharts = chartDataDictionary[chartType] {

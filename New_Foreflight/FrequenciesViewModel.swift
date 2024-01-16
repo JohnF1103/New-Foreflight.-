@@ -27,6 +27,7 @@ func parseFrequencies(json_frequencies: String) -> [String: String]? {
                         if let description = freq["description"] as? String,
                            let frequencyValue = freq["frequency_mhz"] as? String {
                             frequenciesDictionary[description] = frequencyValue
+                            print("INSIDE FREQ PARSER")
                         } else {
                             print("Invalid frequency entry")
                         }

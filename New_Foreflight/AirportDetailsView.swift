@@ -22,7 +22,7 @@ struct AirportDetailsView: View {
 
     @State private var isFreqenciespresented = false
     @State private var FreqapiKey = "9d0b8ab9c176ca96804eac20c1936b5b2b058965c1c0e6ffbfd4c737730dfe8f5d175f8f447b6be1b9875346c5f00cc3"
-    
+    @State private var NOTAMapikey = "f482ac5e-2eac-48ff-b603-0ad8c36c0cee"
     
     
     @State var isPresenting = false
@@ -66,11 +66,14 @@ struct AirportDetailsView: View {
                     Text("Frequencies")
                 }
             
+            
+            
             NOTAMS_View_(NotamsJson: self.NotamsInfo, curr_ap: self.airport)
                 .tabItem {
-                    Image(systemName: "exclamationmark.triangle")
-                    Text("NOTAMS")
+                    Image(systemName: "antenna.radiowaves.left.and.right")
+                    Text("Frequencies")
                 }
+            
         }
         .tabViewStyle(.page)
         .onAppear {
@@ -267,6 +270,35 @@ extension AirportDetailsView{
         task.resume()
         semaphore.wait()
         
+    }
+    
+    func LoadNOTAMS(){
+        
+        
+        let semaphore = DispatchSemaphore (value: 0)
+        
+        var request = URLRequest(url: URL(string: "https://applications.icao.int/dataservices/api/notams-realtime-list?api_key=\(self.NOTAMapikey)&format=json&locations=\(self.airport.AirportCode)")!,timeoutInterval: Double.infinity)
+        
+        
+        request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
+        
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                print(String(describing: error))
+                semaphore.signal()
+                return
+            }
+            
+            self.NotamsInfo = String(data: data, encoding: .utf8)!
+            
+            semaphore.signal()
+        }
+        
+        
+        task.resume()
+        semaphore.wait()
     }
     
     
