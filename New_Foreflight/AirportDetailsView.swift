@@ -79,8 +79,9 @@ struct AirportDetailsView: View {
         .onAppear {
             DispatchQueue.main.async {
                 loadImageFromAPI()
-                LoadFrequencies()
                 LoadPlates()
+                LoadFrequencies()
+                //LoadNOTAMS()
             }
         }
         

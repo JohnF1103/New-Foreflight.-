@@ -27,7 +27,9 @@ func parseNOTAMS(json_notams: String) -> [String: [String]]? {
     // Check if the JSON data is not empty
     
     
-    let jsonString = """
+    
+    /**THIS IS A TEST STR TO SAVE API CALLS!    TO USE LIVE NOTAMS FROM API USE JSON NOTAMS PARAM**/
+    let testnotams = """
     [
         {
             "all": "!EWR 01/136 EWR RWY 04L/22R CLSD 2401160716-2401160800\\nCREATED: 16 Jan 2024 07:16:00 \\nSOURCE: EWR",
@@ -69,25 +71,25 @@ func parseNOTAMS(json_notams: String) -> [String: [String]]? {
     
     var notamsDict: [String: [String]] = [:]
     
-    
-    if let jsonData = jsonString.data(using: .utf8) {
+    //SUB IN API OR TEST VAL HERE! ALSO CALL LOADNOTAMS IN AIRPORTDETAILSVIEW
+    if let jsonData = testnotams.data(using: .utf8) {
         do {
             // Parse JSON Data
             if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                 // Iterate through the list and print "all" values
                 for item in jsonArray {
-                    if let allValue = item["all"] as? String{
+                    if let notamvalue = item["all"] as? String{
                         if let loc = item["location"] as? String{
                             //here
                             
                             if var valuesForLoc = notamsDict[loc] {
                                                        // Append the new "all" value to the existing array
-                                                       valuesForLoc.append(allValue)
+                                                       valuesForLoc.append(notamvalue)
                                                        // Update the dictionary with the modified array
                                                        notamsDict[loc] = valuesForLoc
                                                    } else {
                                                        // If the location key doesn't exist, create a new array with the "all" value
-                                                       notamsDict[loc] = [allValue]
+                                                       notamsDict[loc] = [notamvalue]
                                                    }
                         }
                     }

@@ -12,6 +12,7 @@ struct Titlesection: View {
     let curr_ap : Airport
     let subtitle: String
     let flightrules :String
+
     
     var body: some View {
 
@@ -26,11 +27,16 @@ struct Titlesection: View {
                         .foregroundStyle(flightrules.lowercased().first == "v" ? Color.green : flightrules.lowercased().first == "i" ? Color.red : Color.white)
                     
                 }
+                HStack(spacing: 150) {
+                    Text(subtitle)
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                    
+                    
+                }
                 
-                Text(subtitle)
-                    .font(.title3)
-                    .foregroundColor(.secondary)
                 
+               
                 
                 
             
