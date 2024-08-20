@@ -29,4 +29,4 @@ User manual/install instructions
 
 Currently, clicking on an airport supports live METAR & NOTAMS(If enabled. ICAO API only allows 100 free calls), updated approach/Departure/IAP plates, live frequency data with an interactive selector, as well as airport diagrams using the foreflight API. 
 
-**Please keep in mind still a work in progress, Support for flight planning to come in the next few days. 
+**still a work in progress. 
