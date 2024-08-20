@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var airports = [MKPointAnnotation]()
     @State private var isPickerVisible = false
     
-    
+    //Move this into a DB and implement search. 
     @State private var locations: [Airport] = readFile()
     
     @EnvironmentObject private var vm : AirportDetailModel

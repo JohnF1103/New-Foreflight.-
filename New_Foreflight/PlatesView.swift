@@ -30,7 +30,6 @@ struct PlatesView: View {
                 
                 // Convert the dictionary to an array of key-value pairs and sort it
                 let sortedCharts = chartDictionary.sorted { $0.key < $1.key }
-                
                 // Process the parsed data
                 List {
                     ForEach(sortedCharts, id: \.0) { key, values in
@@ -39,6 +38,7 @@ struct PlatesView: View {
                                 HStack {
                                     Spacer().frame(width: 15) // Adjust spacing as needed
                                     //HERE
+                                    
                                     
                                     WebViewRow(urlString: tuple.1, chartname: tuple.0)
                                     
