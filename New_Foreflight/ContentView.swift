@@ -107,6 +107,7 @@ extension ContentView{
                 Button("National Defense TFRs", action:showTFRs )
                 Button("ATC Boundaries", action: showATClimits)
                 Button("Special use airspaces", action: showSpecialAirspaces)
+                Button("Radar", action: showRadar)
 
             } label: {
                 
@@ -146,6 +147,12 @@ extension ContentView{
     
     func Show_class_Bravo(){
         vm.selectedData = "Class_B"
+    }
+    
+    func showRadar(){
+        // TODO: Implement a radar overlay by itself.
+        // Later down the line, we can 
+        print("Weather Radar is a work in progress.")
     }
 }
 
