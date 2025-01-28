@@ -44,11 +44,21 @@ struct MapView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
     }
-    
+    // Example URL for testing purposes
+    // let url = URL("https://api.weather.gov/gridpoints/ALY/74,67/forecast")!
+ 
     func parseGEOjson() ->[MKOverlay]{
         //add logic for toggles on the map here
         
         //vm.whatever we label
+        if(vm.selectedData == "radar"){
+            
+            // TODO: Make a proper parser that turns coordinates into a full gridpoint thingy
+            var a = [MKOverlay]()
+            return a
+            
+        }
+        
         guard let url = Bundle.main.url(forResource: vm.selectedData, withExtension: "json") else {
             
             fatalError("Uable to get geoJSON update API creds.")

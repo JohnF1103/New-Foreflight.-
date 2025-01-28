@@ -151,7 +151,8 @@ extension ContentView{
     
     func showRadar(){
         // TODO: Implement a radar overlay by itself.
-        // Later down the line, we can 
+        // Later down the line, we can integrate it with other features
+        vm.selectedData = "radar"
         print("Weather Radar is a work in progress.")
     }
 }
