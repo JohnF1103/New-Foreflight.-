@@ -30,6 +30,7 @@ struct MapView: UIViewRepresentable {
     
     func updateUIView(_ view: MKMapView, context: Context) {
         print("hello")
+        print(centerCoordinate)
         
         
         if annotations.count != view.annotations.count{
@@ -53,8 +54,17 @@ struct MapView: UIViewRepresentable {
         //vm.whatever we label
         if(vm.selectedData == "radar"){
             
-            // TODO: Make a proper parser that turns coordinates into a full gridpoint thingy
+            // TODO: Make a proper parser
+            /*var a = [MKOverlay]()
+            var poly : MKPolygon
+            poly = MKPolygon(coordinates:[CLLocationCoordinate2D(latitude:55.0,longitude:-130.0),CLLocationCoordinate2D(latitude:20.0,longitude:-130.0),CLLocationCoordinate2D(latitude:20.0,longitude:-60.0),CLLocationCoordinate2D(latitude:55.0,longitude:-60.0)], count: 4)
+            a.append(poly)
+            print(a[0].coordinate)
+            return a*/
             var a = [MKOverlay]()
+            var tile =  MKTileOverlay(urlTemplate: "example_radar.png")
+            tile.tileSize = CGSize(width:512.0,height:512.0)
+            a.append(tile)
             return a
             
         }
@@ -85,6 +95,7 @@ struct MapView: UIViewRepresentable {
                 }
             }
         }
+        print(overlays[0].coordinate)
         return overlays
     }
     
@@ -108,6 +119,7 @@ struct MapView: UIViewRepresentable {
                 renderer.strokeColor = UIColor.black
                 return renderer
             }
+            
 
             return MKOverlayRenderer(overlay: overlay)
         }
