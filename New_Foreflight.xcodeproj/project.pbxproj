@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EC4C30C2D4DAAA800F3928E /* radar.json in Resources */ = {isa = PBXBuildFile; fileRef = 1EC4C30B2D4DAAA800F3928E /* radar.json */; };
 		2444452E2B33FA8E001854DD /* LocationPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2444452D2B33FA8E001854DD /* LocationPreviewView.swift */; };
 		244445322B351B44001854DD /* Tower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 244445312B351B44001854DD /* Tower.jpg */; };
 		245C35412B3900E800CD3DC1 /* METAR in Frameworks */ = {isa = PBXBuildFile; productRef = 245C35402B3900E800CD3DC1 /* METAR */; };
@@ -63,6 +64,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1EC4C30B2D4DAAA800F3928E /* radar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = radar.json; sourceTree = "<group>"; };
 		2444452D2B33FA8E001854DD /* LocationPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPreviewView.swift; sourceTree = "<group>"; };
 		244445312B351B44001854DD /* Tower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tower.jpg; sourceTree = "<group>"; };
 		246715502B436D0B00DCDFAB /* Special.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Special.json; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 		248A9EFF2B2D660400C99490 /* New_Foreflight */ = {
 			isa = PBXGroup;
 			children = (
+				1EC4C30B2D4DAAA800F3928E /* radar.json */,
 				24CF751D2B3D616A00B751E0 /* FrequenciesViewModel.swift */,
 				24813A152B42B125003616F6 /* Map.geojson */,
 				244445312B351B44001854DD /* Tower.jpg */,
@@ -334,6 +337,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EC4C30C2D4DAAA800F3928E /* radar.json in Resources */,
 				249164572B32762E00D505AC /* Airports.txt in Resources */,
 				246715552B43E76E00DCDFAB /* ASpace_bounds.json in Resources */,
 				246715512B436D0B00DCDFAB /* Special.json in Resources */,

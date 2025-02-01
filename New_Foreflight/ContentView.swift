@@ -29,15 +29,15 @@ struct ContentView: View {
     
     var body: some View {
         
+        
         ZStack{
-            
             
             
             MapView(centerCoordinate: $centerCoordinate, annotations:  airports)
                 .edgesIgnoringSafeArea(.all)
             
             
-            
+            //Image("radar_example").background(Color.clear).opacity(0.1)
             VStack(spacing: 0){
                 AdditionalDataButton
                 

@@ -47,27 +47,31 @@ struct MapView: UIViewRepresentable {
     }
     // Example URL for testing purposes
     // let url = URL("https://api.weather.gov/gridpoints/ALY/74,67/forecast")!
- 
+    // https://api.weather.gov/alerts/active?region_type=land&limit=500
     func parseGEOjson() ->[MKOverlay]{
         //add logic for toggles on the map here
         
         //vm.whatever we label
-        if(vm.selectedData == "radar"){
+        /*if(vm.selectedData == "radar"){
             
             // TODO: Make a proper parser
-            /*var a = [MKOverlay]()
-            var poly : MKPolygon
+            // The approach:
+            /*
+             Array of MKPolygons representing every current weather.gov alert
+             
+             Eventually I'll make this a full radar view, but I'll deem this good enough for now.
+             */
+            
+             
+             var a = [MKOverlay]()
+            var poly : MKPolygon // This represents all of North America
             poly = MKPolygon(coordinates:[CLLocationCoordinate2D(latitude:55.0,longitude:-130.0),CLLocationCoordinate2D(latitude:20.0,longitude:-130.0),CLLocationCoordinate2D(latitude:20.0,longitude:-60.0),CLLocationCoordinate2D(latitude:55.0,longitude:-60.0)], count: 4)
             a.append(poly)
             print(a[0].coordinate)
-            return a*/
-            var a = [MKOverlay]()
-            var tile =  MKTileOverlay(urlTemplate: "example_radar.png")
-            tile.tileSize = CGSize(width:512.0,height:512.0)
-            a.append(tile)
             return a
+           
             
-        }
+        }*/
         
         guard let url = Bundle.main.url(forResource: vm.selectedData, withExtension: "json") else {
             
