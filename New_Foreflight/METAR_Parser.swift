@@ -140,9 +140,9 @@ func getComponents(metar: String) -> KeyValuePairs<String ,String>{
                               "Wind": winds,
                               "Visibility" : vis,
                               "Clouds(AGL)": clouds,
-                              "Tempature": temp,
+                              "Temperature": temp,
                               "Dewpoint": dew,
-                              "Altimiter": altimiter,
+                              "Altimeter": altimiter,
                               "Humidity": humidity,
                               "Density altitude": "formula"]
     

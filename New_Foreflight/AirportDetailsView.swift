@@ -48,8 +48,10 @@ struct AirportDetailsView: View {
                     Image(systemName: "airplane.arrival")
                     Text("Airport")
                 }
-            METAR_View(JSON_Metar: self.curr_mertar, curr_ap: self.airport)
-                .tabItem {
+            ScrollView{
+                METAR_View(JSON_Metar: self.curr_mertar, curr_ap: self.airport)
+            }
+            .tabItem {
                     Image(systemName: "cloud.fill")
                     Text("METAR")
                 }
@@ -75,7 +77,7 @@ struct AirportDetailsView: View {
                 }
             
         }
-        .tabViewStyle(.page)
+        .tabViewStyle(.page )
         .onAppear {
             DispatchQueue.main.async {
                 loadImageFromAPI()

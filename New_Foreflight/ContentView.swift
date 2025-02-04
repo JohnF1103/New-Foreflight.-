@@ -77,10 +77,11 @@ struct ContentView: View {
                 vm.selected_airport = nil
             }
             
-        }.fullScreenCover(item: $vm.sheetlocation, onDismiss: nil){ap in
+        }.sheet(item: $vm.sheetlocation, onDismiss: nil){ap in
             
             
             AirportDetailsView(airport: ap, curr_mertar: vm.curr_metar ?? "NIL")
+                .presentationDetents([.medium])
                
         }
         
