@@ -20,6 +20,7 @@ struct MapView: UIViewRepresentable {
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
+        //this should really be in an API 
         mapView.addOverlays(self.parseGEOjson())
         
         let region = MKCoordinateRegion(center: centerCoordinate, span: MKCoordinateSpan(latitudeDelta: 3, longitudeDelta: 3))
@@ -29,7 +30,6 @@ struct MapView: UIViewRepresentable {
     }
     
     func updateUIView(_ view: MKMapView, context: Context) {
-        print("hello")
         
         
         if annotations.count != view.annotations.count{

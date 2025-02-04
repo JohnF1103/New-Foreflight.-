@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var airports = [MKPointAnnotation]()
     @State private var isPickerVisible = false
     
-    
+    //Move this into a DB and implement search. 
     @State private var locations: [Airport] = readFile()
     
     @EnvironmentObject private var vm : AirportDetailModel
@@ -77,7 +77,7 @@ struct ContentView: View {
                 vm.selected_airport = nil
             }
             
-        }.sheet(item: $vm.sheetlocation, onDismiss: nil){ap in
+        }.fullScreenCover(item: $vm.sheetlocation, onDismiss: nil){ap in
             
             
             AirportDetailsView(airport: ap, curr_mertar: vm.curr_metar ?? "NIL")
