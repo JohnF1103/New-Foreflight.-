@@ -42,42 +42,40 @@ struct AirportDetailsView: View {
     
     
     var body: some View {
-        TabView{
-            TaxiDiagramSection
-                .tabItem {
-                    Image(systemName: "airplane.arrival")
-                    Text("Airport")
-                }
-            ScrollView{
-                METAR_View(JSON_Metar: self.curr_mertar, curr_ap: self.airport)
-            }
-            .tabItem {
-                    Image(systemName: "cloud.fill")
-                    Text("METAR")
-                }
-            
-            PlatesView(plateJSON: self.PlateInfo, curr_ap: self.airport)
-                .tabItem {
-                    Image(systemName: "road.lanes")
-                    Text("Plates")
-                }
-            
-            FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport)
-                .tabItem {
-                    Image(systemName: "antenna.radiowaves.left.and.right")
-                    Text("Frequencies")
-                }
-            
-            
-            
-            NOTAMS_View_(NotamsJson: self.NotamsInfo, curr_ap: self.airport)
-                .tabItem {
-                    Image(systemName: "antenna.radiowaves.left.and.right")
-                    Text("Frequencies")
-                }
-            
-        }
-        .tabViewStyle(.page )
+    
+              TabView {
+                  TaxiDiagramSection
+                      .tabItem {
+                          Image(systemName: "airplane.arrival")
+                          Text("Airport")
+                      }
+                  ScrollView {
+                      METAR_View(JSON_Metar: self.curr_mertar, curr_ap: self.airport)
+                  }
+                  .tabItem {
+                      Image(systemName: "cloud.fill")
+                      Text("METAR")
+                  }
+                  PlatesView(plateJSON: self.PlateInfo, curr_ap: self.airport)
+                      .tabItem {
+                          Image(systemName: "road.lanes")
+                          Text("Plates")
+                      }
+                  FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport)
+                      .tabItem {
+                          Image(systemName: "antenna.radiowaves.left.and.right")
+                          Text("Frequencies")
+                      }
+                  NOTAMS_View_(NotamsJson: self.NotamsInfo, curr_ap: self.airport)
+                      .tabItem {
+                          Image(systemName: "antenna.radiowaves.left.and.right")
+                          Text("NOTAMS")
+                      }
+              
+                  
+          }
+              .tabViewStyle(.page)
+      // Constrain the TabView height to your desired medium size
         .onAppear {
             DispatchQueue.main.async {
                 loadImageFromAPI()
@@ -85,6 +83,8 @@ struct AirportDetailsView: View {
                 LoadFrequencies()
                 //LoadNOTAMS()
             }
+            
+        
         }
         
         
