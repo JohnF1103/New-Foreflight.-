@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+struct ServerResponse: Decodable {
+    var metar_data: String? = nil
+    var flight_rules: String? = nil
+}
 struct LocationPreviewView: View {
     
     let airport: Airport
@@ -124,9 +128,10 @@ extension LocationPreviewView{
 
             task.resume()
             semaphore.wait()
-            
+            let jsonData = curr_metar_of_selected_Airport.data(using:.utf8)!
+            let metarData : ServerResponse = try! JSONDecoder().decode(ServerResponse.self,from: jsonData)
+            vm.curr_metar = metarData.metar_data
             vm.sheetlocation = airport
-            vm.curr_metar = parseRawText(jsonString: curr_metar_of_selected_Airport)
             // TODO: Get this dictionary fixed up here instead of METAR_Parser
             let interestingNumbers: KeyValuePairs = ["Time": "0",
                                       "Wind": "0",
@@ -137,8 +142,8 @@ extension LocationPreviewView{
                                       "Altimeter": "0",
                                       "Humidity": "0",
                                       "Density altitude": "formula"]
-            vm.flightrules = getFlightRules(metar: vm.curr_metar ?? "Nil")
-            vm.parsed_metar = interestingNumbers
+            vm.flightrules = metarData.flight_rules
+            //vm.parsed_metar = interestingNumbers
             
             
         }label: {

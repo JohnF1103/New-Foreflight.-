@@ -9,7 +9,7 @@ import Foundation
 import METAR
 
 
-func parseRawText(jsonString: String) -> String? {
+    /*func parseRawText(jsonString: String) -> String? {
     do {
         // Convert the JSON string to Data
         guard let jsonData = jsonString.data(using: .utf8) else {
@@ -25,7 +25,7 @@ func parseRawText(jsonString: String) -> String? {
             print("Error casting JSON to dictionary.")
             return nil
         }
-        print(jsonDict)
+            // print(jsonDict)
         // Extract the value for the "metar_data" key
         if let rawText = jsonDict["metar_data"] as? String {
             return rawText
@@ -52,7 +52,7 @@ func getFlightRules(metar:String) -> String{
     
     return fr
 }
-
+*/
 
 
 func getComponents(metar: String) -> KeyValuePairs<String ,String>{
