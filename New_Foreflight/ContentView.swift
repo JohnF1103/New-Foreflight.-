@@ -33,7 +33,7 @@ struct ContentView: View {
             
             
             
-            MapView(centerCoordinate: $centerCoordinate, annotations:  airports)
+            DarkAeronauticalMapView(centerCoordinate: $centerCoordinate, annotations:  airports)
                 .edgesIgnoringSafeArea(.all)
             
             
