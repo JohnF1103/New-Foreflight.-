@@ -25,15 +25,16 @@ func parseRawText(jsonString: String) -> String? {
             print("Error casting JSON to dictionary.")
             return nil
         }
-
-        // Extract the value for the "raw_text" key
-        if let dataArray = jsonDict["data"] as? [[String: Any]], let rawText = dataArray.first?["raw_text"] as? String {
+        print(jsonDict)
+        // Extract the value for the "metar_data" key
+        if let rawText = jsonDict["metar_data"] as? String {
             return rawText
         } else {
-            print("Error extracting value for 'raw_text' key.")
+            print("Error extracting value for 'metar_data' key.")
             return nil
         }
     } catch {
+        print("we should remove METAR_Parser now")
         print("Error parsing JSON: \(error)")
         return nil
     }

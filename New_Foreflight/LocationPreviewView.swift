@@ -103,11 +103,8 @@ extension LocationPreviewView{
             //**TODO** Use completion handler to capture return value of async funciton.
             
             let semaphore = DispatchSemaphore (value: 0)
-
-            var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(airport.AirportCode)/decoded")!,timeoutInterval: Double.infinity)
-
-
-            request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
+            //var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(airport.AirportCode)/decoded")!,timeoutInterval: Double.infinity)
+            var request = URLRequest(url: URL(string: "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportInfo?airportCode=KEWR")!,timeoutInterval: Double.infinity)
 
             request.httpMethod = "GET"
 
@@ -119,7 +116,7 @@ extension LocationPreviewView{
               }
                 
                  curr_metar_of_selected_Airport = String(data: data, encoding: .utf8)!
-                
+                print(curr_metar_of_selected_Airport)
 
               semaphore.signal()
             }
@@ -128,11 +125,20 @@ extension LocationPreviewView{
             task.resume()
             semaphore.wait()
             
-            
             vm.sheetlocation = airport
             vm.curr_metar = parseRawText(jsonString: curr_metar_of_selected_Airport)
+            // TODO: Get this dictionary fixed up here instead of METAR_Parser
+            let interestingNumbers: KeyValuePairs = ["Time": "0",
+                                      "Wind": "0",
+                                      "Visibility" : "0",
+                                      "Clouds(AGL)": "0",
+                                      "Temperature": "0",
+                                      "Dewpoint": "0",
+                                      "Altimeter": "0",
+                                      "Humidity": "0",
+                                      "Density altitude": "formula"]
             vm.flightrules = getFlightRules(metar: vm.curr_metar ?? "Nil")
-            
+            vm.parsed_metar = interestingNumbers
             
             
         }label: {
@@ -161,7 +167,7 @@ extension LocationPreviewView{
     
 }
 
-#Preview {
+/*#Preview {
     
     ZStack{
         
@@ -173,5 +179,5 @@ extension LocationPreviewView{
     }
    
 }
-
+*/
 
