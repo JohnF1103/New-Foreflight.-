@@ -8,8 +8,25 @@
 import SwiftUI
 
 struct ServerResponse: Decodable {
+    /**/
     var metar_data: String? = nil
     var flight_rules: String? = nil
+    var metar_components: MetarComponents
+}
+struct MetarComponents: Decodable{
+    var wind: String
+    var clouds: [Cloud]
+    var visibility: String
+    var temperature: String
+    var dewpoint: String
+    var barometer: String
+    var humidity: String
+    var elevation: String
+    var density_altitude: Int = 0
+}
+struct Cloud: Decodable{
+    var code: String
+    var feet: String
 }
 struct LocationPreviewView: View {
     
@@ -131,19 +148,23 @@ extension LocationPreviewView{
             let jsonData = curr_metar_of_selected_Airport.data(using:.utf8)!
             let metarData : ServerResponse = try! JSONDecoder().decode(ServerResponse.self,from: jsonData)
             vm.curr_metar = metarData.metar_data
+            print(metarData.metar_components)
             vm.sheetlocation = airport
+            let cloudCode = String(metarData.metar_components.clouds.first?.code ?? "n/a")
+            let cloudFeet = String(metarData.metar_components.clouds.first?.feet ?? "")
+            let cloudAGL = cloudCode + " at " + cloudFeet + "ft"
             // TODO: Get this dictionary fixed up here instead of METAR_Parser
-            let interestingNumbers: KeyValuePairs = ["Time": "0",
-                                      "Wind": "0",
-                                      "Visibility" : "0",
-                                      "Clouds(AGL)": "0",
-                                      "Temperature": "0",
-                                      "Dewpoint": "0",
-                                      "Altimeter": "0",
-                                      "Humidity": "0",
-                                      "Density altitude": "formula"]
+            let interestingNumbers: KeyValuePairs<String,String> = ["Time": "0",
+                                                     "Wind": metarData.metar_components.wind,
+                                                     "Visibility" : metarData.metar_components.visibility,
+                                                                    "Clouds(AGL)": cloudAGL,
+                                                     "Temperature": metarData.metar_components.temperature,
+                                                     "Dewpoint": metarData.metar_components.dewpoint,
+                                                     "Altimeter": metarData.metar_components.barometer,
+                                                     "Humidity": metarData.metar_components.humidity,
+                                                     "Density altitude": String(metarData.metar_components.density_altitude)]
             vm.flightrules = metarData.flight_rules
-            //vm.parsed_metar = interestingNumbers
+            vm.parsed_metar = interestingNumbers
             
             
         }label: {

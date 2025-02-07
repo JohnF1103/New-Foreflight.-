@@ -3,7 +3,7 @@
 //  New_Foreflight
 //
 //  Created by John Foster on 12/24/23.
-//
+// 
 
 import Foundation
 import METAR
@@ -53,7 +53,7 @@ func getFlightRules(metar:String) -> String{
     return fr
 }
 */
-
+/*
 
 func getComponents(metar: String) -> KeyValuePairs<String ,String>{
     
@@ -154,5 +154,5 @@ func getComponents(metar: String) -> KeyValuePairs<String ,String>{
     
     return interestingNumbers
 }
-
+*/
 
