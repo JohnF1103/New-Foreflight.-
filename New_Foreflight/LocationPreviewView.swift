@@ -125,7 +125,7 @@ extension LocationPreviewView{
             
             let semaphore = DispatchSemaphore (value: 0)
             //var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(airport.AirportCode)/decoded")!,timeoutInterval: Double.infinity)
-            var request = URLRequest(url: URL(string: "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportInfo?airportCode=KEWR")!,timeoutInterval: Double.infinity)
+            var request = URLRequest(url: URL(string: "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportInfo?airportCode=\(airport.AirportCode)")!,timeoutInterval: Double.infinity)
 
             request.httpMethod = "GET"
 
@@ -153,7 +153,6 @@ extension LocationPreviewView{
             let cloudCode = String(metarData.metar_components.clouds.first?.code ?? "n/a")
             let cloudFeet = String(metarData.metar_components.clouds.first?.feet ?? "")
             let cloudAGL = cloudCode + " at " + cloudFeet + "ft"
-            // TODO: Get this dictionary fixed up here instead of METAR_Parser
             let interestingNumbers: KeyValuePairs<String,String> = ["Time": "0",
                                                      "Wind": metarData.metar_components.wind,
                                                      "Visibility" : metarData.metar_components.visibility,

@@ -252,7 +252,8 @@ extension AirportDetailsView{
         
         var request = URLRequest(url: URL(string: "https://airportdb.io/api/v1/airport/\(self.airport.AirportCode)?apiToken=\(self.FreqapiKey)")!,timeoutInterval: Double.infinity)
         
-        
+        // TODO: create struct to hold this new data
+        /*var request = URLRequest(url: URL(string:"https://frq-svc-272565453292.us-central1.run.app/frequencies?airport_code=KEWR")!, timeoutInterval: Double.infinity)*/
         request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
         
         request.httpMethod = "GET"
@@ -265,7 +266,8 @@ extension AirportDetailsView{
             }
             
             self.FrequencyInfo = String(data: data, encoding: .utf8)!
-            
+            print("Freq data")
+            print(self.FrequencyInfo)
             semaphore.signal()
         }
         
