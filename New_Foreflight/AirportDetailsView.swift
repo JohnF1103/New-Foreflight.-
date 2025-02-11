@@ -48,6 +48,8 @@ struct AirportDetailsView: View {
                     Image(systemName: "airplane.arrival")
                     Text("Airport")
                 }
+            RunwaysView(curr_ap: self.airport).tabItem{}
+            
             METAR_View(JSON_Metar: self.curr_mertar, curr_ap: self.airport)
                 .tabItem {
                     Image(systemName: "cloud.fill")

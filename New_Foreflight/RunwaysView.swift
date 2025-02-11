@@ -9,20 +9,33 @@ import SwiftUI
 struct Runway : Identifiable{
     var id = UUID()
     var heading : String
+    var direction : Int
 }
 struct RunwaysView: View {
     let curr_ap: Airport
+    @EnvironmentObject private var vm : AirportDetailModel
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-        List{
-            Text("04L-22R")
-            Text("04R-22L")
-            Text("11-29")
+        VStack(spacing:2){
+            Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: vm.flightrules ?? "Nil").padding(.all)
+            Divider()
+            /*
+             Head/Tailwind: wind speed * sin(a)
+             Crosswind: wind speed * cos(a)
+             */
+            TabView(){
+                // TODO: get vm.parsed_metar from the integration branch
+                // this is an example wind vector
+                let wind_speed: Int = 9
+                let wind_direction: Int = 240
+                let runway_example = Runway(heading:"4L-22R",direction:40)
+                var head_tail: Double = wind_speed*sin(Double(wind_direction-runway_example.direction))
+                var cross: Double =
+                print(head_tail)
+                print(cross)
+            }
         }
+        
     }
 }
 
-#Preview {
-    /*RunwaysView(curr_ap: Airport(
-        id: UUID(),AirportCode: "KEWR", latitude: 40.69222222222222, longitdue: -74.16861111111112) )*/
-}
+
