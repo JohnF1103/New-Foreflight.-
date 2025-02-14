@@ -26,7 +26,7 @@ struct MetarComponents: Decodable{
 }
 struct Cloud: Decodable{
     var code: String
-    var feet: String
+    var feet: String? = nil
 }
 struct LocationPreviewView: View {
     
@@ -152,8 +152,14 @@ extension LocationPreviewView{
             vm.sheetlocation = airport
             let cloudCode = String(metarData.metar_components.clouds.first?.code ?? "n/a")
             let cloudFeet = String(metarData.metar_components.clouds.first?.feet ?? "")
-            let cloudAGL = cloudCode + " at " + cloudFeet + "ft"
-            let interestingNumbers: KeyValuePairs<String,String> = ["Time": "0",
+            var cloudAGL : String
+            if(cloudCode == "CLR"){
+                cloudAGL = "CLR"
+            }
+            else{ cloudAGL = cloudCode + " at " + cloudFeet + "ft"}
+            // TODO: Make the AGL more human-readable
+            let now = Date.now
+            let interestingNumbers: KeyValuePairs<String,String> = ["Time":now.formatted(date: .omitted, time: .standard),
                                                      "Wind": metarData.metar_components.wind,
                                                      "Visibility" : metarData.metar_components.visibility,
                                                                     "Clouds(AGL)": cloudAGL,
