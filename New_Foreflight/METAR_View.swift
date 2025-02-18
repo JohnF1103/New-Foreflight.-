@@ -62,7 +62,7 @@ struct METAR_View: View {
                     .font(.headline)
                     .padding(.bottom, 4)
                 
-                let order_metar: KeyValuePairs = getComponents(metar: vm.curr_metar ?? "NO METAR")
+                let order_metar: KeyValuePairs = vm.parsed_metar!
                 
                 ForEach(order_metar, id: \.0) { key, value in
                     HStack {

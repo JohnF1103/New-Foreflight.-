@@ -7,6 +7,27 @@
 
 import SwiftUI
 
+struct ServerResponse: Decodable {
+    /**/
+    var metar_data: String? = nil
+    var flight_rules: String? = nil
+    var metar_components: MetarComponents
+}
+struct MetarComponents: Decodable{
+    var wind: String
+    var clouds: [Cloud]
+    var visibility: String
+    var temperature: String
+    var dewpoint: String
+    var barometer: String
+    var humidity: String
+    var elevation: String
+    var density_altitude: Int = 0
+}
+struct Cloud: Decodable{
+    var code: String
+    var feet: String? = nil
+}
 struct LocationPreviewView: View {
     
     let airport: Airport
@@ -103,11 +124,8 @@ extension LocationPreviewView{
             //**TODO** Use completion handler to capture return value of async funciton.
             
             let semaphore = DispatchSemaphore (value: 0)
-
-            var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(airport.AirportCode)/decoded")!,timeoutInterval: Double.infinity)
-
-
-            request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
+            //var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(airport.AirportCode)/decoded")!,timeoutInterval: Double.infinity)
+            var request = URLRequest(url: URL(string: "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportInfo?airportCode=\(airport.AirportCode)")!,timeoutInterval: Double.infinity)
 
             request.httpMethod = "GET"
 
@@ -119,7 +137,7 @@ extension LocationPreviewView{
               }
                 
                  curr_metar_of_selected_Airport = String(data: data, encoding: .utf8)!
-                
+                print(curr_metar_of_selected_Airport)
 
               semaphore.signal()
             }
@@ -127,12 +145,31 @@ extension LocationPreviewView{
 
             task.resume()
             semaphore.wait()
-            
-            
+            let jsonData = curr_metar_of_selected_Airport.data(using:.utf8)!
+            let metarData : ServerResponse = try! JSONDecoder().decode(ServerResponse.self,from: jsonData)
+            vm.curr_metar = metarData.metar_data
+            print(metarData.metar_components)
             vm.sheetlocation = airport
-            vm.curr_metar = parseRawText(jsonString: curr_metar_of_selected_Airport)
-            vm.flightrules = getFlightRules(metar: vm.curr_metar ?? "Nil")
-            
+            let cloudCode = String(metarData.metar_components.clouds.first?.code ?? "n/a")
+            let cloudFeet = String(metarData.metar_components.clouds.first?.feet ?? "")
+            var cloudAGL : String
+            if(cloudCode == "CLR"){
+                cloudAGL = "CLR"
+            }
+            else{ cloudAGL = cloudCode + " at " + cloudFeet + "ft"}
+            // TODO: Make the AGL more human-readable
+            let now = Date.now
+            let interestingNumbers: KeyValuePairs<String,String> = ["Time":now.formatted(date: .omitted, time: .standard),
+                                                     "Wind": metarData.metar_components.wind,
+                                                     "Visibility" : metarData.metar_components.visibility,
+                                                                    "Clouds(AGL)": cloudAGL,
+                                                     "Temperature": metarData.metar_components.temperature,
+                                                     "Dewpoint": metarData.metar_components.dewpoint,
+                                                     "Altimeter": metarData.metar_components.barometer,
+                                                     "Humidity": metarData.metar_components.humidity,
+                                                     "Density altitude": String(metarData.metar_components.density_altitude)]
+            vm.flightrules = metarData.flight_rules
+            vm.parsed_metar = interestingNumbers
             
             
         }label: {
@@ -161,7 +198,7 @@ extension LocationPreviewView{
     
 }
 
-#Preview {
+/*#Preview {
     
     ZStack{
         
@@ -173,5 +210,5 @@ extension LocationPreviewView{
     }
    
 }
-
+*/
 

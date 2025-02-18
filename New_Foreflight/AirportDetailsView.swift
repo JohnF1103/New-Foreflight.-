@@ -18,6 +18,7 @@ struct AirportDetailsView: View {
     @State private var image: UIImage? = nil
     @State private var PlateInfo: String = ""
     @State private var FrequencyInfo: String = ""
+    @State private var ParsedFrequencies: [String:String]? = nil
     @State private var NotamsInfo: String = ""
 
     @State private var isFreqenciespresented = false
@@ -61,7 +62,7 @@ struct AirportDetailsView: View {
                           Image(systemName: "road.lanes")
                           Text("Plates")
                       }
-                  FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport)
+                  FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport,parsedFrequencies:self.ParsedFrequencies)
                       .tabItem {
                           Image(systemName: "antenna.radiowaves.left.and.right")
                           Text("Frequencies")
@@ -250,10 +251,11 @@ extension AirportDetailsView{
         
         let semaphore = DispatchSemaphore (value: 0)
         
-        var request = URLRequest(url: URL(string: "https://airportdb.io/api/v1/airport/\(self.airport.AirportCode)?apiToken=\(self.FreqapiKey)")!,timeoutInterval: Double.infinity)
+        /*var request = URLRequest(url: URL(string: "https://airportdb.io/api/v1/airport/\(self.airport.AirportCode)?apiToken=\(self.FreqapiKey)")!,timeoutInterval: Double.infinity)
+        */
         
+        var request = URLRequest(url: URL(string:"https://frq-svc-272565453292.us-central1.run.app/api/v1/getAirportFrequencies?airportCode=KJFK")!, timeoutInterval: Double.infinity)
         
-        request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
         
         request.httpMethod = "GET"
         
@@ -265,7 +267,9 @@ extension AirportDetailsView{
             }
             
             self.FrequencyInfo = String(data: data, encoding: .utf8)!
-            
+            let json = try! JSONDecoder().decode([String:String].self, from: data)
+            print(json)
+            self.ParsedFrequencies = json
             semaphore.signal()
         }
         
