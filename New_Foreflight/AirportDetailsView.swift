@@ -2,181 +2,137 @@
 //  AirportDetailsView.swift
 //  New_Foreflight
 //
-//  Created by John Foster on 12/23/23.
+//  Created by John Foster on 12/20/23.
 //
+
 
 import SwiftUI
 import PDFKit
 
-// Add this:
-
-
-
 struct AirportDetailsView: View {
     
-    @EnvironmentObject private var vm : AirportDetailModel
+    @EnvironmentObject private var vm: AirportDetailModel
     @State private var image: UIImage? = nil
     @State private var PlateInfo: String = ""
     @State private var FrequencyInfo: String = ""
-    @State private var ParsedFrequencies: [String:String]? = nil
+    @State private var ParsedFrequencies: [String: String]? = nil
     @State private var NotamsInfo: String = ""
-
+    
     @State private var isFreqenciespresented = false
     @State private var FreqapiKey = "9d0b8ab9c176ca96804eac20c1936b5b2b058965c1c0e6ffbfd4c737730dfe8f5d175f8f447b6be1b9875346c5f00cc3"
     @State private var NOTAMapikey = "f482ac5e-2eac-48ff-b603-0ad8c36c0cee"
     
-    
-    @State var isPresenting = false
     @State private var selectedItem = 0
-    //Should take in a METAR obj potentially
     
-    let airport : Airport
+    let airport: Airport
     let curr_mertar: String
     
-    
-    
-    /*TOO add these as properties of VM*/
-    
-    /*  let Notams : String
-     let runways : String */
-    
-    
-    
     var body: some View {
-    
-              TabView {
-                  TaxiDiagramSection
-                      .tabItem {
-                          Image(systemName: "airplane.arrival")
-                          Text("Airport")
-                      }
-                  ScrollView {
-                      METAR_View(JSON_Metar: self.curr_mertar, curr_ap: self.airport)
-                  }
-                  .tabItem {
-                      Image(systemName: "cloud.fill")
-                      Text("METAR")
-                  }
-                  PlatesView(plateJSON: self.PlateInfo, curr_ap: self.airport)
-                      .tabItem {
-                          Image(systemName: "road.lanes")
-                          Text("Plates")
-                      }
-                  FrequenciesView(FreqenciesJSON: self.FrequencyInfo, curr_ap: self.airport,parsedFrequencies:self.ParsedFrequencies)
-                      .tabItem {
-                          Image(systemName: "antenna.radiowaves.left.and.right")
-                          Text("Frequencies")
-                      }
-                  NOTAMS_View_(NotamsJson: self.NotamsInfo, curr_ap: self.airport)
-                      .tabItem {
-                          Image(systemName: "antenna.radiowaves.left.and.right")
-                          Text("NOTAMS")
-                      }
-              
-                  
-          }
-              .tabViewStyle(.page)
-      // Constrain the TabView height to your desired medium size
-        .onAppear {
-            DispatchQueue.main.async {
-                loadImageFromAPI()
-                LoadPlates()
-                LoadFrequencies()
-                //LoadNOTAMS()
-            }
-            
-        
-        }
-        
-        
-    }
-    
-    
+           NavigationView {
+               VStack(spacing: 0) {
+                   // Drag Indicator for sheet-style UI
+                   Capsule()
+                       .fill(Color.secondary.opacity(0.4))
+                       .frame(width: 40, height: 6)
+                       .padding(.top, 8)
+                   
+                   // Swipeable TabView using page style
+                   TabView(selection: $selectedItem) {
+                       TaxiDiagramSection
+                           .tag(0)
+                       
+                       ScrollView {
+                           METAR_View(JSON_Metar: curr_mertar, curr_ap: airport)
+                               .padding()
+                       }
+                       .tag(1)
+                       
+                       PlatesView(plateJSON: PlateInfo, curr_ap: airport)
+                           .tag(2)
+                       
+                       FrequenciesView(FreqenciesJSON: FrequencyInfo,
+                                       curr_ap: airport,
+                                       parsedFrequencies: ParsedFrequencies)
+                           .tag(3)
+                       
+                       NOTAMS_View_(NotamsJson: NotamsInfo, curr_ap: airport)
+                           .tag(4)
+                   }
+                   .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+               }
+               .background(Color(.systemBackground))
+               .navigationBarItems(leading: BackButton)
+               .onAppear {
+                   DispatchQueue.main.async {
+                       loadImageFromAPI()
+                       LoadPlates()
+                       LoadFrequencies()
+                       //LoadNOTAMS() // Uncomment if needed
+                   }
+               }
+           }
+           .navigationViewStyle(StackNavigationViewStyle())
+       }
 }
 
-/*
- #Preview {
- AirportDetailsView(airport: Airport(id: UUID(), AirportCode: "KJFK", latitude: 40.63972222222222, longitude: -73.77888888888889), curr_mertar: "METAR")
- }
- */
-
-extension AirportDetailsView{
+extension AirportDetailsView {
     
-    private var TaxiDiagramSection: some View{
-        VStack{
+    // MARK: - Sections
+    
+    private var TaxiDiagramSection: some View {
+        VStack(spacing: 16) {
+            // Image section in a rounded, card-style view
             Imagesection
-                .shadow(color: Color.black.opacity(0.3), radius: 20,x: 0,y:10)
+                .cornerRadius(12)
+                .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
             
-            
-            VStack(alignment: .leading, spacing: 16){
-                Titlesection(curr_ap: airport, subtitle: "Airport", flightrules: vm.flightrules!)
+            // Title section with a divider
+            VStack(alignment: .leading, spacing: 8) {
+                Titlesection(curr_ap: airport,
+                             subtitle: "Airport",
+                             flightrules: vm.flightrules ?? "")
+                    .padding(.horizontal)
+                
                 Divider()
+                    .background(Color.gray.opacity(0.4))
             }
-            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading)
-            .padding()
-            
-            
         }
-        
-        
-        
+        .padding()
     }
-    private var Imagesection:  some View{
-        //add approach plates
-        
-        VStack {
+    
+    private var Imagesection: some View {
+        Group {
             if let image = image {
                 Image(uiImage: image)
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFit() // Ensures the full image is visible
             } else {
-                Text("Loading Image...")
+                ZStack {
+                    Color.gray.opacity(0.1)
+                    Text("Loading Image...")
+                        .foregroundColor(.gray)
+                        .font(.headline)
+                }
+                .frame(height: 200)
+                .cornerRadius(12)
             }
         }
-        
-        .scaledToFit()
-        .frame(width: UIScreen.main.bounds.width)
-        .clipped()
-        .padding()
-        
-        
-        .frame(height: 500)
-        .tabViewStyle(PageTabViewStyle())
+        .padding(.horizontal) // Leaves a margin on the sides
     }
-    
-    
-    
-    private var TabSection: some View{
-        
-        VStack(alignment: .leading, spacing: 8){
-            
-            
-            
-            
-            
-            
-            
-            
-        }
-    }
-    
-    
-    private var BackButton: some View{
-        
-        Button{
+
+    private var BackButton: some View {
+        Button(action: {
             vm.sheetlocation = nil
-        } label: {
+        }) {
             Image(systemName: "xmark")
-                .font(.headline)
-                .padding(16)
                 .foregroundColor(.primary)
-                .foregroundColor(.primary)
-                .background(.thickMaterial)
-                .cornerRadius(10)
-                .shadow(radius: 4)
-                .padding()
+                .padding(10)
+                .background(Color(.systemGray5))
+                .clipShape(Circle())
         }
     }
+    
+    // MARK: - Networking Functions
     
     func loadImageFromAPI() {
         guard let url = URL(string: "https://cloudfront.foreflight.com/diagrams/2312/\(airport.AirportCode.lowercased()).jpg") else {
@@ -198,116 +154,70 @@ extension AirportDetailsView{
         }.resume()
     }
     
-    
-    func LoadPlates(){
-        
-        //Q for david. Load & parse at the same time? or is it ok to load on view apperence & parse on button click
-        //Q for david. frontend exposure. should this be loaded from out OWN API?
-        /*guard let url = URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())") else {
-         print("Invalid URL")
-         return
-         }*/
-        
-        
-        
-        
-        
-        let semaphore = DispatchSemaphore (value: 0)
-        
-        var request = URLRequest(url: URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())")!,timeoutInterval: Double.infinity)
-        
-        
+    func LoadPlates() {
+        let semaphore = DispatchSemaphore(value: 0)
+        guard let url = URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())") else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
-        
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            defer { semaphore.signal() }
             guard let data = data else {
                 print(String(describing: error))
-                semaphore.signal()
                 return
             }
-            
-            self.PlateInfo = String(data: data, encoding: .utf8)!
-            print("PLATE INFO FOR ", airport.AirportCode.lowercased())
-            
-            semaphore.signal()
-        }
-        
-        
-        task.resume()
+            self.PlateInfo = String(data: data, encoding: .utf8) ?? ""
+            print("Plate info loaded for \(airport.AirportCode.lowercased())")
+        }.resume()
         semaphore.wait()
-        
-        
     }
     
-    
-    func LoadFrequencies(){
-        
-        
-        //Q for david. Load & parse at the same time? or is it ok to load on view apperence & parse on button click
-        //Q for david. frontend exposure. should this be loaded from out OWN API?
-        
-        
-        let semaphore = DispatchSemaphore (value: 0)
-        
-        /*var request = URLRequest(url: URL(string: "https://airportdb.io/api/v1/airport/\(self.airport.AirportCode)?apiToken=\(self.FreqapiKey)")!,timeoutInterval: Double.infinity)
-        */
-        
-        var request = URLRequest(url: URL(string:"https://frq-svc-272565453292.us-central1.run.app/api/v1/getAirportFrequencies?airportCode=KJFK")!, timeoutInterval: Double.infinity)
-        
-        
+    func LoadFrequencies() {
+        let semaphore = DispatchSemaphore(value: 0)
+        guard let url = URL(string:"https://frq-svc-272565453292.us-central1.run.app/api/v1/getAirportFrequencies?airportCode=KJFK") else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            defer { semaphore.signal() }
             guard let data = data else {
                 print(String(describing: error))
-                semaphore.signal()
                 return
             }
-            
-            self.FrequencyInfo = String(data: data, encoding: .utf8)!
-            let json = try! JSONDecoder().decode([String:String].self, from: data)
-            print(json)
-            self.ParsedFrequencies = json
-            semaphore.signal()
-        }
-        
-        
-        task.resume()
+            self.FrequencyInfo = String(data: data, encoding: .utf8) ?? ""
+            if let json = try? JSONDecoder().decode([String: String].self, from: data) {
+                self.ParsedFrequencies = json
+            }
+        }.resume()
         semaphore.wait()
-        
     }
     
-    func LoadNOTAMS(){
-        
-        
-        let semaphore = DispatchSemaphore (value: 0)
-        
-        var request = URLRequest(url: URL(string: "https://applications.icao.int/dataservices/api/notams-realtime-list?api_key=\(self.NOTAMapikey)&format=json&locations=\(self.airport.AirportCode)")!,timeoutInterval: Double.infinity)
-        
-        
+    func LoadNOTAMS() {
+        let semaphore = DispatchSemaphore(value: 0)
+        guard let url = URL(string: "https://applications.icao.int/dataservices/api/notams-realtime-list?api_key=\(NOTAMapikey)&format=json&locations=\(airport.AirportCode)") else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
-        
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            defer { semaphore.signal() }
             guard let data = data else {
                 print(String(describing: error))
-                semaphore.signal()
                 return
             }
-            
-            self.NotamsInfo = String(data: data, encoding: .utf8)!
-            
-            semaphore.signal()
-        }
-        
-        
-        task.resume()
+            self.NotamsInfo = String(data: data, encoding: .utf8) ?? ""
+        }.resume()
         semaphore.wait()
     }
-    
-    
-    
 }
+
