@@ -11,10 +11,11 @@ import SwiftUI
 
 struct FrequenciesView: View {
     
+    
     let FreqenciesJSON: String
     let curr_ap : Airport
     @EnvironmentObject private var vm : AirportDetailModel
-
+    let parsedFrequencies: [String:String]?
     
     @State private var active = ("Unicom",122.8.rounded())
     @State private var SBY = ("",122.8.rounded())
@@ -32,7 +33,7 @@ struct FrequenciesView: View {
             freqchanger
             
             
-            if let frequenciesDict = parseFrequencies(json_frequencies: FreqenciesJSON) {
+            if let frequenciesDict = parsedFrequencies {
             
                 List {
                     ForEach(frequenciesDict.sorted(by: { $0.0 < $1.0 }), id: \.key) { key, value in

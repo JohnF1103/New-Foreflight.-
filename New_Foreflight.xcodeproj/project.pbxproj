@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2435B83C2D64FF5B00449059 /* class_b.json in Resources */ = {isa = PBXBuildFile; fileRef = 2435B83B2D64FF5B00449059 /* class_b.json */; };
+		2435B83E2D64FF6200449059 /* class_c.json in Resources */ = {isa = PBXBuildFile; fileRef = 2435B83D2D64FF6200449059 /* class_c.json */; };
+		2435B8402D65004D00449059 /* class_d.json in Resources */ = {isa = PBXBuildFile; fileRef = 2435B83F2D65004D00449059 /* class_d.json */; };
 		2444452E2B33FA8E001854DD /* LocationPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2444452D2B33FA8E001854DD /* LocationPreviewView.swift */; };
 		244445322B351B44001854DD /* Tower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 244445312B351B44001854DD /* Tower.jpg */; };
 		245C35412B3900E800CD3DC1 /* METAR in Frameworks */ = {isa = PBXBuildFile; productRef = 245C35402B3900E800CD3DC1 /* METAR */; };
@@ -14,7 +17,6 @@
 		246715532B43C61800DCDFAB /* TFR.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715522B43C61800DCDFAB /* TFR.json */; };
 		246715552B43E76E00DCDFAB /* ASpace_bounds.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715542B43E76D00DCDFAB /* ASpace_bounds.json */; };
 		246715572B43E7AD00DCDFAB /* Staduims.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715562B43E7AD00DCDFAB /* Staduims.json */; };
-		246715592B43F79000DCDFAB /* Class_B.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715582B43F79000DCDFAB /* Class_B.json */; };
 		2477B8102B42303A004523FD /* MapView .swift in Sources */ = {isa = PBXBuildFile; fileRef = 2477B80F2B42303A004523FD /* MapView .swift */; };
 		2477B8122B424B9B004523FD /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2477B8112B424B9B004523FD /* AnnotationView.swift */; };
 		24813A162B42B125003616F6 /* Map.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 24813A152B42B125003616F6 /* Map.geojson */; };
@@ -63,13 +65,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2435B83B2D64FF5B00449059 /* class_b.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = class_b.json; sourceTree = "<group>"; };
+		2435B83D2D64FF6200449059 /* class_c.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = class_c.json; sourceTree = "<group>"; };
+		2435B83F2D65004D00449059 /* class_d.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = class_d.json; sourceTree = "<group>"; };
 		2444452D2B33FA8E001854DD /* LocationPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPreviewView.swift; sourceTree = "<group>"; };
 		244445312B351B44001854DD /* Tower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tower.jpg; sourceTree = "<group>"; };
 		246715502B436D0B00DCDFAB /* Special.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Special.json; sourceTree = "<group>"; };
 		246715522B43C61800DCDFAB /* TFR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TFR.json; sourceTree = "<group>"; };
 		246715542B43E76D00DCDFAB /* ASpace_bounds.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ASpace_bounds.json; sourceTree = "<group>"; };
 		246715562B43E7AD00DCDFAB /* Staduims.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Staduims.json; sourceTree = "<group>"; };
-		246715582B43F79000DCDFAB /* Class_B.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Class_B.json; sourceTree = "<group>"; };
 		2477B80F2B42303A004523FD /* MapView .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView .swift"; sourceTree = "<group>"; };
 		2477B8112B424B9B004523FD /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		24813A152B42B125003616F6 /* Map.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = Map.geojson; sourceTree = "<group>"; };
@@ -155,6 +159,8 @@
 		248A9EFF2B2D660400C99490 /* New_Foreflight */ = {
 			isa = PBXGroup;
 			children = (
+				2435B83D2D64FF6200449059 /* class_c.json */,
+				2435B83B2D64FF5B00449059 /* class_b.json */,
 				24CF751D2B3D616A00B751E0 /* FrequenciesViewModel.swift */,
 				24813A152B42B125003616F6 /* Map.geojson */,
 				244445312B351B44001854DD /* Tower.jpg */,
@@ -167,7 +173,6 @@
 				24CF75152B3D611B00B751E0 /* PlatesView.swift */,
 				24CF75172B3D612E00B751E0 /* PlatesViewModel.swift */,
 				24D9C12E2B37F8CB00772DF1 /* METAR_View.swift */,
-				246715582B43F79000DCDFAB /* Class_B.json */,
 				246715502B436D0B00DCDFAB /* Special.json */,
 				246715522B43C61800DCDFAB /* TFR.json */,
 				246715562B43E7AD00DCDFAB /* Staduims.json */,
@@ -187,6 +192,7 @@
 				24C7CAF02B3E85D4009EA545 /* WebView.swift */,
 				24F33F552B4365A9003EABB4 /* Maps */,
 				246715542B43E76D00DCDFAB /* ASpace_bounds.json */,
+				2435B83F2D65004D00449059 /* class_d.json */,
 			);
 			path = New_Foreflight;
 			sourceTree = "<group>";
@@ -338,13 +344,15 @@
 				246715552B43E76E00DCDFAB /* ASpace_bounds.json in Resources */,
 				246715512B436D0B00DCDFAB /* Special.json in Resources */,
 				246715572B43E7AD00DCDFAB /* Staduims.json in Resources */,
+				2435B83E2D64FF6200449059 /* class_c.json in Resources */,
 				24F33F562B4365A9003EABB4 /* Maps in Resources */,
 				244445322B351B44001854DD /* Tower.jpg in Resources */,
-				246715592B43F79000DCDFAB /* Class_B.json in Resources */,
 				246715532B43C61800DCDFAB /* TFR.json in Resources */,
 				248A9F092B2D660A00C99490 /* Preview Assets.xcassets in Resources */,
 				248A9F052B2D660A00C99490 /* Assets.xcassets in Resources */,
 				24813A162B42B125003616F6 /* Map.geojson in Resources */,
+				2435B83C2D64FF5B00449059 /* class_b.json in Resources */,
+				2435B8402D65004D00449059 /* class_d.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

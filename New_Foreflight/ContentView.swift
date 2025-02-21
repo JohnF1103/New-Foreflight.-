@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var airports = [MKPointAnnotation]()
     @State private var isPickerVisible = false
     
-    //Move this into a DB and implement search. 
+    //Move this into a DB and implement search.
     @State private var locations: [Airport] = readFile()
     
     @EnvironmentObject private var vm : AirportDetailModel
@@ -77,13 +77,14 @@ struct ContentView: View {
                 vm.selected_airport = nil
             }
             
-        }.fullScreenCover(item: $vm.sheetlocation, onDismiss: nil){ap in
+        }.sheet(item: $vm.sheetlocation, onDismiss: nil){ap in
             
             
             AirportDetailsView(airport: ap, curr_mertar: vm.curr_metar ?? "NIL")
+                .presentationDetents([.medium])
+
                
         }
-        
         
         
         
@@ -103,7 +104,7 @@ extension ContentView{
             
             
             Menu {
-                Button("Class B cairspaces", action: Show_class_Bravo)
+                Button("Airspace", action: Show_Airspace)
                 Button("National Defense TFRs", action:showTFRs )
                 Button("ATC Boundaries", action: showATClimits)
                 Button("Special use airspaces", action: showSpecialAirspaces)
@@ -129,7 +130,7 @@ extension ContentView{
     func showTFRs() {
         
         print("CALLING ME NOEN SELECTED")
-        vm.selectedData = "TFR"
+        vm.selectedData = ["TFR"]
         
     }
     
@@ -137,15 +138,14 @@ extension ContentView{
     func showSpecialAirspaces() {
         print("CALLING ME NOEN SELECTED")
 
-        vm.selectedData = "Special"
+        vm.selectedData = ["Special"]
     }
     
     func showATClimits(){
-        vm.selectedData = "ASpace_bounds"
+        vm.selectedData = ["ASpace_bounds"]
     }
     
-    func Show_class_Bravo(){
-        vm.selectedData = "Class_B"
+    func Show_Airspace(){
+        vm.selectedData = ["Class_B","Class_C","class_d"]
     }
 }
-
