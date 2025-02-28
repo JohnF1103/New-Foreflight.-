@@ -194,8 +194,10 @@ extension AirportDetailsView {
             self.FrequencyInfo = String(data: data, encoding: .utf8) ?? ""
             if let json = try? JSONDecoder().decode([String: String].self, from: data) {
                 self.ParsedFrequencies = json
+                print(json)
             }
         }.resume()
+        
         semaphore.wait()
     }
     
