@@ -13,7 +13,6 @@
 		2444452E2B33FA8E001854DD /* LocationPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2444452D2B33FA8E001854DD /* LocationPreviewView.swift */; };
 		244445322B351B44001854DD /* Tower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 244445312B351B44001854DD /* Tower.jpg */; };
 		245C35412B3900E800CD3DC1 /* METAR in Frameworks */ = {isa = PBXBuildFile; productRef = 245C35402B3900E800CD3DC1 /* METAR */; };
-		245FF53F2D64FA8A008C85EB /* Class_Airspace 2.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 245FF53E2D64FA8A008C85EB /* Class_Airspace 2.geojson */; };
 		246715512B436D0B00DCDFAB /* Special.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715502B436D0B00DCDFAB /* Special.json */; };
 		246715532B43C61800DCDFAB /* TFR.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715522B43C61800DCDFAB /* TFR.json */; };
 		246715552B43E76E00DCDFAB /* ASpace_bounds.json in Resources */ = {isa = PBXBuildFile; fileRef = 246715542B43E76D00DCDFAB /* ASpace_bounds.json */; };
@@ -39,7 +38,6 @@
 		24CF751A2B3D614900B751E0 /* NotamsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF75192B3D614900B751E0 /* NotamsViewModel.swift */; };
 		24CF751C2B3D615A00B751E0 /* FrequenciesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF751B2B3D615A00B751E0 /* FrequenciesView.swift */; };
 		24CF751E2B3D616A00B751E0 /* FrequenciesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF751D2B3D616A00B751E0 /* FrequenciesViewModel.swift */; };
-		24D483F52D64FAE200467574 /* Class_Airspace.json in Resources */ = {isa = PBXBuildFile; fileRef = 24D483F42D64FAE200467574 /* Class_Airspace.json */; };
 		24D9C12D2B37893B00772DF1 /* AirportDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C12C2B37893B00772DF1 /* AirportDetailModel.swift */; };
 		24D9C12F2B37F8CB00772DF1 /* METAR_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C12E2B37F8CB00772DF1 /* METAR_View.swift */; };
 		24D9C1312B37F90100772DF1 /* RunwaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9C1302B37F90100772DF1 /* RunwaysView.swift */; };
@@ -72,7 +70,6 @@
 		2435B83F2D65004D00449059 /* class_d.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = class_d.json; sourceTree = "<group>"; };
 		2444452D2B33FA8E001854DD /* LocationPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPreviewView.swift; sourceTree = "<group>"; };
 		244445312B351B44001854DD /* Tower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tower.jpg; sourceTree = "<group>"; };
-		245FF53E2D64FA8A008C85EB /* Class_Airspace 2.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Class_Airspace 2.geojson"; sourceTree = "<group>"; };
 		246715502B436D0B00DCDFAB /* Special.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Special.json; sourceTree = "<group>"; };
 		246715522B43C61800DCDFAB /* TFR.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TFR.json; sourceTree = "<group>"; };
 		246715542B43E76D00DCDFAB /* ASpace_bounds.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ASpace_bounds.json; sourceTree = "<group>"; };
@@ -102,7 +99,6 @@
 		24CF75192B3D614900B751E0 /* NotamsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotamsViewModel.swift; sourceTree = "<group>"; };
 		24CF751B2B3D615A00B751E0 /* FrequenciesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequenciesView.swift; sourceTree = "<group>"; };
 		24CF751D2B3D616A00B751E0 /* FrequenciesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequenciesViewModel.swift; sourceTree = "<group>"; };
-		24D483F42D64FAE200467574 /* Class_Airspace.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Class_Airspace.json; sourceTree = "<group>"; };
 		24D9C12C2B37893B00772DF1 /* AirportDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportDetailModel.swift; sourceTree = "<group>"; };
 		24D9C12E2B37F8CB00772DF1 /* METAR_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = METAR_View.swift; sourceTree = "<group>"; };
 		24D9C1302B37F90100772DF1 /* RunwaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunwaysView.swift; sourceTree = "<group>"; };
@@ -165,7 +161,6 @@
 			children = (
 				2435B83D2D64FF6200449059 /* class_c.json */,
 				2435B83B2D64FF5B00449059 /* class_b.json */,
-				24D483F42D64FAE200467574 /* Class_Airspace.json */,
 				24CF751D2B3D616A00B751E0 /* FrequenciesViewModel.swift */,
 				24813A152B42B125003616F6 /* Map.geojson */,
 				244445312B351B44001854DD /* Tower.jpg */,
@@ -197,7 +192,6 @@
 				24C7CAF02B3E85D4009EA545 /* WebView.swift */,
 				24F33F552B4365A9003EABB4 /* Maps */,
 				246715542B43E76D00DCDFAB /* ASpace_bounds.json */,
-				245FF53E2D64FA8A008C85EB /* Class_Airspace 2.geojson */,
 				2435B83F2D65004D00449059 /* class_d.json */,
 			);
 			path = New_Foreflight;
@@ -359,8 +353,6 @@
 				24813A162B42B125003616F6 /* Map.geojson in Resources */,
 				2435B83C2D64FF5B00449059 /* class_b.json in Resources */,
 				2435B8402D65004D00449059 /* class_d.json in Resources */,
-				245FF53F2D64FA8A008C85EB /* Class_Airspace 2.geojson in Resources */,
-				24D483F52D64FAE200467574 /* Class_Airspace.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

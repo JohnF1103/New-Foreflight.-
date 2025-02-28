@@ -14,8 +14,8 @@
             filePath = "New_Foreflight/LocationPreviewView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
             landmarkName = "unknown"
             landmarkType = "0">
          </BreakpointContent>
@@ -31,9 +31,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "282"
-            endingLineNumber = "282"
-            landmarkName = "LoadNOTAMS()"
-            landmarkType = "7">
+            endingLineNumber = "282">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

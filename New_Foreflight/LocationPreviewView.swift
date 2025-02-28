@@ -146,30 +146,53 @@ extension LocationPreviewView{
             task.resume()
             semaphore.wait()
             let jsonData = curr_metar_of_selected_Airport.data(using:.utf8)!
-            let metarData : ServerResponse = try! JSONDecoder().decode(ServerResponse.self,from: jsonData)
-            vm.curr_metar = metarData.metar_data
-            print(metarData.metar_components)
-            vm.sheetlocation = airport
-            let cloudCode = String(metarData.metar_components.clouds.first?.code ?? "n/a")
-            let cloudFeet = String(metarData.metar_components.clouds.first?.feet ?? "")
-            var cloudAGL : String
-            if(cloudCode == "CLR"){
-                cloudAGL = "CLR"
+            var metarData : ServerResponse
+            
+            do{
+                metarData = try JSONDecoder().decode(ServerResponse.self,from: jsonData)
+                vm.curr_metar = metarData.metar_data
+                print(metarData.metar_components)
+                vm.sheetlocation = airport
+                let cloudCode = String(metarData.metar_components.clouds.first?.code ?? "n/a")
+                let cloudFeet = String(metarData.metar_components.clouds.first?.feet ?? "")
+                var cloudAGL : String
+                if(cloudCode == "CLR"){
+                    cloudAGL = "CLR"
+                }
+                else{ cloudAGL = cloudCode + " at " + cloudFeet + "ft"}
+                // TODO: Make the AGL more human-readable
+                // TODO: Check current altitude and pick the most relevant cloud layer
+                let now = Date.now
+                let interestingNumbers: KeyValuePairs<String,String> = ["Time":now.formatted(date: .omitted, time: .standard),
+                                                         "Wind": metarData.metar_components.wind,
+                                                         "Visibility" : metarData.metar_components.visibility,
+                                                                        "Clouds(AGL)": cloudAGL,
+                                                         "Temperature": metarData.metar_components.temperature,
+                                                         "Dewpoint": metarData.metar_components.dewpoint,
+                                                         "Altimeter": metarData.metar_components.barometer,
+                                                         "Humidity": metarData.metar_components.humidity,
+                                                         "Density altitude": String(metarData.metar_components.density_altitude)]
+                vm.flightrules = metarData.flight_rules
+                vm.parsed_metar = interestingNumbers
             }
-            else{ cloudAGL = cloudCode + " at " + cloudFeet + "ft"}
-            // TODO: Make the AGL more human-readable
-            let now = Date.now
-            let interestingNumbers: KeyValuePairs<String,String> = ["Time":now.formatted(date: .omitted, time: .standard),
-                                                     "Wind": metarData.metar_components.wind,
-                                                     "Visibility" : metarData.metar_components.visibility,
-                                                                    "Clouds(AGL)": cloudAGL,
-                                                     "Temperature": metarData.metar_components.temperature,
-                                                     "Dewpoint": metarData.metar_components.dewpoint,
-                                                     "Altimeter": metarData.metar_components.barometer,
-                                                     "Humidity": metarData.metar_components.humidity,
-                                                     "Density altitude": String(metarData.metar_components.density_altitude)]
-            vm.flightrules = metarData.flight_rules
-            vm.parsed_metar = interestingNumbers
+            catch{
+                print("ERROR: JSON not formatted correctly")
+                vm.curr_metar = "NO METAR"
+                let interestingNumbers: KeyValuePairs<String,String> = ["Time":"n/a",
+                                                         "Wind": "n/a",
+                                                         "Visibility" : "n/a",
+                                                                        "Clouds(AGL)": "n/a",
+                                                         "Temperature": "n/a",
+                                                         "Dewpoint": "n/a",
+                                                         "Altimeter": "n/a",
+                                                         "Humidity": "n/a",
+                                                         "Density altitude": "n/a"]
+                vm.parsed_metar = interestingNumbers
+                vm.flightrules = "n/a"
+                vm.sheetlocation = airport
+            }
+            
+            
             
             
         }label: {

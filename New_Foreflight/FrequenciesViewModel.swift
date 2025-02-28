@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 // TODO: Make this irrelevant
-func parseFrequencies(json_frequencies: String) -> [String: String]? {
+/*func parseFrequencies(json_frequencies: String) -> [String: String]? {
     // Convert the JSON string to Data
     // Check if the JSON data is not empty
     
@@ -43,3 +43,4 @@ func parseFrequencies(json_frequencies: String) -> [String: String]? {
 
     return frequenciesDictionary.isEmpty ? nil : frequenciesDictionary
 }
+*/
