@@ -17,9 +17,11 @@ struct FrequenciesView: View {
     @EnvironmentObject private var vm : AirportDetailModel
     let parsedFrequencies: [String:String]?
     
+   /* @State private var active = ("Unicom",122.8.rounded())
+    @State private var SBY = ("",122.8.rounded())*/
     @State private var active = ("Unicom",122.8.rounded())
     @State private var SBY = ("",122.8.rounded())
-
+    
 
     var body: some View {
         
@@ -72,7 +74,9 @@ extension FrequenciesView{
     private var freqchanger: some View{
         
         VStack{
-            Text("Active: \(self.active.0) \(self.active.1, specifier: "%.1f")")
+            let activeKey = self.parsedFrequencies?.first?.key
+            let activeValue = self.parsedFrequencies?.first?.value
+            Text("Active: \(activeKey ?? self.active.0) \(activeValue ?? String(self.active.1))")
                 .padding()
                 .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
                 .foregroundColor(.white)
