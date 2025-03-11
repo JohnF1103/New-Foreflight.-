@@ -9,8 +9,9 @@ import SwiftUI
 // TODO: Flesh out the Runway struct
 struct Runway : Identifiable{
     var id = UUID()
-    var heading : String
-    var direction : Int
+    var heading1: String
+    var heading2: String
+    var direction1 : Int
 }
 struct RunwaysView: View {
     let curr_ap: Airport
@@ -20,36 +21,59 @@ struct RunwaysView: View {
         VStack(spacing:2){
             Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: vm.flightrules ?? "Nil").padding(.all)
             Divider()
-            /*
-             Head/Tailwind: wind speed * sin(a)
-             Crosswind: wind speed * cos(a)
-             */
-            let wind: String = "310 at 11-25 kts"
+            let wind: String = "90 at 5-10 kts"
             // TODO: Get this from the METAR instead of having it hardcoded
-            let windDirection: Int = 310
-            let windSpeed: Int = 11
-            let windGust: Int = 25
+            let windDirection: Int = 90
+            let windSpeed: Int = 5
+            let windGust: Int = 10
             
             // TODO: Finish integrating the Runways API
-            // NOTE: Most runway headings are
-            let runway1 = Runway(heading:"4L-22R",direction:26)
-            let runway2 = Runway(heading:"4R-22L",direction:26)
-            let runway3 = Runway(heading:"11-29",direction:95)
+            // NOTE: direction2 = 180 + direction1
+            let runway1 = Runway(heading1:"4L",heading2:"22R",direction1:26)
+            let runway2 = Runway(heading1:"4R",heading2:"22L",direction1:26)
+            let runway3 = Runway(heading1:"11",heading2:"29",direction1:95)
             let data = [runway1,runway2,runway3]
             
         // TODO: Pick out the best runway
             List(data){ runway in
-                let headwind: Double = abs(Double(windSpeed)*sin(1.0/180.0 * Double.pi * Double(runway.direction - windDirection)))
-                let headgust: Double = abs(Double(windGust)*sin(1.0/180.0 * Double.pi * Double(runway.direction - windDirection)))
-                let crosswind: Double = abs(Double(windSpeed)*cos(1.0/180.0 * Double.pi * Double(runway.direction - windDirection)))
-                let crossgust: Double = abs(Double(windGust)*cos(1.0/180.0 * Double.pi * Double(runway.direction - windDirection)))
-                VStack(){
-                    
-                    Text(runway.heading).bold()
-                    Text("Head/Tailwind: \(headwind, specifier: "%.1f")-\(headgust, specifier: "%.1f") kt")
-                    Text("Crosswind: \(crosswind, specifier: "%.1f")-\(crossgust, specifier: "%.1f") kt")
-                }
                 
+                let direction2: Int = 180+runway.direction1
+                /*
+                    Wind Math
+                    angle = runway direction - wind direction
+                 
+                    Head/Tail = Windspeed * cos(angle)
+                    Positive cos = Headwind
+                    Negative cos = Tailwind
+                 
+                    Cross = Windspeed * sin(angle)
+                    Positive sin = Right
+                    Negative sin = Left
+                 */
+                let angle_degrees_1: Double = Double(runway.direction1 - windDirection)
+                let angle_degrees_2: Double = Double(direction2 - windDirection)
+                let angle_radians_1: Double = 1.0/180.0 * Double.pi * angle_degrees_1
+                let angle_radians_2: Double = 1.0/180.0 * Double.pi * angle_degrees_2
+                
+                let headwind_1: Double = Double(windSpeed)*cos(angle_radians_1)
+                let crosswind_1: Double = Double(windSpeed)*sin(angle_radians_1)
+                let headwind_2: Double = Double(windSpeed)*cos(angle_radians_2)
+                let crosswind_2: Double = Double(windSpeed)*sin(angle_radians_2)
+                    
+                    //Text("Head/Tailwind: \(headwind, specifier: "%.1f")-\(headgust, specifier: "%.1f") kt")
+                    //Text("Crosswind: \(crosswind, specifier: "%.1f")-\(crossgust, specifier: "%.1f") kt")
+                
+                HStack(){
+                    Text("\(runway.heading1)-\(runway.heading2)").bold().frame(width:80)
+                    Divider()
+                    VStack(){
+                        Text("Rwy \(runway.heading1)").italic()
+                        Text("\(headwind_1) and \(crosswind_1)")
+                        Text("Rwy \(runway.heading2)").italic()
+                        Text("\(headwind_2) and \(crosswind_2)")
+                    }
+                    
+                }
                 
                 
                 
