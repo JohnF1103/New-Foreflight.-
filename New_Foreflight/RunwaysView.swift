@@ -12,6 +12,7 @@ struct Runway : Identifiable{
     var heading1: String
     var heading2: String
     var direction1 : Int
+    var length : Int
 }
 struct RunwaysView: View {
     let curr_ap: Airport
@@ -21,17 +22,17 @@ struct RunwaysView: View {
         VStack(spacing:2){
             Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: vm.flightrules ?? "Nil").padding(.all)
             Divider()
-            let wind: String = "90 at 5-10 kts"
+            let wind: String = "90 at 5 kts"
             // TODO: Get this from the METAR instead of having it hardcoded
             let windDirection: Int = 90
             let windSpeed: Int = 5
-            let windGust: Int = 10
+            
             
             // TODO: Finish integrating the Runways API
             // NOTE: direction2 = 180 + direction1
-            let runway1 = Runway(heading1:"4L",heading2:"22R",direction1:26)
-            let runway2 = Runway(heading1:"4R",heading2:"22L",direction1:26)
-            let runway3 = Runway(heading1:"11",heading2:"29",direction1:95)
+            let runway1 = Runway(heading1:"4L",heading2:"22R",direction1:26,length:11000)
+            let runway2 = Runway(heading1:"4R",heading2:"22L",direction1:26,length:10000)
+            let runway3 = Runway(heading1:"11",heading2:"29",direction1:95,length:6726)
             let data = [runway1,runway2,runway3]
             
         // TODO: Pick out the best runway
@@ -59,18 +60,26 @@ struct RunwaysView: View {
                 let crosswind_1: Double = Double(windSpeed)*sin(angle_radians_1)
                 let headwind_2: Double = Double(windSpeed)*cos(angle_radians_2)
                 let crosswind_2: Double = Double(windSpeed)*sin(angle_radians_2)
-                    
+                
                     //Text("Head/Tailwind: \(headwind, specifier: "%.1f")-\(headgust, specifier: "%.1f") kt")
                     //Text("Crosswind: \(crosswind, specifier: "%.1f")-\(crossgust, specifier: "%.1f") kt")
                 
+                let string_1a : String = (headwind_1>0) ? "⬇️ \(String(format:"%.1f",headwind_1))":"⬆️ \(String(format:"%.1f",headwind_2))"
+                let string_1b : String = (crosswind_1>0) ? "➡️ \(String(format:"%.1f",crosswind_1))":"⬅️ \(String(format:"%.1f",crosswind_2))"
+                let string_2a : String = (headwind_2>0) ? "⬇️ \(String(format:"%.1f",headwind_2))":"⬆️ \(String(format:"%.1f",headwind_1))"
+                let string_2b : String = (crosswind_2>0) ? "➡️ \(String(format:"%.1f",crosswind_2))":"⬅️ \(String(format:"%.1f",crosswind_1))"
+                
                 HStack(){
-                    Text("\(runway.heading1)-\(runway.heading2)").bold().frame(width:80)
+                    VStack(){
+                        Text("\(runway.heading1)-\(runway.heading2)").bold().frame(width:80)
+                        Text("\(runway.length)'")
+                    }
                     Divider()
                     VStack(){
                         Text("Rwy \(runway.heading1)").italic()
-                        Text("\(headwind_1) and \(crosswind_1)")
+                        Text("\(string_1a) kts, \(string_1b) kts")
                         Text("Rwy \(runway.heading2)").italic()
-                        Text("\(headwind_2) and \(crosswind_2)")
+                        Text("\(string_2a) kts, \(string_2b) kts")
                     }
                     
                 }
