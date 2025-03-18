@@ -89,7 +89,7 @@ struct RunwaysView: View {
                 
             }
             
-        }
+        }.padding(.all)
         
     }
 }

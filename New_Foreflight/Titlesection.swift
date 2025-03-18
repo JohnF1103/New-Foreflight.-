@@ -32,15 +32,15 @@ struct Titlesection: View {
                     }
                     
                 }
-                HStack(spacing: 150) {
+                HStack() {
                     Text(subtitle)
                         .font(.title3)
                         .foregroundColor(.secondary)
-                    
-                    
+                    Spacer(minLength: 1)
+                    Text(flightrules.uppercased())
+                        .foregroundStyle(flightrules.lowercased().first == "v" ? Color.green : flightrules.lowercased().first == "i" ? Color.red : Color.white)
                 }
-                Text(flightrules.uppercased())
-                    .foregroundStyle(flightrules.lowercased().first == "v" ? Color.green : flightrules.lowercased().first == "i" ? Color.red : Color.white)
+                
                 
                
                 
