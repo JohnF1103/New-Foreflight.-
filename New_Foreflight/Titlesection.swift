@@ -12,6 +12,7 @@ struct Titlesection: View {
     let curr_ap : Airport
     let subtitle: String
     let flightrules :String
+    var symbol: String? = nil
 
     
     var body: some View {
@@ -22,9 +23,13 @@ struct Titlesection: View {
                     Text(curr_ap.AirportCode)
                         .font(.largeTitle)
                         .fontWeight(.semibold)
-            
-                    Text(flightrules.uppercased())
-                        .foregroundStyle(flightrules.lowercased().first == "v" ? Color.green : flightrules.lowercased().first == "i" ? Color.red : Color.white)
+                    
+                    if(symbol != nil){
+                        Image(systemName:symbol!).font(.largeTitle)
+                    }
+                    else{
+                        Text("")
+                    }
                     
                 }
                 HStack(spacing: 150) {
@@ -34,7 +39,8 @@ struct Titlesection: View {
                     
                     
                 }
-                
+                Text(flightrules.uppercased())
+                    .foregroundStyle(flightrules.lowercased().first == "v" ? Color.green : flightrules.lowercased().first == "i" ? Color.red : Color.white)
                 
                
                 

@@ -29,7 +29,8 @@ struct FrequenciesView: View {
 
         VStack(spacing: 2) {
             
-            Titlesection(curr_ap: curr_ap, subtitle: "Nearby frequencies", flightrules: vm.flightrules!)
+            Titlesection(curr_ap: curr_ap, subtitle: "Nearby frequencies", flightrules: vm.flightrules!,
+                         symbol:"radio")
                 .padding(.all)
            Divider()
             freqchanger

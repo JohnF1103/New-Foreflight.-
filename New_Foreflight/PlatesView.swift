@@ -10,7 +10,7 @@ struct PlatesView: View {
         ScrollView {
             VStack(spacing: 20) {
                 // Title Section
-                Titlesection(curr_ap: curr_ap, subtitle: "PLATES", flightrules: vm.flightrules!)
+                Titlesection(curr_ap: curr_ap, subtitle: "PLATES", flightrules: vm.flightrules!,symbol:"document")
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 12)

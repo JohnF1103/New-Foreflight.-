@@ -20,7 +20,8 @@ struct RunwaysView: View {
     
     var body: some View {
         VStack(spacing:2){
-            Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: vm.flightrules ?? "Nil").padding(.all)
+            Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: "VFR",symbol:"road.lanes").padding(.all)
+            
             Divider()
             let wind: String = "90 at 5 kts"
             // TODO: Get this from the METAR instead of having it hardcoded

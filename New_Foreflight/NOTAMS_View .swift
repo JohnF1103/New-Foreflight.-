@@ -18,7 +18,7 @@ struct NOTAMS_View_: View {
         
        
         VStack(spacing: 2){
-            Titlesection(curr_ap: self.curr_ap, subtitle: "NOTAMS", flightrules: vm.flightrules ?? "Nil").padding(.all)
+            Titlesection(curr_ap: self.curr_ap, subtitle: "NOTAMS", flightrules: vm.flightrules ?? "Nil",symbol:"envelope.badge").padding(.all)
             Divider()
             
             if let notamsDict = parseNOTAMS(json_notams: NotamsJson){
