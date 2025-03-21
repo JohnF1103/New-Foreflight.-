@@ -23,7 +23,7 @@ struct RunwaysView: View {
             Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: "VFR",symbol:"road.lanes").padding(.all)
             
             Divider()
-            let wind: String = "90 at 5 kts"
+            let wind: String = "90° at 5 kts"
             // TODO: Get this from the METAR instead of having it hardcoded
             let windDirection: Int = 90
             let windSpeed: Int = 5
@@ -35,7 +35,7 @@ struct RunwaysView: View {
             let runway2 = Runway(heading1:"4R",heading2:"22L",direction1:26,length:10000)
             let runway3 = Runway(heading1:"11",heading2:"29",direction1:95,length:6726)
             let data = [runway1,runway2,runway3]
-            
+        // TODO: Color code headwind and crosswind
         // TODO: Pick out the best runway
             List(data){ runway in
                 
@@ -62,13 +62,13 @@ struct RunwaysView: View {
                 let headwind_2: Double = Double(windSpeed)*cos(angle_radians_2)
                 let crosswind_2: Double = Double(windSpeed)*sin(angle_radians_2)
                 
-                    //Text("Head/Tailwind: \(headwind, specifier: "%.1f")-\(headgust, specifier: "%.1f") kt")
-                    //Text("Crosswind: \(crosswind, specifier: "%.1f")-\(crossgust, specifier: "%.1f") kt")
-                
                 let string_1a : String = (headwind_1>0) ? "⬇️ \(String(format:"%.1f",headwind_1))":"⬆️ \(String(format:"%.1f",headwind_2))"
                 let string_1b : String = (crosswind_1>0) ? "➡️ \(String(format:"%.1f",crosswind_1))":"⬅️ \(String(format:"%.1f",crosswind_2))"
                 let string_2a : String = (headwind_2>0) ? "⬇️ \(String(format:"%.1f",headwind_2))":"⬆️ \(String(format:"%.1f",headwind_1))"
                 let string_2b : String = (crosswind_2>0) ? "➡️ \(String(format:"%.1f",crosswind_2))":"⬅️ \(String(format:"%.1f",crosswind_1))"
+                
+                let style_1a = (headwind_1>0) ? Color(red:0.4,green:0.8,blue:0.4) : Color(red:0,green:0,blue:0)
+                let style_2a = (headwind_2>0) ? Color(red:0.4,green:0.8,blue:0.4) : Color(red:0,green:0,blue:0)
                 
                 HStack(){
                     VStack(){
@@ -78,9 +78,16 @@ struct RunwaysView: View {
                     Divider()
                     VStack(){
                         Text("Rwy \(runway.heading1)").italic()
-                        Text("\(string_1a) kts, \(string_1b) kts")
+                        HStack(){
+                            Text("\(string_1a) kts").foregroundStyle(style_1a)
+                            Text("\(string_1b) kts").foregroundStyle(.red)
+                        }
+                        
                         Text("Rwy \(runway.heading2)").italic()
-                        Text("\(string_2a) kts, \(string_2b) kts")
+                        HStack(){
+                            Text("\(string_2a) kts").foregroundStyle(style_2a)
+                            Text("\(string_2b) kts").foregroundStyle(.red)
+                        }
                     }
                     
                 }
@@ -88,6 +95,7 @@ struct RunwaysView: View {
                 
                 
             }
+            
             
         }.padding(.all)
         
