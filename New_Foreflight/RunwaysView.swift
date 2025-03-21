@@ -23,10 +23,10 @@ struct RunwaysView: View {
             Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: "VFR",symbol:"road.lanes").padding(.all)
             
             Divider()
-            let wind: String = "90° at 5 kts"
+            let wind: String = "300° at 24 kts"
             // TODO: Get this from the METAR instead of having it hardcoded
-            let windDirection: Int = 90
-            let windSpeed: Int = 5
+            let windDirection: Int = 300
+            let windSpeed: Int = 24
             
             
             // TODO: Finish integrating the Runways API
@@ -34,8 +34,9 @@ struct RunwaysView: View {
             let runway1 = Runway(heading1:"4L",heading2:"22R",direction1:26,length:11000)
             let runway2 = Runway(heading1:"4R",heading2:"22L",direction1:26,length:10000)
             let runway3 = Runway(heading1:"11",heading2:"29",direction1:95,length:6726)
-            let data = [runway1,runway2,runway3]
-        // TODO: Color code headwind and crosswind
+            let data : [Runway] = [runway1,runway2,runway3]
+            let result : String = BestRunway(data: data, direction: windDirection)
+            //Text("\(data.count) Best Runway: \(result)")
         // TODO: Pick out the best runway
             List(data){ runway in
                 
@@ -70,6 +71,9 @@ struct RunwaysView: View {
                 let style_1a = (headwind_1>0) ? Color(red:0.4,green:0.8,blue:0.4) : Color(red:0,green:0,blue:0)
                 let style_2a = (headwind_2>0) ? Color(red:0.4,green:0.8,blue:0.4) : Color(red:0,green:0,blue:0)
                 
+                let full_heading_1 = (runway.heading1 == result) ? "\(runway.heading1) [Best]" : "\(runway.heading1)"
+                let full_heading_2 = (runway.heading2 == result) ? "\(runway.heading2) [Best]" : "\(runway.heading2)"
+                
                 HStack(){
                     VStack(){
                         Text("\(runway.heading1)-\(runway.heading2)").bold().frame(width:80)
@@ -77,13 +81,13 @@ struct RunwaysView: View {
                     }
                     Divider()
                     VStack(){
-                        Text("Rwy \(runway.heading1)").italic()
+                        Text("Rwy \(full_heading_1)").italic()
                         HStack(){
                             Text("\(string_1a) kts").foregroundStyle(style_1a)
                             Text("\(string_1b) kts").foregroundStyle(.red)
                         }
                         
-                        Text("Rwy \(runway.heading2)").italic()
+                        Text("Rwy \(full_heading_2)").italic()
                         HStack(){
                             Text("\(string_2a) kts").foregroundStyle(style_2a)
                             Text("\(string_2b) kts").foregroundStyle(.red)
@@ -101,5 +105,29 @@ struct RunwaysView: View {
         
     }
 }
-
+extension RunwaysView{
+    func BestRunway(data: [Runway],direction: Int) -> String{
+        // More Math:
+        // Most Headwind = Smallest difference between runway angle and wind vector angle
+        var result : String = "n/a"
+        var min_diff : Int = 180
+        for runway in data{
+            //print("Text: \(runway.heading1)-\(runway.heading2)")
+            let diff_1 = abs(direction-runway.direction1) < 180 ? abs(direction-runway.direction1) : abs(abs(direction-runway.direction1)-360)
+            //print("diff_1: \(diff_1)")
+            if(diff_1<min_diff ){
+                result = runway.heading1
+                min_diff = diff_1
+            }
+            let direction2 : Int = 180 + runway.direction1
+            let diff_2 = abs(direction-direction2) < 180 ? abs(direction-direction2) : abs(abs(direction-direction2)-360)
+           // print("diff_2: \(diff_2)")
+            if(diff_2<min_diff){
+                result = runway.heading2
+                min_diff = diff_2
+            }
+        }
+        return result
+    }
+}
 
