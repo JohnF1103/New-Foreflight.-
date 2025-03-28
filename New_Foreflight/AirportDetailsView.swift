@@ -17,6 +17,8 @@ struct AirportDetailsView: View {
     @State private var FrequencyInfo: String = ""
     @State private var ParsedFrequencies: [String: String]? = nil
     @State private var NotamsInfo: String = ""
+    @State private var wind_direction: Int = 0
+    @State private var wind_speed: Int = -1
     
     @State private var isFreqenciespresented = false
     @State private var FreqapiKey = "9d0b8ab9c176ca96804eac20c1936b5b2b058965c1c0e6ffbfd4c737730dfe8f5d175f8f447b6be1b9875346c5f00cc3"
@@ -58,7 +60,8 @@ struct AirportDetailsView: View {
                        NOTAMS_View_(NotamsJson: NotamsInfo, curr_ap: airport)
                            .tag(4)
                        
-                       RunwaysView(curr_ap:airport).tag(5)
+                       RunwaysView(curr_ap:airport,windDirection:wind_direction,windSpeed:wind_speed)
+                           .tag(5)
                    }
                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                }
@@ -70,6 +73,7 @@ struct AirportDetailsView: View {
                        LoadPlates()
                        LoadFrequencies()
                        //LoadNOTAMS() // Uncomment if needed
+                       LoadRunways()
                    }
                }
            }
@@ -92,7 +96,7 @@ extension AirportDetailsView {
             VStack(alignment: .leading, spacing: 8) {
                 Titlesection(curr_ap: airport,
                              subtitle: "Airport",
-                             flightrules: vm.flightrules ?? "")
+                             flightrules: vm.flightrules ?? "",symbol:"airplane")
                     .padding(.horizontal)
                 
                 Divider()
@@ -202,7 +206,20 @@ extension AirportDetailsView {
         
         semaphore.wait()
     }
-    
+    func LoadRunways(){
+        // TODO: Implement this
+        
+        if(vm.wind_vector == nil){
+            wind_direction = 0
+            wind_speed = -1
+        }
+        let split_wind_vector = vm.wind_vector!.split(separator:" ")
+        print(split_wind_vector)
+        wind_direction = Int(split_wind_vector[0])!
+        let temp_split = split_wind_vector[2].split(separator:" ")
+        let speed = temp_split.first
+        wind_speed = Int(speed ?? "-1")!
+    }
     func LoadNOTAMS() {
         let semaphore = DispatchSemaphore(value: 0)
         guard let url = URL(string: "https://applications.icao.int/dataservices/api/notams-realtime-list?api_key=\(NOTAMapikey)&format=json&locations=\(airport.AirportCode)") else {

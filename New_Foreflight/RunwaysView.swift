@@ -16,6 +16,8 @@ struct Runway : Identifiable{
 }
 struct RunwaysView: View {
     let curr_ap: Airport
+    let windDirection: Int
+    let windSpeed: Int
     @EnvironmentObject private var vm : AirportDetailModel
     
     var body: some View {
@@ -23,10 +25,10 @@ struct RunwaysView: View {
             Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: "VFR",symbol:"road.lanes").padding(.all)
             
             Divider()
-            let wind: String = "300° at 24 kts"
+            // let wind: String = "300° at 24 kts"
             // TODO: Get this from the METAR instead of having it hardcoded
-            let windDirection: Int = 300
-            let windSpeed: Int = 24
+            let windDirection: Int = self.windDirection
+            let windSpeed: Int = self.windSpeed
             
             
             // TODO: Finish integrating the Runways API

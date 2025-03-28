@@ -16,6 +16,7 @@ class AirportDetailModel: ObservableObject{
     
     @Published var curr_metar : String? = nil
     @Published var parsed_metar : KeyValuePairs<String ,String>?
+    @Published var wind_vector : String? = nil
     @Published var DisplayLocationdetail = false
     @Published var selected_airport: Airport?
     @Published  var flightrules: String?  = "VFR"

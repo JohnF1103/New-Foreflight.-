@@ -10,19 +10,21 @@ import SwiftUI
 struct ServerResponse: Decodable {
     /**/
     var metar_data: String? = nil
-    var flight_rules: String? = nil
     var metar_components: MetarComponents
+    var flight_rules: String? = nil
+    
 }
 struct MetarComponents: Decodable{
     var wind: String
-    var clouds: [Cloud]
     var visibility: String
+    var clouds: [Cloud]
+    
     var temperature: String
     var dewpoint: String
     var barometer: String
     var humidity: String
     var elevation: String
-    var density_altitude: Int = 0
+    var density_altitude: Double
 }
 struct Cloud: Decodable{
     var code: String
@@ -125,7 +127,7 @@ extension LocationPreviewView{
             
             let semaphore = DispatchSemaphore (value: 0)
             //var request = URLRequest(url: URL(string: "https://api.checkwx.com/metar/\(airport.AirportCode)/decoded")!,timeoutInterval: Double.infinity)
-            var request = URLRequest(url: URL(string: "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportInfo?airportCode=\(airport.AirportCode)")!,timeoutInterval: Double.infinity)
+            var request = URLRequest(url: URL(string: "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportWeather?airportCode=\(airport.AirportCode)")!,timeoutInterval: Double.infinity)
 
             request.httpMethod = "GET"
 
@@ -137,7 +139,7 @@ extension LocationPreviewView{
               }
                 
                  curr_metar_of_selected_Airport = String(data: data, encoding: .utf8)!
-                print(curr_metar_of_selected_Airport)
+                //print(curr_metar_of_selected_Airport)
 
               semaphore.signal()
             }
@@ -150,6 +152,7 @@ extension LocationPreviewView{
             
             do{
                 metarData = try JSONDecoder().decode(ServerResponse.self,from: jsonData)
+                print("If things worked, at all, they will be hre")
                 vm.curr_metar = metarData.metar_data
                 print(metarData.metar_components)
                 vm.sheetlocation = airport
@@ -174,6 +177,7 @@ extension LocationPreviewView{
                                                          "Density altitude": String(metarData.metar_components.density_altitude)]
                 vm.flightrules = metarData.flight_rules
                 vm.parsed_metar = interestingNumbers
+                vm.wind_vector = metarData.metar_components.wind
             }
             catch{
                 print("ERROR: JSON not formatted correctly")
@@ -234,4 +238,3 @@ extension LocationPreviewView{
    
 }
 */
-
