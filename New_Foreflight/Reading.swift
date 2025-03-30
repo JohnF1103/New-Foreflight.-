@@ -14,7 +14,7 @@ func readFile() -> [Airport] {
     
     do {
         // Creating a path from the main bundle
-        if let bundlePath = Bundle.main.path(forResource: "Airports", ofType: "txt") {
+        if let bundlePath = Bundle.main.path(forResource: "formatted_airports", ofType: "txt") {
             let stringContent = try String(contentsOfFile: bundlePath)
             print("Content string starts from here-----")
             
