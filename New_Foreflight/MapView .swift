@@ -18,6 +18,7 @@ struct MapView: UIViewRepresentable {
     
     @EnvironmentObject private var vm: AirportDetailModel
     @Binding var centerCoordinate: CLLocationCoordinate2D
+    @Binding var shouldUpdateRegion: Bool
     var annotations: [MKPointAnnotation]
     
     // Static cache for overlays keyed by a string representing the active airspace types.
@@ -70,14 +71,29 @@ struct MapView: UIViewRepresentable {
             }
         }
         
-        let region = MKCoordinateRegion(center: centerCoordinate,
-                                          span: MKCoordinateSpan(latitudeDelta: 3, longitudeDelta: 3))
-        mapView.setRegion(region, animated: false)
+        let region = MKCoordinateRegion(
+                 center: centerCoordinate,
+                 span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+             )
+             mapView.setRegion(region, animated: false)
         return mapView
     }
     
     func updateUIView(_ view: MKMapView, context: Context) {
         // Update annotations (excluding the user location).
+        if shouldUpdateRegion {
+                let newRegion = MKCoordinateRegion(
+                    center: centerCoordinate,
+                    span: MKCoordinateSpan(latitudeDelta:0.5, longitudeDelta: 0.5)
+                )
+            view.setRegion(newRegion, animated: true)
+                // Clear the flag on the next run loop to avoid re-centering on any other interaction.
+                DispatchQueue.main.async {
+                    shouldUpdateRegion = false
+                }
+            }
+        
+        
         let nonUserAnnotations = view.annotations.filter { !($0 is MKUserLocation) }
         if annotations.count != nonUserAnnotations.count {
             view.removeAnnotations(nonUserAnnotations)
@@ -115,7 +131,7 @@ struct MapView: UIViewRepresentable {
         for airspace in airspaces {
             let fileName = airspace.lowercased()
             guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
-                print("Warning: Unable to load GeoJSON file for \(airspace).")
+                print("Warning: Unable to load GeoJSON file for \(airspace.lowercased()).")
                 continue
             }
             do {
@@ -313,31 +329,47 @@ struct MapView: UIViewRepresentable {
             if let polygon = overlay as? MKPolygon {
                 let renderer = MKPolygonRenderer(polygon: polygon)
                 renderer.fillColor = UIColor.clear
-                if let airspacePolygon = polygon as? AirspacePolygon,
-                   let type = airspacePolygon.airspaceType?.lowercased() {
-                    switch type {
-                    case "class_b":
-                        renderer.strokeColor = UIColor(red: 135/255, green: 206/255, blue: 235/255, alpha: 1.0)
-                        renderer.lineWidth = 2.5
-                    case "class_c":
-                        renderer.strokeColor = UIColor.systemPink
-                        renderer.lineWidth = 2.5
-                    case "class_d":
-                        renderer.strokeColor = UIColor.blue.withAlphaComponent(0.5)
-                        renderer.lineWidth = 2.5
-                    default:
-                        renderer.strokeColor = UIColor.white
-                        renderer.lineWidth = 2.5
+                
+                // Immediately return the renderer while we update its properties asynchronously.
+                DispatchQueue.global(qos: .userInitiated).async {
+                    let hotPink = UIColor(red: 1.0, green: 0.4118, blue: 0.7059, alpha: 1.0)
+                    var strokeColor = UIColor.white
+                    var lineWidth: CGFloat = 2.5
+                    var dashPattern: [NSNumber]?
+                    
+                    if let airspacePolygon = polygon as? AirspacePolygon,
+                       let type = airspacePolygon.airspaceType?.lowercased() {
+                        switch type {
+                        case "class_b":
+                            strokeColor = UIColor(red: 135/255, green: 206/255, blue: 235/255, alpha: 1.0)
+                        case "class_c":
+                            strokeColor = UIColor.systemPink
+                        case "class_d":
+                            strokeColor = UIColor.blue.withAlphaComponent(0.5)
+                        case "special":
+                            strokeColor = hotPink
+                            lineWidth = 1
+                            dashPattern = [NSNumber(value: 6), NSNumber(value: 6)]
+                        default:
+                            strokeColor = UIColor.white
+                        }
                     }
-                } else {
-                    renderer.strokeColor = UIColor.white
-                    renderer.lineWidth = 2.5
+                    
+                    // Update the renderer on the main thread
+                    DispatchQueue.main.async {
+                        renderer.strokeColor = strokeColor
+                        renderer.lineWidth = lineWidth
+                        if let dashPattern = dashPattern {
+                            renderer.lineDashPattern = dashPattern
+                        }
+                        renderer.setNeedsDisplay()
+                    }
                 }
                 return renderer
             }
             return MKOverlayRenderer(overlay: overlay)
         }
-        
+
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             // Process your annotation selection asynchronously.
             if let annotation = view.annotation, let title = annotation.title ?? nil {
@@ -354,4 +386,3 @@ struct MapView: UIViewRepresentable {
         }
     }
 }
-
