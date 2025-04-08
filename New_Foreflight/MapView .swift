@@ -73,7 +73,7 @@ struct MapView: UIViewRepresentable {
         
         let region = MKCoordinateRegion(
                  center: centerCoordinate,
-                 span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                 span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
              )
              mapView.setRegion(region, animated: false)
         return mapView
