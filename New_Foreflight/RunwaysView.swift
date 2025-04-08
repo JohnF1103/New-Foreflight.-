@@ -22,7 +22,7 @@ struct RunwaysView: View {
     
     var body: some View {
         VStack(spacing:2){
-            Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: "VFR",symbol:"road.lanes").padding(.all)
+            Titlesection(curr_ap: self.curr_ap, subtitle: "Runways and wind", flightrules: vm.flightrules ?? "Nil",symbol:"road.lanes").padding(.all)
             
             Divider()
             // let wind: String = "300° at 24 kts"

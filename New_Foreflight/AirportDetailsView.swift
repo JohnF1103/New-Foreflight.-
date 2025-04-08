@@ -213,12 +213,15 @@ extension AirportDetailsView {
             wind_direction = 0
             wind_speed = -1
         }
-        let split_wind_vector = vm.wind_vector!.split(separator:" ")
-        print(split_wind_vector)
-        wind_direction = Int(split_wind_vector[0])!
-        let temp_split = split_wind_vector[2].split(separator:" ")
-        let speed = temp_split.first
-        wind_speed = Int(speed ?? "-1")!
+        else{
+            let split_wind_vector = vm.wind_vector!.split(separator:" ")
+            print(split_wind_vector)
+            wind_direction = Int(split_wind_vector[0])!
+            let temp_split = split_wind_vector[2].split(separator:" ")
+            let speed = temp_split.first
+            wind_speed = Int(speed ?? "-1")!
+        }
+        
     }
     func LoadNOTAMS() {
         let semaphore = DispatchSemaphore(value: 0)
