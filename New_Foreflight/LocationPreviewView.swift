@@ -34,6 +34,10 @@ struct LocationPreviewView: View {
     @EnvironmentObject private var vm: AirportDetailModel
     @State private var isShowingFlightPlanSheet = false  // controls sheet presentation
     
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
+
+    
     var body: some View {
         HStack(alignment: .bottom, spacing: 0) {
             VStack(alignment: .leading, spacing: 16) {
@@ -87,53 +91,66 @@ extension LocationPreviewView {
     
     private var AirportINFOButton: some View {
         Button {
-            var curr_metar_of_selected_Airport = ""
-            // Changes view (and fetches weather data)
-            let semaphore = DispatchSemaphore(value: 0)
-            let urlString = "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportWeather?airportCode=\(airport.AirportCode)"
-            var request = URLRequest(url: URL(string: urlString)!, timeoutInterval: Double.infinity)
-            request.httpMethod = "GET"
-                       
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data else {
-                    print(String(describing: error))
-                    semaphore.signal()
-                    return
+            Task {
+                do {
+                    let urlString = "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportWeather?airportCode=\(airport.AirportCode)"
+
+                    guard let url = URL(string: urlString) else {
+                        errorMessage = "Invalid URL for airport: \(airport.AirportCode)"
+                        showErrorAlert = true
+                        return
+                    }
+
+                    let (data, _) = try await URLSession.shared.data(from: url)
+                    guard let jsonString = String(data: data, encoding: .utf8),
+                          let jsonData = jsonString.data(using: .utf8) else {
+                        errorMessage = "Failed to decode server response"
+                        showErrorAlert = true
+                        return
+                    }
+
+                    let metarData = try JSONDecoder().decode(ServerResponse.self, from: jsonData)
+                    vm.curr_metar = metarData.metar_data
+                    vm.sheetlocation = airport
+                    vm.flightrules = metarData.flight_rules
+
+                    let cloudCode = metarData.metar_components.clouds.first?.code ?? "n/a"
+                    let cloudFeet = metarData.metar_components.clouds.first?.feet.map { "\($0)" } ?? ""
+                    let cloudAGL = (cloudCode == "CLR") ? "CLR" : "\(cloudCode) at \(cloudFeet)ft"
+                    let now = Date.now
+
+                    let interestingNumbers: KeyValuePairs<String, String> = [
+                        "Time": now.formatted(date: .omitted, time: .standard),
+                        "Wind": metarData.metar_components.wind ?? "n/a",
+                        "Visibility": metarData.metar_components.visibility ?? "n/a",
+                        "Clouds(AGL)": cloudAGL,
+                        "Temperature": metarData.metar_components.temperature ?? "n/a",
+                        "Dewpoint": metarData.metar_components.dewpoint ?? "n/a",
+                        "Altimeter": metarData.metar_components.barometer ?? "n/a",
+                        "Humidity": metarData.metar_components.humidity ?? "n/a",
+                        "Density altitude": String(format: "%.2f", metarData.metar_components.density_altitude ?? 0.0)
+                    ]
+
+                    vm.parsed_metar = interestingNumbers
+
+                } catch {
+                    errorMessage = "Failed to load METAR: \(error.localizedDescription)"
+                    showErrorAlert = true
                 }
-                curr_metar_of_selected_Airport = String(data: data, encoding: .utf8)!
-                print(curr_metar_of_selected_Airport)
-                semaphore.signal()
             }
-            task.resume()
-            semaphore.wait()
-            let jsonData = curr_metar_of_selected_Airport.data(using: .utf8)!
-            let metarData: ServerResponse = try! JSONDecoder().decode(ServerResponse.self, from: jsonData)
-            vm.curr_metar = metarData.metar_data
-            print(metarData.metar_components)
-            vm.sheetlocation = airport
-            let cloudCode = String(metarData.metar_components.clouds.first?.code ?? "n/a")
-            let cloudFeet = String(metarData.metar_components.clouds.first?.feet ?? "")
-            let cloudAGL = (cloudCode == "CLR") ? "CLR" : "\(cloudCode) at \(cloudFeet)ft"
-            let now = Date.now
-            let interestingNumbers: KeyValuePairs<String,String> = [
-                "Time": now.formatted(date: .omitted, time: .standard),
-                "Wind": metarData.metar_components.wind,
-                "Visibility": metarData.metar_components.visibility,
-                "Clouds(AGL)": cloudAGL,
-                "Temperature": metarData.metar_components.temperature,
-                "Dewpoint": metarData.metar_components.dewpoint,
-                "Altimeter": metarData.metar_components.barometer,
-                "Humidity": metarData.metar_components.humidity,
-                "Density altitude": String(format: "%.2f", metarData.metar_components.density_altitude)
-            ]
-            vm.flightrules = metarData.flight_rules
-            vm.parsed_metar = interestingNumbers
         } label: {
             Text("Airport Info")
                 .font(.headline)
                 .frame(width: 125, height: 35)
         }
         .buttonStyle(.borderedProminent)
+        .alert("Error", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage)
+        }
+
+
     }
     
     private var Weatherbutton: some View {

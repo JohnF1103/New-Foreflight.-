@@ -63,12 +63,16 @@ struct AirportDetailsView: View {
                .background(Color(.systemBackground))
                .navigationBarItems(leading: BackButton)
                .onAppear {
-                   DispatchQueue.main.async {
-                       loadImageFromAPI()
-                       LoadPlates()
-                       LoadFrequencies()
-                       //LoadNOTAMS() // Uncomment if needed
+                   Task {
+                       async let plates = loadPlates()
+                       async let freqs = loadFrequencies()
+                       async let notams = loadNOTAMS()
+                       async let image = loadImageFromAPI()
+
+                       // Wait for all to finish
+                       _ = await (plates, freqs, notams, image)
                    }
+
                }
            }
            .navigationViewStyle(StackNavigationViewStyle())
@@ -91,7 +95,7 @@ extension AirportDetailsView {
                 Titlesection(curr_ap: airport,
                              subtitle: "Airport",
                              flightrules: vm.flightrules ?? "")
-                    .padding(.horizontal)
+                .padding(.horizontal)
                 
                 Divider()
                     .background(Color.gray.opacity(0.4))
@@ -119,7 +123,7 @@ extension AirportDetailsView {
         }
         .padding(.horizontal) // Leaves a margin on the sides
     }
-
+    
     private var BackButton: some View {
         Button(action: {
             vm.sheetlocation = nil
@@ -133,91 +137,89 @@ extension AirportDetailsView {
     }
     
     // MARK: - Networking Functions
-    
-    func loadImageFromAPI() {
+    @MainActor
+    func loadImageFromAPI() async {
         guard let url = URL(string: "https://cloudfront.foreflight.com/diagrams/2312/\(airport.AirportCode.lowercased()).jpg") else {
             print("Invalid URL")
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-                return
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let uiImage = UIImage(data: data) {
+                self.image = uiImage
             }
-            
-            if let data = data, let uiImage = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    self.image = uiImage
-                }
-            }
-        }.resume()
+        } catch {
+            print("Error loading image: \(error.localizedDescription)")
+        }
     }
     
-    func LoadPlates() {
-        let semaphore = DispatchSemaphore(value: 0)
+    func loadPlates() async {
         guard let url = URL(string: "https://api.aviationapi.com/v1/charts?apt=\(airport.AirportCode.lowercased())") else {
             print("Invalid URL")
             return
         }
+        
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
         request.httpMethod = "GET"
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            defer { semaphore.signal() }
-            guard let data = data else {
-                print(String(describing: error))
-                return
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+            if let str = String(data: data, encoding: .utf8) {
+                await MainActor.run {
+                    self.PlateInfo = str
+                }
             }
-            self.PlateInfo = String(data: data, encoding: .utf8) ?? ""
             print("Plate info loaded for \(airport.AirportCode.lowercased())")
-        }.resume()
-        semaphore.wait()
+        } catch {
+            print("Error loading plates: \(error.localizedDescription)")
+        }
     }
     
-    func LoadFrequencies() {
-        let semaphore = DispatchSemaphore(value: 0)
-        guard let url = URL(string:"https://frq-svc-272565453292.us-central1.run.app/api/v1/getAirportFrequencies?airportCode=\(airport.AirportCode.uppercased())") else {
+    func loadFrequencies() async {
+        guard let url = URL(string: "https://frq-svc-272565453292.us-central1.run.app/api/v1/getAirportFrequencies?airportCode=\(airport.AirportCode.uppercased())") else {
             print("Invalid URL")
             return
         }
+        
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.httpMethod = "GET"
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            defer { semaphore.signal() }
-            guard let data = data else {
-                print(String(describing: error))
-                return
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+            let string = String(data: data, encoding: .utf8) ?? ""
+            let parsed = (try? JSONDecoder().decode([String: String].self, from: data)) ?? [:]
+            
+            await MainActor.run {
+                self.FrequencyInfo = string
+                self.ParsedFrequencies = parsed
             }
-            self.FrequencyInfo = String(data: data, encoding: .utf8) ?? ""
-            if let json = try? JSONDecoder().decode([String: String].self, from: data) {
-                self.ParsedFrequencies = json
-            }
-        }.resume()
-        semaphore.wait()
+        } catch {
+            print("Error loading frequencies: \(error.localizedDescription)")
+        }
     }
     
-    func LoadNOTAMS() {
-        let semaphore = DispatchSemaphore(value: 0)
+    func loadNOTAMS() async {
         guard let url = URL(string: "https://applications.icao.int/dataservices/api/notams-realtime-list?api_key=\(NOTAMapikey)&format=json&locations=\(airport.AirportCode)") else {
             print("Invalid URL")
             return
         }
+        
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.addValue("8bf1b3467a3548a1bb8b643978", forHTTPHeaderField: "X-API-Key")
         request.httpMethod = "GET"
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            defer { semaphore.signal() }
-            guard let data = data else {
-                print(String(describing: error))
-                return
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+            if let str = String(data: data, encoding: .utf8) {
+                await MainActor.run {
+                    self.NotamsInfo = str
+                }
             }
-            self.NotamsInfo = String(data: data, encoding: .utf8) ?? ""
-        }.resume()
-        semaphore.wait()
+        } catch {
+            print("Error loading NOTAMs: \(error.localizedDescription)")
+        }
     }
 }
 
