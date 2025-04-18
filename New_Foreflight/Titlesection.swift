@@ -7,11 +7,25 @@
 
 import SwiftUI
 
+extension HorizontalAlignment{
+    private struct IconAlignment : AlignmentID{
+        static func defaultValue(in context: ViewDimensions) -> CGFloat {
+            context[HorizontalAlignment.leading]
+        }
+
+
+
+    }
+    static let iconAlignmentGuide = HorizontalAlignment(IconAlignment.self)
+}
+
 struct Titlesection: View {
     
     let curr_ap : Airport
     let subtitle: String
     let flightrules :String
+    var symbol: String? = nil
+
 
     
     var body: some View {

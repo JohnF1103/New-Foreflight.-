@@ -18,11 +18,16 @@ struct AirportDetailsView: View {
     @State private var ParsedFrequencies: [String: String]? = nil
     @State private var NotamsInfo: String = ""
     
+    @State private var selectedItem = 0
+
+    
     @State private var isFreqenciespresented = false
     @State private var FreqapiKey = "9d0b8ab9c176ca96804eac20c1936b5b2b058965c1c0e6ffbfd4c737730dfe8f5d175f8f447b6be1b9875346c5f00cc3"
     @State private var NOTAMapikey = "f482ac5e-2eac-48ff-b603-0ad8c36c0cee"
     
-    @State private var selectedItem = 0
+    
+    
+    
     
     let airport: Airport
     let curr_mertar: String
@@ -47,16 +52,20 @@ struct AirportDetailsView: View {
                        }
                        .tag(1)
                        
-                       PlatesView(plateJSON: PlateInfo, curr_ap: airport)
+                       RunwaysView(curr_ap:airport)
+                           .padding()
                            .tag(2)
+                       
+                       PlatesView(plateJSON: PlateInfo, curr_ap: airport)
+                           .tag(4)
                        
                        FrequenciesView(FreqenciesJSON: FrequencyInfo,
                                        curr_ap: airport,
                                        parsedFrequencies: ParsedFrequencies)
-                           .tag(3)
+                           .tag(5)
                        
                        NOTAMS_View_(NotamsJson: NotamsInfo, curr_ap: airport)
-                           .tag(4)
+                           .tag(6)
                    }
                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                }
@@ -68,9 +77,11 @@ struct AirportDetailsView: View {
                        async let freqs = loadFrequencies()
                        async let notams = loadNOTAMS()
                        async let image = loadImageFromAPI()
+                       async let runways  = loadRunways()
+
 
                        // Wait for all to finish
-                       _ = await (plates, freqs, notams, image)
+                       _ = await (plates, freqs, notams, image, runways)
                    }
 
                }
@@ -221,5 +232,55 @@ extension AirportDetailsView {
             print("Error loading NOTAMs: \(error.localizedDescription)")
         }
     }
+    
+        // MARK: - Networking Functions
+
+    func loadRunways() async {
+        // 1) Parse the METAR wind vector (e.g. "27005KT")
+        if let rawVec = vm.wind_vector?.split(separator: " ").first {
+            let dirPart   = rawVec.prefix(3)                 // "270"
+            let speedPart = rawVec.dropFirst(3).dropLast(2)  // "05"
+        
+        }
+
+        // 2) Build the AirportDB URL using your existing FreqapiKey
+        guard let url = URL(string:
+            "https://airportdb.io/api/v1/airport/\(airport.AirportCode)/?apiToken=\(FreqapiKey)"
+        ) else {
+            print("Invalid AirportDB URL")
+            return
+        }
+
+        // 3) Minimal Codable for just the runway idents
+        struct AirportDBResponse: Codable {
+            struct Runway: Codable {
+                let le_ident: String
+                let he_ident: String
+            }
+            let runways: [Runway]
+        }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let resp = try JSONDecoder().decode(AirportDBResponse.self, from: data)
+
+            // 4) Extract and dedupe all ends (["04L","22R",...])
+            let idents = resp.runways
+                .flatMap { [$0.le_ident, $0.he_ident] }
+                .filter { !$0.isEmpty }
+
+            vm.runwayNumbers = Array(Set(idents))
+                .sorted { $0 < $1 }
+            
+            print("RWYS \(vm.runwayNumbers)" )
+
+        } catch {
+            print("Error loading runways:", error)
+        }
+    }
+
+
+    
+
 }
 
