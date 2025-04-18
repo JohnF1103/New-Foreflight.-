@@ -1,13 +1,11 @@
-//
-//  LocationPreviewView.swift
-//  New_Foreflight
-//
-//  Created by John Foster on 12/20/23.
-//
-
 import SwiftUI
 import MapKit
+import Combine
+// MARK: - Models
 
+
+
+// (Your existing models below...)
 struct ServerResponse: Decodable {
     var metar_data: String? = nil
     var flight_rules: String? = nil
@@ -29,8 +27,9 @@ struct Cloud: Decodable {
     var feet: String? = nil
 }
 
+// MARK: - LocationPreviewView (unchanged)
+
 struct LocationPreviewView: View {
-    
     let airport: Airport
     @EnvironmentObject private var vm: AirportDetailModel
     @State private var isShowingFlightPlanSheet = false  // controls sheet presentation
@@ -56,13 +55,13 @@ struct LocationPreviewView: View {
         .cornerRadius(10)
         .sheet(isPresented: $isShowingFlightPlanSheet) {
             // Pass the selected airport as the destination.
-            FlightPlanSheetView(destinationAirport: airport)
+            FlightPlanSheetView()
+                .environmentObject(ActiveNavlogsViewModel.shared)
         }
     }
 }
 
 extension LocationPreviewView {
-    
     private var imageSection: some View {
         ZStack {
             Image(systemName: "airplane.departure")
@@ -89,47 +88,47 @@ extension LocationPreviewView {
     private var AirportINFOButton: some View {
         Button {
             var curr_metar_of_selected_Airport = ""
-                       // Changes view (and fetches weather data)
-                       let semaphore = DispatchSemaphore(value: 0)
-                    
-                       let urlString = "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportWeather?airportCode=\(airport.AirportCode)"
-                       var request = URLRequest(url: URL(string: urlString)!, timeoutInterval: Double.infinity)
-                       request.httpMethod = "GET"
+            // Changes view (and fetches weather data)
+            let semaphore = DispatchSemaphore(value: 0)
+            let urlString = "https://wx-svc-x86-272565453292.us-central1.run.app/api/v1/getAirportWeather?airportCode=\(airport.AirportCode)"
+            var request = URLRequest(url: URL(string: urlString)!, timeoutInterval: Double.infinity)
+            request.httpMethod = "GET"
                        
-                       let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                           guard let data = data else {
-                               print(String(describing: error))
-                               semaphore.signal()
-                               return
-                           }
-                           curr_metar_of_selected_Airport = String(data: data, encoding: .utf8)!
-                           print(curr_metar_of_selected_Airport)
-                           semaphore.signal()
-                       }
-                       task.resume()
-                       semaphore.wait()
-                       let jsonData = curr_metar_of_selected_Airport.data(using: .utf8)!
-                       let metarData: ServerResponse = try! JSONDecoder().decode(ServerResponse.self, from: jsonData)
-                       vm.curr_metar = metarData.metar_data
-                       print(metarData.metar_components)
-                       vm.sheetlocation = airport
-                       let cloudCode = String(metarData.metar_components.clouds.first?.code ?? "n/a")
-                       let cloudFeet = String(metarData.metar_components.clouds.first?.feet ?? "")
-                       let cloudAGL = (cloudCode == "CLR") ? "CLR" : "\(cloudCode) at \(cloudFeet)ft"
-                       let now = Date.now
-                       let interestingNumbers: KeyValuePairs<String,String> = [
-                           "Time": now.formatted(date: .omitted, time: .standard),
-                           "Wind": metarData.metar_components.wind,
-                           "Visibility": metarData.metar_components.visibility,
-                           "Clouds(AGL)": cloudAGL,
-                           "Temperature": metarData.metar_components.temperature,
-                           "Dewpoint": metarData.metar_components.dewpoint,
-                           "Altimeter": metarData.metar_components.barometer,
-                           "Humidity": metarData.metar_components.humidity,
-                           "Density altitude": String(format: "%.2f", metarData.metar_components.density_altitude)
-                       ]
-                       vm.flightrules = metarData.flight_rules
-                       vm.parsed_metar = interestingNumbers        } label: {
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data else {
+                    print(String(describing: error))
+                    semaphore.signal()
+                    return
+                }
+                curr_metar_of_selected_Airport = String(data: data, encoding: .utf8)!
+                print(curr_metar_of_selected_Airport)
+                semaphore.signal()
+            }
+            task.resume()
+            semaphore.wait()
+            let jsonData = curr_metar_of_selected_Airport.data(using: .utf8)!
+            let metarData: ServerResponse = try! JSONDecoder().decode(ServerResponse.self, from: jsonData)
+            vm.curr_metar = metarData.metar_data
+            print(metarData.metar_components)
+            vm.sheetlocation = airport
+            let cloudCode = String(metarData.metar_components.clouds.first?.code ?? "n/a")
+            let cloudFeet = String(metarData.metar_components.clouds.first?.feet ?? "")
+            let cloudAGL = (cloudCode == "CLR") ? "CLR" : "\(cloudCode) at \(cloudFeet)ft"
+            let now = Date.now
+            let interestingNumbers: KeyValuePairs<String,String> = [
+                "Time": now.formatted(date: .omitted, time: .standard),
+                "Wind": metarData.metar_components.wind,
+                "Visibility": metarData.metar_components.visibility,
+                "Clouds(AGL)": cloudAGL,
+                "Temperature": metarData.metar_components.temperature,
+                "Dewpoint": metarData.metar_components.dewpoint,
+                "Altimeter": metarData.metar_components.barometer,
+                "Humidity": metarData.metar_components.humidity,
+                "Density altitude": String(format: "%.2f", metarData.metar_components.density_altitude)
+            ]
+            vm.flightrules = metarData.flight_rules
+            vm.parsed_metar = interestingNumbers
+        } label: {
             Text("Airport Info")
                 .font(.headline)
                 .frame(width: 125, height: 35)
@@ -149,12 +148,8 @@ extension LocationPreviewView {
     }
 }
 
+// MARK: - CustomMapView (unchanged)
 
-//
-// CustomMapView: A UIViewRepresentable wrapper for MKMapView that draws a pink polyline
-// from the departure coordinate to the destination coordinate.
-//
-// MARK: - CustomMapView with Draggable Route
 struct CustomMapView: UIViewRepresentable {
     @Binding var region: MKCoordinateRegion
     @Binding var routeCoordinates: [CLLocationCoordinate2D]
@@ -162,177 +157,243 @@ struct CustomMapView: UIViewRepresentable {
     var onDragPointAdded: ((CLLocationCoordinate2D) -> Void)?
     
     func makeUIView(context: Context) -> MKMapView {
-         let mapView = MKMapView(frame: .zero)
-         mapView.delegate = context.coordinator
-         mapView.setRegion(region, animated: false)
-         // Add a pan gesture recognizer for handling drags on the route.
-         let panGesture = UIPanGestureRecognizer(target: context.coordinator,
-                                                 action: #selector(Coordinator.handlePan(_:)))
-         panGesture.delegate = context.coordinator
-         mapView.addGestureRecognizer(panGesture)
-         return mapView
+        let mapView = MKMapView(frame: .zero)
+        mapView.delegate = context.coordinator
+        mapView.setRegion(region, animated: false)
+        // Add a pan gesture recognizer for handling drags on the route.
+        let panGesture = UIPanGestureRecognizer(target: context.coordinator,
+                                                action: #selector(Coordinator.handlePan(_:)))
+        panGesture.delegate = context.coordinator
+        mapView.addGestureRecognizer(panGesture)
+        return mapView
     }
 
     func updateUIView(_ uiView: MKMapView, context: Context) {
-         uiView.setRegion(region, animated: true)
-         // Remove existing overlays and annotations (if needed) to update view cleanly.
-         uiView.removeOverlays(uiView.overlays)
-         uiView.removeAnnotations(uiView.annotations)
-         // Re-add annotations for each route coordinate inserted (except start/end if desired).
-         for coord in routeCoordinates.dropFirst().dropLast() {
-             let annotation = MKPointAnnotation()
-             annotation.coordinate = coord
-             uiView.addAnnotation(annotation)
-         }
-         if routeCoordinates.count >= 2 {
-              let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
-              uiView.addOverlay(polyline)
-         }
+        uiView.setRegion(region, animated: true)
+        // Remove existing overlays and annotations (if needed) to update view cleanly.
+        uiView.removeOverlays(uiView.overlays)
+        uiView.removeAnnotations(uiView.annotations)
+        // Re-add annotations for each route coordinate inserted (except start/end if desired).
+        for coord in routeCoordinates.dropFirst().dropLast() {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coord
+            uiView.addAnnotation(annotation)
+        }
+        if routeCoordinates.count >= 2 {
+            let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
+            uiView.addOverlay(polyline)
+        }
     }
 
     func makeCoordinator() -> Coordinator {
-         Coordinator(self)
+        Coordinator(self)
     }
 
     class Coordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
-         var parent: CustomMapView
-         // Holds the index of the inserted point during a drag.
-         var draggingIndex: Int? = nil
+        var parent: CustomMapView
+        // Holds the index of the inserted point during a drag.
+        var draggingIndex: Int? = nil
+        // New: work item to throttle overlay updates.
+        var overlayUpdateWorkItem: DispatchWorkItem?
+        // New properties for hold-to-drag:
+        var gestureStartTime: Date? = nil
+        var draggingActivated: Bool = false
+        // The required hold duration in seconds before dragging starts.
+        let holdDuration: TimeInterval = 0.3
 
-         init(_ parent: CustomMapView) {
-              self.parent = parent
-         }
+        init(_ parent: CustomMapView) {
+            self.parent = parent
+        }
 
-         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-              if let polyline = overlay as? MKPolyline {
-                 let renderer = MKPolylineRenderer(polyline: polyline)
-                 renderer.strokeColor = .systemPink
-                 renderer.lineWidth = 3
-                 return renderer
-              }
-              return MKOverlayRenderer(overlay: overlay)
-         }
+        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+            if let polyline = overlay as? MKPolyline {
+                let renderer = MKPolylineRenderer(polyline: polyline)
+                renderer.strokeColor = .systemPink
+                renderer.lineWidth = 3
+                return renderer
+            }
+            return MKOverlayRenderer(overlay: overlay)
+        }
 
-         // Allow our gesture to recognize simultaneously with built-in gestures.
-         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-              return true
-         }
+        // Allow our gesture to recognize simultaneously with built-in gestures.
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            return true
+        }
 
-         @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
-              guard let mapView = gesture.view as? MKMapView else { return }
-              let location = gesture.location(in: mapView)
-              let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+        @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
+            guard let mapView = gesture.view as? MKMapView else { return }
+            let location = gesture.location(in: mapView)
+            let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
 
-              switch gesture.state {
-              case .began:
-                   // Check if touch is near any segment of the route.
-                   if let (segmentIndex, distance) = nearestSegment(to: location, in: mapView) {
-                        // If within threshold, insert a new coordinate.
+            switch gesture.state {
+            case .began:
+                // Record the start time but don't insert yet.
+                gestureStartTime = Date()
+                draggingActivated = false
+            case .changed:
+                // Check if the hold duration has passed.
+                if !draggingActivated, let startTime = gestureStartTime,
+                   Date().timeIntervalSince(startTime) >= holdDuration {
+                    // Now try to activate dragging.
+                    if let (segmentIndex, distance) = nearestSegment(to: location, in: mapView) {
+                        // If there are FAA fixes (i.e. more than just departure and destination)
+                        // allow insertion only in the last segment.
+                        if parent.routeCoordinates.count > 2 && segmentIndex != parent.routeCoordinates.count - 2 {
+                            return
+                        }
                         if distance < 20 {
-                             let newIndex = segmentIndex + 1
-                             parent.routeCoordinates.insert(coordinate, at: newIndex)
-                             draggingIndex = newIndex
-                             
-                             // Add an annotation at the new point.
-                             let annotation = MKPointAnnotation()
-                             annotation.coordinate = coordinate
-                             mapView.addAnnotation(annotation)
-                             
-                             // Notify that a new drag point was added.
-                             parent.onDragPointAdded?(coordinate)
+                            let newIndex = segmentIndex + 1
+                            parent.routeCoordinates.insert(coordinate, at: newIndex)
+                            draggingIndex = newIndex
+
+                            let annotation = MKPointAnnotation()
+                            annotation.coordinate = coordinate
+                            mapView.addAnnotation(annotation)
+                           
+                            parent.onDragPointAdded?(coordinate)
+                            draggingActivated = true
                         }
-                   }
-              case .changed:
-                   if let index = draggingIndex {
-                        // Update the coordinate for the dragged point.
-                        parent.routeCoordinates[index] = coordinate
+                    }
+                } else if draggingActivated, let index = draggingIndex {
+                    // Update the dragged point's coordinate.
+                    parent.routeCoordinates[index] = coordinate
+                    // Throttle overlay updates.
+                    overlayUpdateWorkItem?.cancel()
+                    let workItem = DispatchWorkItem {
                         mapView.removeOverlays(mapView.overlays)
-                        if parent.routeCoordinates.count >= 2 {
-                             let polyline = MKPolyline(coordinates: parent.routeCoordinates, count: parent.routeCoordinates.count)
-                             mapView.addOverlay(polyline)
+                        if self.parent.routeCoordinates.count >= 2 {
+                            let polyline = MKPolyline(coordinates: self.parent.routeCoordinates, count: self.parent.routeCoordinates.count)
+                            mapView.addOverlay(polyline)
                         }
-                   }
-              case .ended, .cancelled:
-                   draggingIndex = nil
-              default:
-                   break
-              }
-         }
+                    }
+                    overlayUpdateWorkItem = workItem
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
+                }
+            case .ended, .cancelled:
+                draggingIndex = nil
+                gestureStartTime = nil
+                draggingActivated = false
+                overlayUpdateWorkItem?.cancel()
+                mapView.removeOverlays(mapView.overlays)
+                if parent.routeCoordinates.count >= 2 {
+                    let polyline = MKPolyline(coordinates: parent.routeCoordinates, count: parent.routeCoordinates.count)
+                    mapView.addOverlay(polyline)
+                }
+            default:
+                break
+            }
+        }
 
-         // Finds the nearest segment (pair of consecutive points) to the touch.
-         // Returns the segment's starting index and the distance from the touch point.
-         func nearestSegment(to point: CGPoint, in mapView: MKMapView) -> (Int, CGFloat)? {
-              guard parent.routeCoordinates.count >= 2 else { return nil }
-              var minDistance: CGFloat = CGFloat.greatestFiniteMagnitude
-              var bestSegment: Int?
-              for i in 0..<(parent.routeCoordinates.count - 1) {
-                   let pt1 = mapView.convert(parent.routeCoordinates[i], toPointTo: mapView)
-                   let pt2 = mapView.convert(parent.routeCoordinates[i + 1], toPointTo: mapView)
-                   let distance = distanceFrom(point, toLineSegment: pt1, pt2)
-                   if distance < minDistance {
-                        minDistance = distance
-                        bestSegment = i
-                   }
-              }
-              if let best = bestSegment {
-                   return (best, minDistance)
-              }
-              return nil
-         }
+        // Finds the nearest segment (pair of consecutive points) to the touch.
+        func nearestSegment(to point: CGPoint, in mapView: MKMapView) -> (Int, CGFloat)? {
+            guard parent.routeCoordinates.count >= 2 else { return nil }
+            var minDistance: CGFloat = CGFloat.greatestFiniteMagnitude
+            var bestSegment: Int?
+            for i in 0..<(parent.routeCoordinates.count - 1) {
+                let pt1 = mapView.convert(parent.routeCoordinates[i], toPointTo: mapView)
+                let pt2 = mapView.convert(parent.routeCoordinates[i + 1], toPointTo: mapView)
+                let distance = distanceFrom(point, toLineSegment: pt1, pt2)
+                if distance < minDistance {
+                    minDistance = distance
+                    bestSegment = i
+                }
+            }
+            if let best = bestSegment {
+                return (best, minDistance)
+            }
+            return nil
+        }
 
-         // Calculates the perpendicular distance from a point to a line segment.
-         func distanceFrom(_ point: CGPoint, toLineSegment pt1: CGPoint, _ pt2: CGPoint) -> CGFloat {
-              let a = point.x - pt1.x
-              let b = point.y - pt1.y
-              let c = pt2.x - pt1.x
-              let d = pt2.y - pt1.y
-              let dot = a * c + b * d
-              let lenSq = c * c + d * d
-              var param: CGFloat = -1
-              if lenSq != 0 {
-                   param = dot / lenSq
-              }
-              var xx: CGFloat, yy: CGFloat
-              if param < 0 {
-                   xx = pt1.x
-                   yy = pt1.y
-              } else if param > 1 {
-                   xx = pt2.x
-                   yy = pt2.y
-              } else {
-                   xx = pt1.x + param * c
-                   yy = pt1.y + param * d
-              }
-              let dx = point.x - xx
-              let dy = point.y - yy
-              return sqrt(dx * dx + dy * dy)
-         }
+        // Calculates the perpendicular distance from a point to a line segment.
+        func distanceFrom(_ point: CGPoint, toLineSegment pt1: CGPoint, _ pt2: CGPoint) -> CGFloat {
+            let a = point.x - pt1.x
+            let b = point.y - pt1.y
+            let c = pt2.x - pt1.x
+            let d = pt2.y - pt1.y
+            let dot = a * c + b * d
+            let lenSq = c * c + d * d
+            var param: CGFloat = -1
+            if lenSq != 0 {
+                param = dot / lenSq
+            }
+            var xx: CGFloat, yy: CGFloat
+            if param < 0 {
+                xx = pt1.x
+                yy = pt1.y
+            } else if param > 1 {
+                xx = pt2.x
+                yy = pt2.y
+            } else {
+                xx = pt1.x + param * c
+                yy = pt1.y + param * d
+            }
+            let dx = point.x - xx
+            let dy = point.y - yy
+            return sqrt(dx * dx + dy * dy)
+        }
     }
 }
+
+// MARK: - FlightPlanSheetView (Modified)
+
+
+
+
 struct FlightPlanSheetView: View {
     @Environment(\.dismiss) var dismiss
-    let destinationAirport: Airport
+    @EnvironmentObject var activeNavlogsVM: ActiveNavlogsViewModel
 
+    // Remove the fixed destinationAirport parameter so both endpoints are editable.
     @State private var departure: String = ""
+    @State private var destination: String = ""
     @State private var cruisingAltitude: String = ""
     @State private var aircraftType: String = ""
-    @State private var routeDescription: String = "" // Holds the formatted route details.
-    @State private var region: MKCoordinateRegion
-    @State private var departureCoordinate: CLLocationCoordinate2D? = nil
-    // Route coordinates array: will contain departure, any inserted points, and destination.
-    @State private var routeCoordinates: [CLLocationCoordinate2D] = []
+    // The route description now holds intermediate waypoints (fix codes)
+    @State private var routeDescription: String = ""
+    @State private var TAS: String = ""
 
-    init(destinationAirport: Airport) {
-        self.destinationAirport = destinationAirport
-        // Center the map on the destination airport.
+    // Coordinates for departure and destination.
+    @State private var departureCoordinate: CLLocationCoordinate2D? = nil
+    @State private var destinationCoordinate: CLLocationCoordinate2D? = nil
+    // The full route: departure, intermediate fixes, destination.
+    @State private var routeCoordinates: [CLLocationCoordinate2D] = []
+    @State private var customWaypoints: [CLLocationCoordinate2D] = []
+
+    
+    // Map region state.
+    @State private var region: MKCoordinateRegion = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 39.0, longitude: -98.0),
+        span: MKCoordinateSpan(latitudeDelta: 10.0, longitudeDelta: 10.0)
+    )
+    
+    let aircraftOptions = [
+        "PA-28-151",
+        "C172",
+        "C182",
+        "Boeing 737",
+        "Airbus A320",
+        "Beechcraft G36 Bonanza",
+        "Cessna 162"
+    ]
+    
+    @State private var showValidationAlert = false
+    @State private var validationMessage = ""
+    
+    // Combine publisher for debouncing route description updates.
+    @State private var routeDescriptionPublisher = PassthroughSubject<String, Never>()
+    @State private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        // Initialize with a default region (centered on continental US).
         _region = State(initialValue: MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: destinationAirport.latitude,
-                                           longitude: destinationAirport.longitude),
-            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            center: CLLocationCoordinate2D(latitude: 39.0, longitude: -98.0),
+            span: MKCoordinateSpan(latitudeDelta: 10.0, longitudeDelta: 10.0)
         ))
     }
     
-    // Helper to calculate a region that fits both coordinates with padding.
+    // MARK: - Helper Methods
+    
+    /// Returns a map region that fits the two coordinates.
     private func regionForCoordinates(coord1: CLLocationCoordinate2D, coord2: CLLocationCoordinate2D) -> MKCoordinateRegion {
         let latCenter = (coord1.latitude + coord2.latitude) / 2.0
         let lonCenter = (coord1.longitude + coord2.longitude) / 2.0
@@ -344,169 +405,330 @@ struct FlightPlanSheetView: View {
         )
     }
     
-    // Updates the route description using the format:
-    // DEPARTURE_CODE  (lat,lon)  (lat,lon)  ARRIVAL_CODE
-    private func updateRouteDescription() {
-        // Validate departure airport.
-        guard let depAirport = lookupAirport(code: departure.trimmingCharacters(in: .whitespacesAndNewlines)) else {
-            routeDescription = ""
-            return
+    /// Updates routeCoordinates by scanning the departure, destination, and route description.
+    /// – If the first token in the route description is a valid airport code, it will override departure.
+    /// – If the last token is a valid airport code, it will override destination.
+    private func updateRouteCoordinatesFromDescription() {
+        let tokens = routeDescription
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .split(separator: " ")
+            .map { String($0) }
+
+        var newRoute: [CLLocationCoordinate2D] = []
+        var updatedCustomWaypoints: [CLLocationCoordinate2D] = []
+
+        if let first = tokens.first, first.count == 4, let depAirport = lookupAirport(code: first) {
+            departure = depAirport.AirportCode
+            departureCoordinate = CLLocationCoordinate2D(latitude: depAirport.latitude, longitude: depAirport.longitude)
         }
-        var description = "\(depAirport.AirportCode)"
-        
-        // Intermediate points: all inserted points (if any) are between departure and destination.
-        let intermediatePoints = routeCoordinates.dropFirst().dropLast()
-        for point in intermediatePoints {
-            let lat = String(format: "%.4f", point.latitude)
-            let lon = String(format: "%.4f", point.longitude)
-            description += " (\(lat),\(lon))"
+
+        if let last = tokens.last, last.count == 4, let destAirport = lookupAirport(code: last) {
+            destination = destAirport.AirportCode
+            destinationCoordinate = CLLocationCoordinate2D(latitude: destAirport.latitude, longitude: destAirport.longitude)
         }
-        description += " \(destinationAirport.AirportCode)"
-        routeDescription = description
+
+        guard let dep = departureCoordinate, let dest = destinationCoordinate else { return }
+
+        newRoute.append(dep)
+
+        for token in tokens.dropFirst().dropLast() {
+            if let fix = lookupFIXX(code: token) {
+                newRoute.append(fix)
+            } else if let coord = parseCoordinate(token) {
+                // Find the index of the coordinate in original route description
+                let latLonString = String(format: "%.6f,%.6f", coord.latitude, coord.longitude)
+
+                // Check if this coordinate matches a token exactly in the routeDescription
+                if let tokenIndex = tokens.firstIndex(of: latLonString),
+                   tokenIndex < routeCoordinates.count {
+                    let existingCoord = routeCoordinates[tokenIndex]
+                    newRoute.append(existingCoord)
+                    updatedCustomWaypoints.append(existingCoord)
+                } else if let matched = customWaypoints.first(where: {
+                    abs($0.latitude - coord.latitude) < 0.0001 &&
+                    abs($0.longitude - coord.longitude) < 0.0001
+                }) {
+                    newRoute.append(matched)
+                    updatedCustomWaypoints.append(matched)
+                } else {
+                    newRoute.append(coord)
+                    updatedCustomWaypoints.append(coord)
+                }
+            }
+        }
+
+        newRoute.append(dest)
+
+        routeCoordinates = newRoute
+        customWaypoints = updatedCustomWaypoints
+        region = regionForCoordinates(coord1: dep, coord2: dest)
     }
 
+
+    /// Updates the route using the current departure and destination text fields.
+    
+    // MARK: - Modern Card Modifier
+    
+    private func modernCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        content()
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 15).fill(Color(.systemBackground)))
+            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
+            .padding(.horizontal)
+    }
+    
+    // MARK: - Body
+    
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                Text("Plan Your Flight")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .padding(.top, 20)
-                
-                CustomMapView(
-                    region: $region,
-                    routeCoordinates: $routeCoordinates,
-                    onDragPointAdded: { newPoint in
-                        // After a new point is added via drag, update the route description.
-                        updateRouteDescription()
-                    }
-                )
-                .frame(height: 200)
-                .cornerRadius(10)
-                .overlay(
-                    Text("Route Preview")
-                        .foregroundColor(.white)
-                        .padding(4)
-                        .background(Color.black.opacity(0.5))
-                        .cornerRadius(5),
-                    alignment: .topLeading
-                )
-                .padding(.horizontal, 20)
-                
-                // Rectangular box for route description.
-                VStack(alignment: .leading) {
-                    Text("Route Description")
-                        .font(.headline)
-                        .padding(.horizontal, 4)
-                    TextEditor(text: $routeDescription)
-                        .frame(height: 100)
-                        .padding(4)
-                        .background(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
-                        .disabled(true)
-                }
-                .padding(.horizontal, 20)
-                
-                VStack(spacing: 15) {
-                    TextField("Departure (4-letter code)", text: $departure)
-                        .padding()
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(8)
-                        .onChange(of: departure) { newValue in
-                            let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                            // Only update if the trimmed input is exactly 4 letters.
-                            if trimmed.count == 4 {
-                                if let depAirport = lookupAirport(code: trimmed) {
-                                    print("Found departure airport: \(depAirport.AirportCode) at \(depAirport.latitude), \(depAirport.longitude)")
-                                    departureCoordinate = CLLocationCoordinate2D(latitude: depAirport.latitude,
-                                                                                 longitude: depAirport.longitude)
-                                    let destCoordinate = CLLocationCoordinate2D(latitude: destinationAirport.latitude,
-                                                                                longitude: destinationAirport.longitude)
-                                    region = regionForCoordinates(coord1: departureCoordinate!, coord2: destCoordinate)
-                                    // Initialize the route with departure and destination.
-                                    routeCoordinates = [departureCoordinate!, destCoordinate]
-                                    updateRouteDescription()
+            VStack(spacing: 0) {
+                // Fixed Map Preview Card at the top.
+                modernCard {
+                    VStack(alignment: .leading, spacing: 4) {
+                        CustomMapView(
+                            region: $region,
+                            routeCoordinates: $routeCoordinates,
+                            onDragPointAdded: { newPoint in
+                                
+                                
+                                let pointString = String(format: "%.6f,%.6f", newPoint.latitude, newPoint.longitude)
+                                var tokens = routeDescription
+                                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                                    .split(separator: " ")
+                                    .map { String($0) }
+
+                                // If we have at least 2 tokens (departure + destination), insert before destination
+                                if tokens.count >= 2 {
+                                    tokens.insert(pointString, at: tokens.count - 1)
                                 } else {
-                                    print("No airport found for code: \(trimmed)")
-                                    departureCoordinate = nil
-                                    region = MKCoordinateRegion(
-                                        center: CLLocationCoordinate2D(latitude: destinationAirport.latitude,
-                                                                       longitude: destinationAirport.longitude),
-                                        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                                    )
-                                    routeCoordinates = []
-                                    routeDescription = ""
+                                    // Otherwise, just append
+                                    tokens.append(pointString)
                                 }
-                            } else {
-                                departureCoordinate = nil
-                                region = MKCoordinateRegion(
-                                    center: CLLocationCoordinate2D(latitude: destinationAirport.latitude,
-                                                                   longitude: destinationAirport.longitude),
-                                    span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                                )
-                                routeCoordinates = []
-                                routeDescription = ""
+
+                                // Update routeDescription and publish
+                                routeDescription = tokens.joined(separator: " ")
+                                routeDescriptionPublisher.send(routeDescription)
+                            }
+                        )
+
+                        .frame(height: 180)
+                        .cornerRadius(8)
+                        .overlay(
+                            Text("Route Preview")
+                                .foregroundColor(.white)
+                                .padding(8)
+                                .background(Color.black.opacity(0.5))
+                                .cornerRadius(5),
+                            alignment: .topLeading
+                        )
+                    }
+                }
+                .padding(.vertical, 10)
+                
+                // Scrollable Form with editable fields.
+                ScrollView {
+                    VStack(spacing: 10) {
+                        // Flight Details Card.
+                        modernCard {
+                            VStack(spacing: 8) {
+                                // Departure & Destination Row.
+                                
+                                
+                                // Intermediate Fixes via Route Description.
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Route Description (Intermediate Fixes)")
+                                        .font(.headline)
+                                    TextEditor(text: $routeDescription)
+                                        .frame(height: 40)
+                                        .padding(8)
+                                        .background(RoundedRectangle(cornerRadius: 8)
+                                                        .stroke(Color.gray.opacity(0.5), lineWidth: 1))
+                                        // Instead of immediate onChange, send the value to a publisher.
+                                        .onChange(of: routeDescription) { newValue in
+                                            routeDescriptionPublisher.send(newValue)
+                                        }
+                                        // Debounce updates for 300 milliseconds.
+                                        .onReceive(routeDescriptionPublisher.debounce(for: .milliseconds(300), scheduler: RunLoop.main)) { _ in
+                                            updateRouteCoordinatesFromDescription()
+                                        }
+                                }
+                                
+                                // FAA Fix & Cruising Altitude Row.
+                                HStack {
+                                   
+                                    Spacer()
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Cruising Altitude")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                        TextField("Altitude", text: $cruisingAltitude)
+                                            .padding(8)
+                                            .frame(maxWidth: .infinity, minHeight: 45)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .fill(Color(.secondarySystemBackground))
+                                            )
+                                            .keyboardType(.numberPad)
+                                    }
+                                }
+                                
+                                // Aircraft Type & TAS Row.
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Aircraft Type")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                        Picker("Aircraft Type", selection: $aircraftType) {
+                                            ForEach(aircraftOptions, id: \.self) { option in
+                                                Text(option).tag(option)
+                                            }
+                                        }
+                                        .pickerStyle(MenuPickerStyle())
+                                        .padding(8)
+                                        .frame(maxWidth: .infinity, minHeight: 45)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(Color(.secondarySystemBackground))
+                                        )
+                                    }
+                                    Spacer()
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("TAS")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                        TextField("TAS", text: $TAS)
+                                            .padding(8)
+                                            .frame(maxWidth: .infinity, minHeight: 45)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .fill(Color(.secondarySystemBackground))
+                                            )
+                                    }
+                                }
                             }
                         }
-                    
-                    // Destination is read-only.
-                    TextField("Destination", text: .constant(destinationAirport.AirportCode))
-                        .padding()
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(8)
-                        .disabled(true)
-                    
-                    TextField("Cruising Altitude", text: $cruisingAltitude)
-                        .padding()
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(8)
-                        .keyboardType(.numberPad)
-                    
-                    TextField("Aircraft Type", text: $aircraftType)
-                        .padding()
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(8)
+                        
+                        // Submit Button Card.
+                        modernCard {
+                            Button(action: {
+                                // Validate required fields.
+                                if departure.trimmingCharacters(in: .whitespaces).isEmpty ||
+                                    destination.trimmingCharacters(in: .whitespaces).isEmpty ||
+                                    cruisingAltitude.trimmingCharacters(in: .whitespaces).isEmpty ||
+                                    aircraftType.trimmingCharacters(in: .whitespaces).isEmpty ||
+                                    TAS.trimmingCharacters(in: .whitespaces).isEmpty {
+                                    validationMessage = "Please fill in all required fields."
+                                    showValidationAlert = true
+                                    return
+                                }
+                                
+                                let baseURL = "https://nav-service-272565453292.us-central1.run.app/api/v1/ComputeNavlog"
+
+                                // Add parentheses around coordinates in the routeDescription
+                                let fixedRoute = routeDescription
+                                    .split(separator: " ")
+                                    .map { part -> String in
+                                        let trimmed = part.trimmingCharacters(in: .whitespaces)
+                                        let isCoordinate = trimmed.range(of: #"^-?\d+(\.\d+)?,-?\d+(\.\d+)?$"#, options: .regularExpression) != nil
+                                        return isCoordinate ? "(\(trimmed))" : trimmed
+                                    }
+                                    .joined(separator: " ")
+
+                                let routeQuery = fixedRoute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                                let aircraftQuery = aircraftType.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                                let cruiseALTQuery = "\(cruisingAltitude)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                                let tasQuery = "\(TAS)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+
+                                let fullURLString = "\(baseURL)?route=\(routeQuery)&aircraft=\(aircraftQuery)&CruiseALT=\(cruiseALTQuery)&TAS=\(tasQuery)"
+
+                                print("Calling URL: \(fullURLString)")
+
+                                
+                                fetchNavLog(from: fullURLString) { navLogData in
+                                    guard let navLogData = navLogData else {
+                                        print("Failed to parse navlog data.")
+                                        return
+                                    }
+                                    DispatchQueue.main.async {
+                                        activeNavlogsVM.activeNavlogs.append(navLogData)
+                                        print("New NavLog Created: \(navLogData.title)")
+                                        dismiss()
+                                    }
+                                }
+                                dismiss()
+                            }) {
+                                Text("Submit Flight Plan")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
+                            }
+                        }
+                    }
+                    .padding(.vertical, 10)
                 }
-                .padding(.horizontal, 20)
-                
-                Spacer()
-                
-                Button(action: {
-                    // Handle submission as needed.
-                    print("Sending to backend")
-                    print("Route Object: \(routeDescription)")
-                    dismiss()
-                }) {
-                    Text("Submit")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal, 20)
-                }
-                
-                Button(action: {
-                    dismiss()
-                }) {
-                    Text("Cancel")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .foregroundColor(.red)
-                        .cornerRadius(10)
-                        .padding(.horizontal, 20)
-                }
-                .padding(.bottom, 20)
             }
-            .navigationBarHidden(true)
+            .background(Color(.systemGroupedBackground).ignoresSafeArea(.keyboard))
+            .navigationTitle("Plan Your Flight")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(trailing: Button("Done") { dismiss() })
+            .alert(isPresented: $showValidationAlert) {
+                Alert(title: Text("Missing Information"),
+                      message: Text(validationMessage),
+                      dismissButton: .default(Text("OK")))
+            }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .onDisappear {
+            cancellables.forEach { $0.cancel() }
+        }
     }
 }
 
-/// Generic lookup function that reads from Airports.txt in your app bundle.
-/// Assumes each nonempty line is formatted as: CODE,latitude,longitude,...
+
+
+
+
+
+
+// MARK: - Helper functions
+
+func lookupFIXX(code: String) -> CLLocationCoordinate2D? {
+    let normalizedCode = code.uppercased()
+    guard !normalizedCode.isEmpty else { return nil }
+    
+    guard let fileUrl = Bundle.main.url(forResource: "fixx", withExtension: "txt"),
+          let content = try? String(contentsOf: fileUrl) else {
+        print("Unable to load FIXX.txt")
+        return nil
+    }
+    
+    let fields = content.components(separatedBy: ":")
+    // Process the file in steps of three: [FixCode, Latitude, Longitude]
+    for i in stride(from: 0, to: fields.count, by: 3) {
+        let fixCode = fields[i].trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        if fixCode == normalizedCode,
+           let lat = Double(fields[i+1].trimmingCharacters(in: .whitespacesAndNewlines)),
+           let lon = Double(fields[i+2].trimmingCharacters(in: .whitespacesAndNewlines)) {
+            return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        }
+    }
+    
+    print("No fix found for code: \(normalizedCode)")
+    return nil
+}
+
+private func parseCoordinate(_ token: String) -> CLLocationCoordinate2D? {
+    let components = token.split(separator: ",")
+    if components.count == 2,
+       let lat = Double(components[0]),
+       let lon = Double(components[1]) {
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+    return nil
+}
+
+
 func lookupAirport(code: String) -> Airport? {
     let normalizedCode = code.uppercased()
     guard normalizedCode.count == 4 else { return nil }
@@ -532,3 +754,136 @@ func lookupAirport(code: String) -> Airport? {
     print("No airport found for code: \(normalizedCode)")
     return nil
 }
+
+
+// MARK: - Networking & Parsing Helpers
+
+func fetchNavLog(from urlString: String, completion: @escaping (NavLogData?) -> Void) {
+    guard let url = URL(string: urlString) else {
+        print("Invalid URL")
+        completion(nil)
+        return
+    }
+    URLSession.shared.dataTask(with: url) { data, response, error in
+        guard let data = data, let responseString = String(data: data, encoding: .utf8) else {
+            print("Error fetching data: \(error?.localizedDescription ?? "Unknown error")")
+            completion(nil)
+            return
+        }
+        let navLog = parseNavLogResponse(responseString)
+        completion(navLog)
+    }.resume()
+}
+
+func parseNavLogResponse(_ response: String) -> NavLogData? {
+    // Expected response format:
+    // "Distance 173.7-Total ETE: 86:12-Total Fuel Burn: 18.84gallons-[27:02, 61:20, 86:12]-[8.982535799199017, 14.697548229504424, 18.843472213792523]-[Node: KPOU, Bearing: 165.0, Distance: 33.31369041097834, Node: (41.1164,-73.5935), Bearing: 200.0, Distance: 29.816762769418574, Node: KJFK, Bearing: 354.0, Distance: 0.0]"
+    
+    let parts = response.components(separatedBy: "^")
+    guard parts.count >= 6 else {
+        print("Unexpected response format; expected at least 6 parts but got \(parts.count)")
+        return nil
+    }
+    
+    // 1. Parse total distance.
+    let distanceStr = parts[0].replacingOccurrences(of: "Distance ", with: "").trimmingCharacters(in: .whitespaces)
+    guard let totalDistance = Double(distanceStr) else {
+        print("Invalid total distance")
+        return nil
+    }
+    
+    // 2. Parse total ETE.
+    let totalETE = parts[1].replacingOccurrences(of: "Total ETE: ", with: "").trimmingCharacters(in: .whitespaces)
+    
+    // 3. Parse total fuel burn.
+    let fuelBurnPart = parts[2].replacingOccurrences(of: "Total Fuel Burn: ", with: "").trimmingCharacters(in: .whitespaces)
+    guard let gallonsRange = fuelBurnPart.range(of: "gallons") else {
+        print("Invalid fuel burn format")
+        return nil
+    }
+    let totalFuelBurnStr = fuelBurnPart[..<gallonsRange.lowerBound].trimmingCharacters(in: .whitespaces)
+    guard let totalFuelBurn = Double(totalFuelBurnStr) else {
+        print("Invalid fuel burn value")
+        return nil
+    }
+    
+    // 4. Parse waypoint ETES.
+    let eteArrayString = parts[3].trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+    let waypointETEs = eteArrayString
+        .split(separator: ",")
+        .map { $0.trimmingCharacters(in: .whitespaces) }
+    
+    // 5. Parse fuel burns.
+    let fuelBurnsArrayString = parts[4].trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+    let fuelBurns = fuelBurnsArrayString
+        .split(separator: ",")
+        .compactMap { Double($0.trimmingCharacters(in: .whitespaces)) }
+    
+    // 6. Parse the flight route from the last part.
+    let routePart = parts[5].trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+    
+    print("ROUTE PART " + routePart)
+    let flightSegments = parseRoute(from: routePart)
+    
+    if flightSegments.isEmpty {
+        print("No flight segments were parsed from the route string.")
+        return nil
+    }
+    
+    // Form the title from the first and last segment.
+    
+    print("FINAL PARSED =  \(flightSegments)")
+    let title = "\(flightSegments.first!.node) \(flightSegments.last!.node)"
+    
+    return NavLogData(
+        title: title,
+        totalDistance: totalDistance,
+        totalETE: totalETE,
+        totalFuelBurn: totalFuelBurn,
+        waypointETEs: waypointETEs,
+        fuelBurns: fuelBurns,
+        flightSegments: flightSegments
+    )
+}
+
+/// This helper takes a route string (without the surrounding brackets) and returns an array of FlightSegment.
+/// For example, given:
+/// "Node: KPOU, Bearing: 165.0, Distance: 33.31369041097834, Node: (41.1164,-73.5935), Bearing: 200.0, Distance: 29.816762769418574, Node: KJFK, Bearing: 354.0, Distance: 0.0"
+/// it will return three FlightSegment objects.
+func parseRoute(from routeString: String) -> [FlightSegment] {
+    var segments: [FlightSegment] = []
+    
+    let pattern = #"Node: (.*?), Bearing: ([\d.]+), Distance: ([\d.]+)"#
+    
+    guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+        print("Invalid regex")
+        return []
+    }
+
+    let nsString = routeString as NSString
+    let matches = regex.matches(in: routeString, options: [], range: NSRange(location: 0, length: nsString.length))
+
+    for match in matches {
+        guard match.numberOfRanges == 4 else { continue }
+
+        let node = nsString.substring(with: match.range(at: 1)).trimmingCharacters(in: .whitespaces)
+        let bearingString = nsString.substring(with: match.range(at: 2)).trimmingCharacters(in: .whitespaces)
+        let distanceString = nsString.substring(with: match.range(at: 3)).trimmingCharacters(in: .whitespaces)
+
+        if let bearing = Double(bearingString), let distance = Double(distanceString) {
+            segments.append(FlightSegment(node: node, bearing: bearing, distance: distance))
+        }
+    }
+
+    return segments
+}
+
+
+
+
+
+
+
+// MARK: - Main ContentView
+
+

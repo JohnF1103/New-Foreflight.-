@@ -178,7 +178,7 @@ extension AirportDetailsView {
     
     func LoadFrequencies() {
         let semaphore = DispatchSemaphore(value: 0)
-        guard let url = URL(string:"https://frq-svc-272565453292.us-central1.run.app/api/v1/getAirportFrequencies?airportCode=KJFK") else {
+        guard let url = URL(string:"https://frq-svc-272565453292.us-central1.run.app/api/v1/getAirportFrequencies?airportCode=\(airport.AirportCode.uppercased())") else {
             print("Invalid URL")
             return
         }

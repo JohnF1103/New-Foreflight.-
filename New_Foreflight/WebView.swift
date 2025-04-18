@@ -19,21 +19,21 @@ struct WebViewRow: View {
             isPresented.toggle()
         }) {
             Text(chartname)
+                .font(.subheadline)
+                .bold()
+                .foregroundColor(.gray)
+                .underline()
         }
         .sheet(isPresented: $isPresented) {
-            
-            NavigationStack{
+            NavigationStack {
                 WebView(urlString: urlString)
                     .ignoresSafeArea()
                     .navigationTitle(chartname)
                     .navigationBarTitleDisplayMode(.inline)
-                
             }
-           
         }
     }
 }
-
 
 
 struct WebView: UIViewRepresentable {

@@ -13,11 +13,18 @@ class AirportDetailModel: ObservableObject{
     //airport optional for sheet. if we are nil we wont display the sheet.
     
     @Published var sheetlocation : Airport? = nil
+    @Published var fixlocation : Fix? = nil
+
+    
     
     @Published var curr_metar : String? = nil
     @Published var parsed_metar : KeyValuePairs<String ,String>?
     @Published var DisplayLocationdetail = false
+    @Published var DisplayFixDetail = false
+
     @Published var selected_airport: Airport?
+    @Published var selectedFix: Fix?
+
     @Published  var flightrules: String?  = "VFR"
     @Published  var selectedData: [String?] = ["Class_B","Class_C","Class_D","special"]
 

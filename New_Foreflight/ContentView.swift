@@ -10,24 +10,38 @@ import MapKit
 
 // Assuming your Airport object is defined as:
 
+
+
+
+
 struct ContentView: View {
     @State private var centerCoordinate = CLLocationCoordinate2D(latitude: 40.6, longitude: -73.7)
     @State private var shouldUpdateRegion = false
     @State private var annotations = [MKPointAnnotation]()
+    
+    @State private var isShowingNavlogs = false
+    
+    @StateObject var activeNavlogsVM = ActiveNavlogsViewModel.shared
+
     // Replace this with your actual data source.
     @State private var locations: [Airport] = readFile()
     
     @EnvironmentObject private var vm: AirportDetailModel
     @State private var showAirportSearchDialog = false
     
+    
+    
     var body: some View {
         ZStack {
             // Pass the new binding to MapView.
-            MapView(centerCoordinate: $centerCoordinate,
-                    shouldUpdateRegion: $shouldUpdateRegion,
-                    annotations: annotations)
+         
+            ForeflightDarkMap(
+                    centerCoordinate: $centerCoordinate,
+                    shouldUpdateRegion: $shouldUpdateRegion
+                )
                 .edgesIgnoringSafeArea(.all)
             
+                   
             VStack {
                 HStack {
                     AdditionalDataButton
@@ -50,10 +64,29 @@ struct ContentView: View {
                 
                 ZStack {
                     if vm.DisplayLocationdetail, let selected = vm.selected_airport {
-                        LocationPreviewView(airport: selected)
-                            .shadow(color: Color.black.opacity(0.3), radius: 20)
-                            .padding()
+                        ZStack {
+                            // Fullscreen transparent background for tap dismissal
+                            Color.black.opacity(0.001)
+                                .ignoresSafeArea()
+                                .onTapGesture {
+                                    withAnimation {
+                                        vm.DisplayLocationdetail = false
+                                        vm.selected_airport = nil
+                                    }
+                                }
+
+                            // Align preview view at bottom
+                            VStack {
+                                Spacer()
+                                LocationPreviewView(airport: selected)
+                                    .shadow(color: Color.black.opacity(0.3), radius: 20)
+                                    .padding()
+                            }
+                        }
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .animation(.easeInOut, value: vm.DisplayLocationdetail)
                     }
+
                 }
             }
             .onAppear {
@@ -89,13 +122,29 @@ struct ContentView: View {
                 })
             }
         }
-        .sheet(item: $vm.sheetlocation, onDismiss: nil) { ap in
+        .sheet(item: $vm.sheetlocation, onDismiss: {
+            withAnimation {
+                vm.DisplayLocationdetail = false
+                vm.selected_airport = nil
+            }        }) { ap in
             AirportDetailsView(airport: ap, curr_mertar: vm.curr_metar ?? "NIL")
                 .presentationDetents([.medium])
+                .interactiveDismissDisabled(false)
         }
+
+        .sheet(item: $vm.selectedFix, onDismiss: nil) { fi in
+            FixDetailView(fix: fi)
+                .presentationDetents([.fraction(0.30)])
+                .presentationDragIndicator(.visible) // Optional: adds a drag indicator
+        }
+        
+        
+        .sheet(isPresented: $isShowingNavlogs) {
+                  ActiveNavlogsView()
+                      .environmentObject(activeNavlogsVM)
+              }
     }
     
-    // ... (AdditionalDataButton and other methods remain the same)
 }
 
 extension ContentView {
@@ -107,6 +156,7 @@ extension ContentView {
                 Button("National Defense TFRs", action: showTFRs)
                 Button("ATC Boundaries", action: showATClimits)
                 Button("Special use airspaces", action: showSpecialAirspaces)
+                Button("F-Plans", action: showNavlogs)
             } label: {
                 Image(systemName: "square.on.square")
                     .font(.headline)
@@ -137,7 +187,14 @@ extension ContentView {
     func Show_Airspace() {
         vm.selectedData = ["Class_B", "Class_C", "class_d", "special"]
     }
+    func showNavlogs() {
+
+        isShowingNavlogs = true
+
+        
+    }
 }
+
 struct AirportSearchDialog: View {
     @Binding var isPresented: Bool
     var onAirportSelected: (Airport) -> Void
