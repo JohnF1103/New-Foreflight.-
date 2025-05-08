@@ -15,11 +15,12 @@ class AirportDetailModel: ObservableObject{
     @Published var sheetlocation : Airport? = nil
     
     @Published var curr_metar : String? = nil
-    
+    @Published var parsed_metar : KeyValuePairs<String ,String>?
+    @Published var wind_vector : String? = nil
     @Published var DisplayLocationdetail = false
     @Published var selected_airport: Airport?
     @Published  var flightrules: String?  = "VFR"
-    @Published  var selectedData: String? = "Class_B"
+    @Published  var selectedData: [String?] = ["Class_B","Class_C","Class_D","special"]
 
     
    
